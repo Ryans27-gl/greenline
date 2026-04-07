@@ -309,8 +309,108 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(70px); background: #1d2c1a; border: 1px solid var(--matcha-lt); color: #f0ead0; padding: 11px 24px; border-radius: 100px; font-size: 13px; font-weight: 500; z-index: 999; transition: transform 0.28s ease; pointer-events: none; white-space: nowrap; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-@media (max-width: 860px) { .wl-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .market-summary { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .nav-inner { padding: 0 16px; gap: 10px; } main, .wl-page { padding: 24px 16px 60px; } .logo-bottom { display: none; } .wl-grid { grid-template-columns: 1fr; } }
+/* ── TABLET ── */
+@media (max-width: 860px) {
+  .wl-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .market-summary { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 760px) {
+  /* Safe area insets for notched phones */
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+
+  /* NAV: stack into two rows */
+  .nav-inner {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 16px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    gap: 8px;
+  }
+  .logo { flex-shrink: 0; }
+  .logo-bottom { display: none; }
+  .nav-links { gap: 4px; }
+  /* Move nav links and refresh to the right */
+  .nav-links, .refresh-btn { order: 0; }
+  /* Push refresh to far right */
+  .refresh-btn { margin-left: auto; padding: 10px 16px; font-size: 0; min-height: 44px; min-width: 44px; justify-content: center; }
+  .refresh-btn svg { width: 18px; height: 18px; }
+
+  /* Filters: full-width scrollable row on second line */
+  .nav-filters {
+    order: 1;
+    width: 100%;
+    flex: none;
+    gap: 6px;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Touch targets: minimum 44px height on interactive elements */
+  .nav-link { min-height: 44px; display: flex; align-items: center; padding: 8px 16px; font-size: 14px; }
+  .filter-btn { min-height: 44px; padding: 10px 18px; font-size: 14px; }
+  .act-btn { min-height: 44px; padding: 12px 0; font-size: 13px; }
+  .stock-chip { padding: 10px 12px; min-height: 44px; min-width: 90px; }
+  .sug-chip { padding: 10px 16px; font-size: 13px; min-height: 44px; display: inline-flex; align-items: center; }
+  .wl-remove { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; padding: 0; margin: -8px -8px 0 0; }
+  .wl-news-btn { min-height: 44px; display: inline-flex; align-items: center; font-size: 12px; }
+  .onboard-skip { min-height: 44px; display: inline-flex; align-items: center; }
+  .onboard-next { min-height: 44px; padding: 12px 24px; }
+  .tooltip-close { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+
+  /* Font size bumps */
+  .feed-label { font-size: 12px; }
+  .status-bar { font-size: 12px; }
+  .updated-at { font-size: 12px; }
+  .sw-label { font-size: 11px; }
+  .wl-vol { font-size: 12px; }
+  .chip-ticker { font-size: 12px; }
+  .chip-change { font-size: 11px; }
+  .chip-price { font-size: 12px; }
+  .cat-pill { font-size: 11px; padding: 4px 12px; }
+  .new-pill { font-size: 10px; padding: 4px 12px; }
+  .live-badge { font-size: 10px; padding: 4px 10px; }
+  .card-title { font-size: 16px; }
+  .card-summary { font-size: 14px; }
+  .ticker-strip { font-size: 12px; padding: 9px 0; }
+
+  /* Layout fixes */
+  .grid { grid-template-columns: 1fr; }
+  .wl-grid { grid-template-columns: 1fr; }
+  .market-summary { grid-template-columns: 1fr; }
+  main, .wl-page {
+    padding: 24px 16px 60px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(60px, env(safe-area-inset-bottom));
+  }
+
+  /* Card thumbnail taller on full-width cards */
+  .card-thumb { height: 160px; }
+
+  /* Watchlist search: stack on narrow screens */
+  .wl-search-wrap { flex-wrap: wrap; }
+  .wl-search { min-width: 0; width: 100%; min-height: 48px; font-size: 16px; }
+  .wl-add-btn { width: 100%; min-height: 48px; text-align: center; justify-content: center; display: flex; align-items: center; font-size: 15px; }
+
+  /* Toast: constrain to viewport */
+  .toast { max-width: calc(100vw - 32px); white-space: normal; text-align: center; font-size: 14px; padding: 12px 20px; bottom: max(30px, env(safe-area-inset-bottom)); }
+
+  /* Tooltip modal: mobile-friendly sizing */
+  .tooltip-overlay { padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  .tooltip-box { max-width: 100%; }
+  .tooltip-body { font-size: 15px; }
+
+  /* Onboarding modal */
+  .onboard-overlay { padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  .onboard-box { max-width: 100%; }
+  .onboard-top { padding: 24px 20px 20px; }
+  .onboard-body { padding: 20px 20px 24px; }
+  .onboard-footer { padding: 14px 20px 20px; }
+  .onboard-step-title { font-size: 18px; }
+}
 </style>
 </head>
 <body>
