@@ -56,11 +56,26 @@ nav { background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255
 .nav-link:hover { color: var(--nav-text); background: rgba(255,255,255,0.06); }
 .nav-link.active { color: #111a0f; background: var(--matcha-lt); font-weight: 600; }
 
-.nav-filters { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
-.nav-filters::-webkit-scrollbar { display: none; }
-.filter-btn { padding: 6px 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.12); background: transparent; color: var(--nav-text2); font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
-.filter-btn:hover { background: rgba(255,255,255,0.06); color: var(--nav-text); }
-.filter-btn.active { background: var(--matcha-lt); color: #111a0f; border-color: var(--matcha-lt); font-weight: 600; }
+.cat-select {
+  padding: 9px 36px 9px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a9470' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 14px center;
+  color: var(--nav-text);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.15s, background-color 0.15s;
+  flex-shrink: 0;
+  min-height: 38px;
+}
+.cat-select:hover { border-color: rgba(255,255,255,0.25); background-color: rgba(255,255,255,0.10); }
+.cat-select:focus { border-color: var(--matcha-lt); }
+.cat-select option { background: #1d2c1a; color: var(--nav-text); font-family: 'Sora', sans-serif; }
 
 .refresh-btn { display: flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 100px; background: var(--matcha-lt); color: #111a0f; border: none; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: opacity 0.15s, transform 0.1s; }
 .refresh-btn:hover { opacity: 0.88; }
@@ -338,19 +353,11 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
   .refresh-btn { margin-left: auto; padding: 10px 16px; font-size: 0; min-height: 44px; min-width: 44px; justify-content: center; }
   .refresh-btn svg { width: 18px; height: 18px; }
 
-  /* Filters: full-width scrollable row on second line */
-  .nav-filters {
-    order: 1;
-    width: 100%;
-    flex: none;
-    gap: 6px;
-    padding-bottom: 2px;
-    -webkit-overflow-scrolling: touch;
-  }
+  /* Category dropdown on mobile */
+  .cat-select { min-height: 44px; font-size: 14px; padding: 10px 40px 10px 16px; }
 
   /* Touch targets: minimum 44px height on interactive elements */
   .nav-link { min-height: 44px; display: flex; align-items: center; padding: 8px 16px; font-size: 14px; }
-  .filter-btn { min-height: 44px; padding: 10px 18px; font-size: 14px; }
   .act-btn { min-height: 44px; padding: 12px 0; font-size: 13px; }
   .stock-chip { padding: 10px 12px; min-height: 44px; min-width: 90px; }
   .sug-chip { padding: 10px 16px; font-size: 13px; min-height: 44px; display: inline-flex; align-items: center; }
@@ -435,15 +442,15 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
       <button class="nav-link" id="navWatchlist" onclick="showPage('watchlist')">Watchlist</button>
     </div>
 
-    <div class="nav-filters" id="filters">
-      <button class="filter-btn active" data-cat="all">All</button>
-      <button class="filter-btn" data-cat="business">Business</button>
-      <button class="filter-btn" data-cat="technology">Technology</button>
-      <button class="filter-btn" data-cat="energy">Energy</button>
-      <button class="filter-btn" data-cat="health">Health</button>
-      <button class="filter-btn" data-cat="economy">Economy</button>
-      <button class="filter-btn" data-cat="markets">Markets</button>
-    </div>
+    <select class="cat-select" id="filters" onchange="activeFilter=this.value;loadFeed(this.value)">
+      <option value="all">All</option>
+      <option value="business">Business</option>
+      <option value="technology">Technology</option>
+      <option value="energy">Energy</option>
+      <option value="health">Health</option>
+      <option value="economy">Economy</option>
+      <option value="markets">Markets</option>
+    </select>
 
     <button class="refresh-btn" id="refreshBtn" onclick="doRefresh()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -585,7 +592,7 @@ function showPage(page) {
   document.getElementById('watchlistPage').classList.toggle('active', page === 'watchlist');
   document.getElementById('navFeed').classList.toggle('active', page === 'feed');
   document.getElementById('navWatchlist').classList.toggle('active', page === 'watchlist');
-  document.getElementById('filters').style.display = page === 'feed' ? 'flex' : 'none';
+  document.getElementById('filters').style.display = page === 'feed' ? 'inline-block' : 'none';
   document.getElementById('refreshBtn').style.display = page === 'feed' ? 'flex' : 'none';
   if (page === 'watchlist') { renderWatchlist(); loadMarketSummary(); }
 }
@@ -1103,14 +1110,6 @@ async function doRefresh(){
   showToast('Feed refreshed!');
 }
 
-document.getElementById('filters').onclick=e=>{
-  const btn=e.target.closest('.filter-btn');
-  if(!btn)return;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  activeFilter=btn.dataset.cat;
-  loadFeed(activeFilter);
-};
 
 let toastTimer;
 function showToast(msg){
