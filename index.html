@@ -735,164 +735,20 @@ const FALLBACK = {
   ],
 };
 
-/* ── RSS FEEDS — today's real financial news, free & unlimited ── */
-const RSS_FEEDS = {
-  all: [
-    'https://feeds.reuters.com/reuters/businessNews',
-    'https://feeds.reuters.com/reuters/technologyNews',
-    'https://www.cnbc.com/id/100003114/device/rss/rss.html',
-    'https://feeds.marketwatch.com/marketwatch/topstories',
-  ],
-  business: [
-    'https://feeds.reuters.com/reuters/businessNews',
-    'https://feeds.marketwatch.com/marketwatch/topstories',
-    'https://www.cnbc.com/id/10001147/device/rss/rss.html',
-  ],
-  technology: [
-    'https://feeds.reuters.com/reuters/technologyNews',
-    'https://www.cnbc.com/id/19854910/device/rss/rss.html',
-  ],
-  energy: [
-    'https://feeds.reuters.com/reuters/energy',
-    'https://www.cnbc.com/id/19836768/device/rss/rss.html',
-  ],
-  health: [
-    'https://feeds.reuters.com/reuters/health',
-    'https://www.cnbc.com/id/10000108/device/rss/rss.html',
-  ],
-  economy: [
-    'https://feeds.reuters.com/reuters/economy',
-    'https://www.cnbc.com/id/20910258/device/rss/rss.html',
-  ],
-};
-
-const RSS_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
-
-async function fetchRSSFeed(url) {
+/* ── FETCH NEWS via Netlify Function ── */
+async function fetchNews(cat) {
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(RSS_PROXY + encodeURIComponent(url), { signal: controller.signal });
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(`/.netlify/functions/news?cat=${cat}`, { signal: controller.signal });
     clearTimeout(timeout);
     const data = await res.json();
-    if (data.status === 'ok' && data.items && data.items.length > 0) {
-      return data.items.map(item => ({
-        title: item.title,
-        description: item.description ? item.description.replace(/<[^>]*>/g, '').slice(0, 200) : '',
-        url: item.link,
-        publishedAt: item.pubDate || new Date().toISOString(),
-        source: { name: data.feed?.title || 'News' }
-      }));
-    }
+    if (data.articles && data.articles.length >= 3) return data.articles;
   } catch(e) {}
-  return [];
+  return FALLBACK[cat] || FALLBACK.all;
 }
 
-async function fetchNews(cat) {
-  const feeds = RSS_FEEDS[cat] || RSS_FEEDS.all;
-  
-  // Fetch first two feeds in parallel
-  const results = await Promise.all(feeds.slice(0,2).map(url => fetchRSSFeed(url)));
-  const combined = results.flat();
-  
-  if (combined.length === 0) return FALLBACK[cat] || FALLBACK.all;
 
-  // Filter to today's articles only
-  const now = new Date();
-  const today = combined.filter(a => {
-    const age = now - new Date(a.publishedAt);
-    return age < 48 * 60 * 60 * 1000; // last 48 hours
-  });
-
-  // Sort by newest first
-  today.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-  return today.length >= 3 ? today.slice(0, 6) : combined.slice(0, 6);
-}
-
-/* ── SMART STOCK PICKER ── */
-function pickStocks(article, cat) {
-  const text = ((article.title||'')+(article.description||'')).toLowerCase();
-  const matched = [];
-  Object.entries(KEYWORD_STOCKS).forEach(([sym,words]) => { if (words.some(w=>text.includes(w))) matched.push(sym); });
-  return [...new Set([...matched,...(CAT_STOCKS[cat]||CAT_STOCKS.all)])].slice(0,4);
-}
-
-function pickIcon(article, cat) {
-  const t = ((article.title||'')+(article.description||'')).toLowerCase();
-  if (t.includes('oil')||t.includes('opec')||t.includes('crude')) return '🛢';
-  if (t.includes('tesla')||t.includes('electric vehicle')) return '⚡';
-  if (t.includes('apple')||t.includes('iphone')||t.includes('nvidia')||t.includes('ai ')) return '💻';
-  if (t.includes('drug')||t.includes('fda')||t.includes('pharma')) return '💊';
-  if (t.includes('fed')||t.includes('inflation')||t.includes('rate')) return '🏦';
-  if (t.includes('merger')||t.includes('acqui')||t.includes('deal')) return '🤝';
-  if (t.includes('gold')) return '🪙';
-  if (t.includes('solar')||t.includes('wind')||t.includes('renewable')) return '🌱';
-  if (t.includes('bank')||t.includes('earnings')) return '📊';
-  return CAT_ICONS[cat] || '📰';
-}
-
-function timeAgo(dateStr) {
-  const diff = Date.now()-new Date(dateStr).getTime();
-  const m=Math.floor(diff/60000),h=Math.floor(m/60),d=Math.floor(h/24);
-  if(m<2)return'Just now';if(m<60)return`${m}m ago`;if(h<24)return`${h}h ago`;return`${d}d ago`;
-}
-
-/* ── MAKE CARD ── */
-function makeCardFast(article, cat, idx) {
-  const symbols = pickStocks(article, cat);
-  const chipsHtml = symbols.map(s =>
-    `<div class="stock-chip" data-sym="${s}">
-      <div class="chip-top">
-        <span class="chip-ticker">${s}</span>
-        <span class="chip-change flat">—</span>
-      </div>
-      <div class="chip-price">loading</div>
-    </div>`
-  ).join('');
-
-  const icon=pickIcon(article,cat), color=CAT_COLORS[cat]||CAT_COLORS.all;
-  const id=`a${idx}`, saved=savedArticleIds.has(id), source=article.source?.name||'News', url=article.url||'#';
-  const div=document.createElement('div');
-  div.className='card'; div.dataset.id=id; div.style.animationDelay=(idx*0.05)+'s';
-  div.innerHTML=`
-    <div class="card-thumb" style="background:${color};">
-      <span>${icon}</span>
-      <span class="live-badge"><span class="live-dot"></span>LIVE</span>
-      <span class="cat-pill">${cat==='all'?'market':cat}</span>
-    </div>
-    <div class="card-meta">
-      <div class="source-dot"></div>
-      <span class="source-name">${source}</span>
-      <span class="meta-sep">·</span>
-      <span class="time-ago">${timeAgo(article.publishedAt)}</span>
-    </div>
-    <div class="card-body">
-      <div class="card-title">${article.title}</div>
-      <div class="card-summary">${article.description||'Click to read the full article.'}</div>
-      <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
-    </div>
-    <div class="stock-widget">
-      <div class="sw-label">Stocks that may be affected</div>
-      <div class="stocks-row">${chipsHtml}</div>
-    </div>
-    <div class="card-actions">
-      <button class="act-btn ${saved?'saved':''}" data-saveid="${id}">
-        <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        ${saved?'Saved':'Save'}
-      </button>
-      <button class="act-btn" onclick="copyLink('${url}')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Share
-      </button>
-      <button class="act-btn" onclick="explainArticle(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Explain
-      </button>
-    </div>`;
-  div.querySelector('[data-saveid]').onclick=()=>toggleSave(id,div);
-  return div;
-}
 
 async function makeCard(article, cat, idx) {
   const symbols = pickStocks(article, cat);
