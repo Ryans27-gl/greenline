@@ -209,6 +209,45 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 .mkt-chg.dn { color: var(--red); }
 
 /* TOAST */
+/* TOOLTIP MODAL */
+.tooltip-overlay {
+  position: fixed; inset: 0; background: rgba(17,26,15,0.55);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 24px; animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.tooltip-box {
+  background: var(--card); border-radius: var(--radius);
+  border: 1px solid var(--border2); max-width: 520px; width: 100%;
+  box-shadow: 0 24px 60px rgba(17,26,15,0.25);
+  animation: slideUp 0.22s ease;
+}
+@keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.tooltip-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 14px; border-bottom: 1px solid var(--border);
+}
+.tooltip-head-left { display: flex; align-items: center; gap: 10px; }
+.tooltip-icon { font-size: 20px; }
+.tooltip-label { font-size: 13px; font-weight: 700; color: var(--matcha); letter-spacing: 0.04em; }
+.tooltip-close {
+  background: none; border: none; cursor: pointer; color: var(--text3);
+  font-size: 18px; padding: 2px 6px; border-radius: 6px; transition: color 0.12s, background 0.12s; line-height: 1;
+}
+.tooltip-close:hover { color: var(--text); background: var(--card2); }
+.tooltip-title { font-size: 13px; font-weight: 600; color: var(--text2); padding: 12px 20px 0; line-height: 1.5; }
+.tooltip-body { padding: 12px 20px 20px; font-size: 14px; line-height: 1.75; color: var(--text); font-weight: 300; }
+.tooltip-body p { margin-bottom: 10px; }
+.tooltip-body p:last-child { margin-bottom: 0; }
+.tooltip-loading { display: flex; align-items: center; gap: 10px; padding: 20px; color: var(--text2); font-size: 14px; }
+.tooltip-spinner { width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--matcha); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.tooltip-footer { padding: 0 20px 16px; }
+.tooltip-stocks { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.tooltip-chip { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 100px; background: var(--matcha-bg, #eaf2e4); color: var(--matcha); border: 1px solid rgba(106,158,82,0.2); }
+.tooltip-chip.up { color: var(--green); background: rgba(58,138,58,0.08); border-color: rgba(58,138,58,0.2); }
+.tooltip-chip.dn { color: var(--red); background: rgba(192,64,64,0.08); border-color: rgba(192,64,64,0.2); }
+
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(70px); background: #1d2c1a; border: 1px solid var(--matcha-lt); color: #f0ead0; padding: 11px 24px; border-radius: 100px; font-size: 13px; font-weight: 500; z-index: 999; transition: transform 0.28s ease; pointer-events: none; white-space: nowrap; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
@@ -730,6 +769,10 @@ async function makeCard(article, cat, idx) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share
       </button>
+      <button class="act-btn" onclick="explainArticle(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Explain
+      </button>
       <button class="act-btn" onclick="showToast('Discussions coming soon!')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Discuss
@@ -796,6 +839,112 @@ function showToast(msg){
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
 }
+
+/* ── EXPLAIN WITH AI ── */
+async function explainArticle(btn) {
+  const card = btn.closest('.card');
+  const title = card.querySelector('.card-title').textContent.trim();
+  const summary = card.querySelector('.card-summary').textContent.trim();
+  const tickers = [...card.querySelectorAll('.chip-ticker')].map(el => el.textContent.trim());
+  const prices = [...card.querySelectorAll('.stock-chip')].map(el => {
+    const t = el.querySelector('.chip-ticker').textContent.trim();
+    const c = el.querySelector('.chip-change').textContent.trim();
+    const p = el.querySelector('.chip-price').textContent.trim();
+    return `${t} ${p} (${c})`;
+  });
+
+  showTooltipLoading(title);
+
+  const prompt = `You are a friendly stock market explainer for beginners. Explain this news article in simple, plain English.
+
+Article headline: "${title}"
+Article summary: "${summary}"
+Stocks affected: ${prices.join(', ')}
+
+Write 2-3 short paragraphs:
+1. What happened (explain it like talking to a friend who knows nothing about finance)
+2. Why this matters for the stocks shown (explain what "up" or "down" means for investors)
+3. One simple takeaway a beginner investor should know
+
+Keep it friendly, clear, and jargon-free. No bullet points — just conversational paragraphs. Keep total response under 150 words.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'Could not generate explanation. Try again.';
+    showTooltipContent(title, text, tickers, card);
+  } catch(e) {
+    showTooltipContent(title, 'Could not load explanation right now. Check your connection and try again.', tickers, card);
+  }
+}
+
+function showTooltipLoading(title) {
+  closeTooltip();
+  const overlay = document.createElement('div');
+  overlay.className = 'tooltip-overlay';
+  overlay.id = 'tooltipOverlay';
+  overlay.onclick = (e) => { if (e.target === overlay) closeTooltip(); };
+  overlay.innerHTML = `
+    <div class="tooltip-box">
+      <div class="tooltip-head">
+        <div class="tooltip-head-left">
+          <span class="tooltip-icon">💡</span>
+          <span class="tooltip-label">What does this mean?</span>
+        </div>
+        <button class="tooltip-close" onclick="closeTooltip()">✕</button>
+      </div>
+      <div class="tooltip-title">${title}</div>
+      <div class="tooltip-loading">
+        <div class="tooltip-spinner"></div>
+        <span>Greenline AI is reading this article...</span>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function showTooltipContent(title, text, tickers, card) {
+  const overlay = document.getElementById('tooltipOverlay');
+  if (!overlay) return;
+  const chips = [...card.querySelectorAll('.stock-chip')].map(el => {
+    const t = el.querySelector('.chip-ticker').textContent.trim();
+    const c = el.querySelector('.chip-change').textContent.trim();
+    const isUp = el.querySelector('.chip-change').classList.contains('up');
+    return `<span class="tooltip-chip ${isUp?'up':'dn'}">${t} ${c}</span>`;
+  }).join('');
+
+  const paragraphs = text.split(/
++/).filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('');
+
+  overlay.querySelector('.tooltip-box').innerHTML = `
+    <div class="tooltip-head">
+      <div class="tooltip-head-left">
+        <span class="tooltip-icon">💡</span>
+        <span class="tooltip-label">What does this mean?</span>
+      </div>
+      <button class="tooltip-close" onclick="closeTooltip()">✕</button>
+    </div>
+    <div class="tooltip-title">${title}</div>
+    <div class="tooltip-body">${paragraphs}</div>
+    <div class="tooltip-footer">
+      <div class="sw-label" style="margin-bottom:8px;">Stocks mentioned</div>
+      <div class="tooltip-stocks">${chips}</div>
+    </div>`;
+}
+
+function closeTooltip() {
+  const el = document.getElementById('tooltipOverlay');
+  if (el) el.remove();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTooltip(); });
 
 /* ── INIT ── */
 (async()=>{
