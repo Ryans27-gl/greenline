@@ -1,68 +1,1263 @@
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method not allowed' };
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQPJZRXEQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NGQPJZRXEQ');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greenline — Market News</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+:root {
+  --nav-bg:    #111a0f;
+  --ticker-bg: #172014;
+  --bg:        #f2ead8;
+  --card:      #faf6ee;
+  --card2:     #f0e8d4;
+  --border:    rgba(90,80,60,0.10);
+  --border2:   rgba(90,80,60,0.18);
+  --text:      #1e1a10;
+  --text2:     #5a5040;
+  --text3:     #9a8e78;
+  --nav-text:  #f0ead0;
+  --nav-text2: #7a9470;
+  --nav-text3: #3a5434;
+  --matcha:    #6a9e52;
+  --matcha-lt: #8ab86a;
+  --green:     #3a8a3a;
+  --red:       #c04040;
+  --radius:    16px;
+  --radius-sm: 10px;
+}
 
-  if (!apiKey) {
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: 'Error: API key not found in environment variables.' })
-    };
-  }
+body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-  let prompt;
-  try {
-    const body = JSON.parse(event.body);
-    prompt = body.prompt;
-  } catch(e) {
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: 'Error: Could not parse request body.' })
-    };
-  }
+/* NAV */
+nav { background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); }
+.nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; gap: 24px; }
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 300,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
+.logo { display: flex; align-items: center; gap: 11px; flex-shrink: 0; text-decoration: none; cursor: pointer; }
+.logo-icon { width: 40px; height: 40px; background: var(--matcha-lt); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+.logo-top { font-size: 17px; font-weight: 700; color: var(--nav-text); letter-spacing: -0.3px; }
+.logo-top span { color: var(--matcha-lt); }
+.logo-bottom { font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--nav-text3); margin-top: 4px; }
 
-    const data = await response.json();
-    console.log('Anthropic status:', response.status);
-    console.log('Anthropic data:', JSON.stringify(data).slice(0, 200));
+.nav-links { display: flex; gap: 4px; }
+.nav-link { padding: 7px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--nav-text2); cursor: pointer; border: none; background: transparent; font-family: 'Sora', sans-serif; transition: all 0.15s; }
+.nav-link:hover { color: var(--nav-text); background: rgba(255,255,255,0.06); }
+.nav-link.active { color: #111a0f; background: var(--matcha-lt); font-weight: 600; }
 
-    if (data.content && data.content[0] && data.content[0].text) {
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: data.content[0].text })
-      };
-    } else {
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: 'API Error: ' + JSON.stringify(data).slice(0, 150) })
-      };
-    }
-  } catch (e) {
-    console.log('Fetch error:', e.message);
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: 'Connection error: ' + e.message })
-    };
-  }
+.nav-filters { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.nav-filters::-webkit-scrollbar { display: none; }
+.filter-btn { padding: 6px 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.12); background: transparent; color: var(--nav-text2); font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+.filter-btn:hover { background: rgba(255,255,255,0.06); color: var(--nav-text); }
+.filter-btn.active { background: var(--matcha-lt); color: #111a0f; border-color: var(--matcha-lt); font-weight: 600; }
+
+.refresh-btn { display: flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 100px; background: var(--matcha-lt); color: #111a0f; border: none; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: opacity 0.15s, transform 0.1s; }
+.refresh-btn:hover { opacity: 0.88; }
+.refresh-btn:active { transform: scale(0.97); }
+.refresh-btn svg { width: 14px; height: 14px; transition: transform 0.55s ease; }
+.refresh-btn.spinning svg { transform: rotate(360deg); }
+
+/* TICKER */
+.ticker-strip { background: var(--ticker-bg); border-bottom: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #3a5434; padding: 7px 0; overflow: hidden; white-space: nowrap; }
+.ticker-track { display: inline-block; animation: ticker 55s linear infinite; }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.t-item { display: inline-block; margin-right: 48px; }
+.t-item .sym { color: #c8d5a0; font-weight: 500; margin-right: 7px; }
+.t-up { color: #8ab86a; }
+.t-dn { color: #e08060; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── FEED PAGE ── */
+main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
+.feed-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.feed-left { display: flex; align-items: center; gap: 14px; }
+.feed-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); }
+.status-bar { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text3); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--matcha); flex-shrink: 0; }
+.status-dot.loading { background: #c8a020; animation: blink 0.8s infinite; }
+.status-dot.error { background: var(--red); }
+.status-dot.live { animation: blink 2.5s infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.updated-at { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+
+/* SKELETONS */
+.skeleton { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+.skel-thumb { height: 118px; background: linear-gradient(90deg, #ede5d0 25%, #e0d8c0 50%, #ede5d0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+.skel-body { padding: 16px 18px 14px; }
+.skel-line { height: 11px; border-radius: 6px; background: linear-gradient(90deg, #ede5d0 25%, #e0d8c0 50%, #ede5d0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; margin-bottom: 10px; }
+.skel-line.w40 { width: 40%; } .skel-line.w60 { width: 60%; } .skel-line.w80 { width: 80%; } .skel-line.w100 { width: 100%; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* NEWS CARDS */
+.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; animation: fadeUp 0.35s ease both; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+.card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(60,50,30,0.10); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+.card-thumb { width: 100%; height: 118px; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; font-size: 44px; }
+.cat-pill { position: absolute; bottom: 10px; left: 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 11px; border-radius: 100px; background: rgba(0,0,0,0.28); color: rgba(255,255,255,0.88); }
+.new-pill { position: absolute; top: 10px; right: 12px; font-size: 9px; font-weight: 700; padding: 3px 10px; border-radius: 100px; background: var(--matcha-lt); color: #111a0f; letter-spacing: 0.07em; text-transform: uppercase; }
+.live-badge { position: absolute; top: 10px; left: 12px; font-size: 9px; font-weight: 600; padding: 3px 9px; border-radius: 100px; background: rgba(0,0,0,0.45); color: #8ab86a; display: flex; align-items: center; gap: 4px; }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: #8ab86a; animation: blink 1.5s infinite; }
+
+.card-meta { display: flex; align-items: center; gap: 8px; padding: 14px 18px 6px; flex-wrap: wrap; }
+.source-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--matcha); flex-shrink: 0; }
+.source-name { font-size: 12px; font-weight: 500; color: var(--text2); }
+.meta-sep { font-size: 11px; color: var(--text3); }
+.time-ago { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+
+.card-body { padding: 4px 18px 16px; flex: 1; }
+.card-title { font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--text); margin-bottom: 8px; letter-spacing: -0.1px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card-summary { font-size: 13px; font-weight: 300; line-height: 1.75; color: var(--text2); margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.read-link { font-size: 12px; font-weight: 600; color: var(--matcha); text-decoration: none; }
+.read-link:hover { text-decoration: underline; }
+
+.stock-widget { border-top: 1px solid var(--border); padding: 12px 18px 14px; background: var(--card2); }
+.sw-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+.stocks-row { display: flex; gap: 7px; flex-wrap: wrap; }
+.stock-chip { background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 7px 11px; min-width: 80px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+.stock-chip:hover { border-color: var(--matcha); box-shadow: 0 2px 8px rgba(106,158,82,0.15); }
+.chip-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.chip-ticker { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text); }
+.chip-change { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; }
+.chip-change.up { color: var(--green); }
+.chip-change.dn { color: var(--red); }
+.chip-change.flat { color: var(--text3); }
+.chip-price { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+
+.card-actions { display: flex; border-top: 1px solid var(--border); }
+.act-btn { flex: 1; padding: 10px 0; background: none; border: none; border-right: 1px solid var(--border); font-family: 'Sora', sans-serif; font-size: 12px; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.12s, color 0.12s; }
+.act-btn:last-child { border-right: none; }
+.act-btn:hover { background: var(--card2); color: var(--text2); }
+.act-btn.saved { color: var(--matcha); }
+.act-btn svg { width: 13px; height: 13px; }
+
+.empty { grid-column: 1/-1; text-align: center; padding: 80px 0; color: var(--text3); font-size: 15px; line-height: 2; }
+
+/* ── WATCHLIST PAGE ── */
+.wl-page { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
+
+.wl-header { margin-bottom: 32px; }
+.wl-title { font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; margin-bottom: 6px; }
+.wl-subtitle { font-size: 14px; color: var(--text2); font-weight: 300; }
+
+/* SEARCH */
+.wl-search-wrap { display: flex; gap: 12px; margin-bottom: 36px; }
+.wl-search { flex: 1; padding: 13px 18px; border-radius: 100px; border: 1.5px solid var(--border2); background: var(--card); font-family: 'Sora', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color 0.15s; }
+.wl-search:focus { border-color: var(--matcha); }
+.wl-search::placeholder { color: var(--text3); }
+.wl-add-btn { padding: 13px 24px; border-radius: 100px; background: var(--matcha-lt); color: #111a0f; border: none; font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
+.wl-add-btn:hover { opacity: 0.88; }
+
+/* SUGGESTIONS */
+.suggestions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.sug-chip { padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border2); background: var(--card); font-size: 12px; font-weight: 500; color: var(--text2); cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: all 0.15s; }
+.sug-chip:hover { border-color: var(--matcha); color: var(--matcha); background: var(--card); }
+
+/* WATCHLIST SECTION */
+.wl-section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 16px; }
+
+.wl-empty { text-align: center; padding: 60px 0; color: var(--text3); }
+.wl-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.wl-empty-text { font-size: 15px; margin-bottom: 6px; }
+.wl-empty-sub { font-size: 13px; color: var(--text3); }
+
+/* WATCHLIST GRID */
+.wl-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin-bottom: 40px; }
+
+.wl-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; animation: fadeUp 0.3s ease both; transition: border-color 0.2s, transform 0.18s, box-shadow 0.2s; position: relative; }
+.wl-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(60,50,30,0.09); }
+
+.wl-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.wl-ticker-wrap { display: flex; flex-direction: column; gap: 2px; }
+.wl-ticker { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 500; color: var(--text); }
+.wl-name { font-size: 11px; color: var(--text3); }
+.wl-remove { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; padding: 2px 4px; border-radius: 4px; transition: color 0.12s, background 0.12s; line-height: 1; }
+.wl-remove:hover { color: var(--red); background: var(--card2); }
+
+.wl-price-row { display: flex; align-items: baseline; gap: 10px; }
+.wl-price { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: var(--text); }
+.wl-change { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
+.wl-change.up { color: var(--green); background: rgba(58,138,58,0.1); }
+.wl-change.dn { color: var(--red); background: rgba(192,64,64,0.1); }
+.wl-change.flat { color: var(--text3); background: var(--card2); }
+
+/* MINI CHART */
+.wl-chart { height: 48px; width: 100%; }
+
+.wl-footer { display: flex; justify-content: space-between; align-items: center; }
+.wl-vol { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+.wl-news-btn { font-size: 11px; font-weight: 600; color: var(--matcha); cursor: pointer; background: none; border: none; font-family: 'Sora', sans-serif; padding: 0; }
+.wl-news-btn:hover { text-decoration: underline; }
+
+.wl-loading { opacity: 0.5; pointer-events: none; }
+
+/* MARKET SUMMARY */
+.market-summary { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 36px; }
+.mkt-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; }
+.mkt-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; font-weight: 500; }
+.mkt-val { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 500; color: var(--text); }
+.mkt-chg { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; margin-top: 3px; }
+.mkt-chg.up { color: var(--green); }
+.mkt-chg.dn { color: var(--red); }
+
+/* TOAST */
+/* TOOLTIP MODAL */
+.tooltip-overlay {
+  position: fixed; inset: 0; background: rgba(17,26,15,0.55);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 24px; animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.tooltip-box {
+  background: var(--card); border-radius: var(--radius);
+  border: 1px solid var(--border2); max-width: 520px; width: 100%;
+  box-shadow: 0 24px 60px rgba(17,26,15,0.25);
+  animation: slideUp 0.22s ease;
+}
+@keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.tooltip-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 14px; border-bottom: 1px solid var(--border);
+}
+.tooltip-head-left { display: flex; align-items: center; gap: 10px; }
+.tooltip-icon { font-size: 20px; }
+.tooltip-label { font-size: 13px; font-weight: 700; color: var(--matcha); letter-spacing: 0.04em; }
+.tooltip-close {
+  background: none; border: none; cursor: pointer; color: var(--text3);
+  font-size: 18px; padding: 2px 6px; border-radius: 6px; transition: color 0.12s, background 0.12s; line-height: 1;
+}
+.tooltip-close:hover { color: var(--text); background: var(--card2); }
+.tooltip-title { font-size: 13px; font-weight: 600; color: var(--text2); padding: 12px 20px 0; line-height: 1.5; }
+.tooltip-body { padding: 12px 20px 20px; font-size: 14px; line-height: 1.75; color: var(--text); font-weight: 300; }
+.tooltip-body p { margin-bottom: 10px; }
+.tooltip-body p:last-child { margin-bottom: 0; }
+.tooltip-loading { display: flex; align-items: center; gap: 10px; padding: 20px; color: var(--text2); font-size: 14px; }
+.tooltip-spinner { width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--matcha); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.tooltip-footer { padding: 0 20px 16px; }
+.tooltip-stocks { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.tooltip-chip { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 100px; background: var(--matcha-bg, #eaf2e4); color: var(--matcha); border: 1px solid rgba(106,158,82,0.2); }
+.tooltip-chip.up { color: var(--green); background: rgba(58,138,58,0.08); border-color: rgba(58,138,58,0.2); }
+.tooltip-chip.dn { color: var(--red); background: rgba(192,64,64,0.08); border-color: rgba(192,64,64,0.2); }
+
+/* ONBOARDING */
+.onboard-overlay {
+  position: fixed; inset: 0; background: rgba(17,26,15,0.7);
+  z-index: 300; display: flex; align-items: center; justify-content: center;
+  padding: 24px; animation: fadeIn 0.3s ease;
+}
+.onboard-box {
+  background: #faf6ee; border-radius: 20px;
+  border: 1px solid rgba(90,80,60,0.18); max-width: 480px; width: 100%;
+  box-shadow: 0 32px 80px rgba(17,26,15,0.3);
+  animation: slideUp 0.25s ease; overflow: hidden;
+}
+.onboard-top {
+  background: #111a0f;
+  padding: 32px 32px 24px;
+  text-align: center;
+}
+.onboard-emoji { font-size: 48px; margin-bottom: 12px; }
+.onboard-step-title { font-size: 20px; font-weight: 700; color: #f0ead0; margin-bottom: 8px; }
+.onboard-step-sub { font-size: 14px; color: #7a9470; font-weight: 300; line-height: 1.6; }
+.onboard-body { padding: 24px 32px 28px; }
+.onboard-desc { font-size: 14px; color: #5a5040; line-height: 1.75; font-weight: 300; margin-bottom: 20px; }
+.onboard-feature {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; border-radius: 10px;
+  background: #f0e8d4; border: 1px solid rgba(90,80,60,0.10);
+  margin-bottom: 10px;
+}
+.onboard-feature-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.onboard-feature-text { font-size: 13px; color: #5a5040; line-height: 1.5; }
+.onboard-feature-text strong { color: #1e1a10; font-weight: 600; display: block; margin-bottom: 2px; }
+.onboard-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px 24px; border-top: 1px solid rgba(90,80,60,0.10);
+}
+.onboard-dots { display: flex; gap: 6px; }
+.onboard-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(90,80,60,0.18); transition: background 0.2s; }
+.onboard-dot.active { background: #8ab86a; }
+.onboard-skip { font-size: 13px; color: #9a8e78; cursor: pointer; background: none; border: none; font-family: 'Sora', sans-serif; }
+.onboard-skip:hover { color: #5a5040; }
+.onboard-next {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 24px; border-radius: 100px;
+  background: var(--matcha-lt); color: #111a0f;
+  border: none; font-family: 'Sora', sans-serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.onboard-next:hover { opacity: 0.88; }
+
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(70px); background: #1d2c1a; border: 1px solid var(--matcha-lt); color: #f0ead0; padding: 11px 24px; border-radius: 100px; font-size: 13px; font-weight: 500; z-index: 999; transition: transform 0.28s ease; pointer-events: none; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 860px) { .wl-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .market-summary { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .nav-inner { padding: 0 16px; gap: 10px; } main, .wl-page { padding: 24px 16px 60px; } .logo-bottom { display: none; } .wl-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('feed')">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <polyline points="3,17 8,11 13,14 21,5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="21" cy="5" r="2.2" fill="white"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-top">Green<span>line</span></div>
+        <div class="logo-bottom">Market News</div>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <button class="nav-link active" id="navFeed" onclick="showPage('feed')">Feed</button>
+      <button class="nav-link" id="navWatchlist" onclick="showPage('watchlist')">Watchlist</button>
+    </div>
+
+    <div class="nav-filters" id="filters">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="business">Business</button>
+      <button class="filter-btn" data-cat="technology">Technology</button>
+      <button class="filter-btn" data-cat="energy">Energy</button>
+      <button class="filter-btn" data-cat="health">Health</button>
+      <button class="filter-btn" data-cat="economy">Economy</button>
+    </div>
+
+    <button class="refresh-btn" id="refreshBtn" onclick="doRefresh()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Refresh
+    </button>
+  </div>
+</nav>
+
+<div class="ticker-strip">
+  <div class="ticker-track" id="tickerTrack">Loading live market data...</div>
+</div>
+
+<!-- FEED PAGE -->
+<div class="page active" id="feedPage">
+  <main>
+    <div class="feed-bar">
+      <div class="feed-left">
+        <span class="feed-label">Live Feed</span>
+        <div class="status-bar">
+          <div class="status-dot loading" id="statusDot"></div>
+          <span id="statusText">Loading...</span>
+        </div>
+      </div>
+      <span class="updated-at" id="updatedAt">—</span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<!-- WATCHLIST PAGE -->
+<div class="page" id="watchlistPage">
+  <div class="wl-page">
+    <div class="wl-header">
+      <div class="wl-title">My Watchlist</div>
+      <div class="wl-subtitle">Track your favorite stocks with live prices. Add any stock by ticker symbol or company name.</div>
+    </div>
+
+    <!-- Market Summary -->
+    <div class="market-summary" id="marketSummary">
+      <div class="mkt-card"><div class="mkt-label">S&P 500</div><div class="mkt-val" id="mktSPY">—</div><div class="mkt-chg" id="mktSPYchg">—</div></div>
+      <div class="mkt-card"><div class="mkt-label">Nasdaq</div><div class="mkt-val" id="mktQQQ">—</div><div class="mkt-chg" id="mktQQQchg">—</div></div>
+      <div class="mkt-card"><div class="mkt-label">Dow Jones</div><div class="mkt-val" id="mktDIA">—</div><div class="mkt-chg" id="mktDIAchg">—</div></div>
+      <div class="mkt-card"><div class="mkt-label">Gold</div><div class="mkt-val" id="mktGLD">—</div><div class="mkt-chg" id="mktGLDchg">—</div></div>
+    </div>
+
+    <!-- Search -->
+    <div class="wl-search-wrap">
+      <input class="wl-search" id="wlSearch" type="text" placeholder="Search by ticker or company name (e.g. AAPL or Apple)..." onkeydown="if(event.key==='Enter')addStock()"/>
+      <button class="wl-add-btn" onclick="addStock()">+ Add Stock</button>
+    </div>
+
+    <!-- Popular suggestions -->
+    <div class="suggestions">
+      <div class="wl-section-label" style="width:100%;margin-bottom:8px;">Popular stocks</div>
+      <div class="sug-chip" onclick="quickAdd('AAPL')">AAPL</div>
+      <div class="sug-chip" onclick="quickAdd('MSFT')">MSFT</div>
+      <div class="sug-chip" onclick="quickAdd('NVDA')">NVDA</div>
+      <div class="sug-chip" onclick="quickAdd('GOOGL')">GOOGL</div>
+      <div class="sug-chip" onclick="quickAdd('AMZN')">AMZN</div>
+      <div class="sug-chip" onclick="quickAdd('TSLA')">TSLA</div>
+      <div class="sug-chip" onclick="quickAdd('META')">META</div>
+      <div class="sug-chip" onclick="quickAdd('JPM')">JPM</div>
+      <div class="sug-chip" onclick="quickAdd('XOM')">XOM</div>
+      <div class="sug-chip" onclick="quickAdd('LLY')">LLY</div>
+      <div class="sug-chip" onclick="quickAdd('GS')">GS</div>
+      <div class="sug-chip" onclick="quickAdd('V')">V</div>
+    </div>
+
+    <!-- Watchlist -->
+    <div class="wl-section-label" id="wlSectionLabel">Your stocks</div>
+    <div id="wlEmpty" class="wl-empty" style="display:none;">
+      <div class="wl-empty-icon">📋</div>
+      <div class="wl-empty-text">Your watchlist is empty</div>
+      <div class="wl-empty-sub">Add stocks above to start tracking them</div>
+    </div>
+    <div class="wl-grid" id="wlGrid"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GNEWS_KEY = '04cf44912073cf109e176446b9ce1dca';
+const POLY_KEY  = '5yZz_lFOat0OcFGjE_d41p1WFAKGh03v';
+
+const STOCK_NAMES = {
+  'AAPL':'Apple','MSFT':'Microsoft','NVDA':'NVIDIA','GOOGL':'Alphabet / Google',
+  'AMZN':'Amazon','META':'Meta','TSLA':'Tesla','JPM':'JPMorgan Chase',
+  'XOM':'ExxonMobil','LLY':'Eli Lilly','GS':'Goldman Sachs','V':'Visa',
+  'JNJ':'Johnson & Johnson','WMT':'Walmart','BRK-A':'Berkshire Hathaway',
+  'SPY':'S&P 500 ETF','QQQ':'Nasdaq ETF','DIA':'Dow Jones ETF',
+  'GLD':'Gold ETF','TLT':'Treasury Bond ETF','BAC':'Bank of America',
+  'PFE':'Pfizer','ABBV':'AbbVie','MRK':'Merck','CVX':'Chevron',
+  'COP':'ConocoPhillips','NEE':'NextEra Energy','ENPH':'Enphase Energy',
+  'MS':'Morgan Stanley','BX':'Blackstone','SLB':'SLB','BIIB':'Biogen',
+  'AMGN':'Amgen','NVO':'Novo Nordisk','INTC':'Intel','QCOM':'Qualcomm',
+  'AMD':'AMD','NFLX':'Netflix','DIS':'Disney','UBER':'Uber','DASH':'DoorDash',
 };
+
+const CAT_QUERIES = {
+  all:'stock market OR Wall Street OR earnings OR Federal Reserve',
+  business:'earnings OR merger OR acquisition OR IPO OR stocks',
+  technology:'technology stocks OR Apple OR Microsoft OR NVIDIA OR semiconductor',
+  energy:'oil prices OR OPEC OR energy stocks OR natural gas OR crude oil',
+  health:'pharmaceutical OR FDA approval OR biotech OR drug trial OR healthcare stocks',
+  economy:'Federal Reserve OR inflation OR interest rates OR GDP OR jobs report',
+};
+const CAT_COLORS = { all:'#111a0f', business:'#111a0f', technology:'#111a0f', energy:'#111a0f', health:'#111a0f', economy:'#111a0f' };
+const CAT_ICONS  = { all:'📰', business:'📊', technology:'💻', energy:'🛢', health:'💊', economy:'🏦' };
+const CAT_STOCKS = {
+  all:['AAPL','MSFT','JPM','XOM','SPY'], business:['JPM','GS','MS','BAC','BRK-A'],
+  technology:['AAPL','MSFT','NVDA','GOOGL','META'], energy:['XOM','CVX','COP','SLB','NEE'],
+  health:['LLY','JNJ','PFE','ABBV','MRK'], economy:['SPY','TLT','GLD','DIA','QQQ'],
+};
+const KEYWORD_STOCKS = {
+  'AAPL':['apple','iphone','ipad','macos','tim cook'],'MSFT':['microsoft','azure','windows','openai'],
+  'NVDA':['nvidia','gpu','jensen huang','ai chip'],'GOOGL':['google','alphabet','youtube','gemini'],
+  'AMZN':['amazon','aws','bezos'],'META':['meta','facebook','instagram','zuckerberg'],
+  'TSLA':['tesla','musk','electric vehicle','ev'],'XOM':['exxon','opec','crude','oil price'],
+  'CVX':['chevron'],'JPM':['jpmorgan','dimon','chase bank'],'GS':['goldman sachs'],
+  'LLY':['eli lilly','ozempic','wegovy','glp-1','obesity drug'],'PFE':['pfizer'],
+  'JNJ':['johnson & johnson'],'SPY':['s&p 500','stock market rally'],'GLD':['gold price'],
+  'TLT':['treasury','bond yield'],'NEE':['nextera','renewable energy','solar','wind energy'],
+};
+const TICKER_SYMS = ['AAPL','MSFT','NVDA','GOOGL','AMZN','META','TSLA','XOM','JPM','LLY','V','JNJ','WMT','GS','BRK-A'];
+
+let stockCache = {};
+let activeFilter = 'all';
+let savedArticleIds = new Set();
+let watchlist = JSON.parse(localStorage.getItem('gl_watchlist') || '["AAPL","MSFT","NVDA"]');
+let currentPage = 'feed';
+
+/* ── PAGE NAV ── */
+function showPage(page) {
+  currentPage = page;
+  document.getElementById('feedPage').classList.toggle('active', page === 'feed');
+  document.getElementById('watchlistPage').classList.toggle('active', page === 'watchlist');
+  document.getElementById('navFeed').classList.toggle('active', page === 'feed');
+  document.getElementById('navWatchlist').classList.toggle('active', page === 'watchlist');
+  document.getElementById('filters').style.display = page === 'feed' ? 'flex' : 'none';
+  document.getElementById('refreshBtn').style.display = page === 'feed' ? 'flex' : 'none';
+  if (page === 'watchlist') { renderWatchlist(); loadMarketSummary(); }
+}
+
+/* ── STATUS ── */
+function setStatus(type, text) {
+  document.getElementById('statusDot').className = 'status-dot ' + type;
+  document.getElementById('statusText').textContent = text;
+}
+
+/* ── SKELETONS ── */
+function showSkeletons() {
+  document.getElementById('grid').innerHTML = [0,1,2,3].map(() => `
+    <div class="skeleton"><div class="skel-thumb"></div>
+    <div class="skel-body"><div class="skel-line w40"></div><div class="skel-line w100"></div>
+    <div class="skel-line w80"></div><div class="skel-line w60"></div></div></div>`).join('');
+}
+
+/* ── STOCK PRICE via Netlify Function ── */
+const STOCK_FETCH_QUEUE = {};
+
+async function fetchStock(symbol) {
+  if (stockCache[symbol] && Date.now() - stockCache[symbol].ts < 300000) return stockCache[symbol];
+  
+  // Deduplicate concurrent requests for same symbol
+  if (STOCK_FETCH_QUEUE[symbol]) return STOCK_FETCH_QUEUE[symbol];
+  
+  STOCK_FETCH_QUEUE[symbol] = (async () => {
+    try {
+      const res = await fetch(`/.netlify/functions/stocks?symbols=${symbol}`);
+      const data = await res.json();
+      if (data[symbol]) {
+        const result = { ...data[symbol], ts: Date.now() };
+        stockCache[symbol] = result;
+        delete STOCK_FETCH_QUEUE[symbol];
+        return result;
+      }
+    } catch(e) {}
+    delete STOCK_FETCH_QUEUE[symbol];
+    return null;
+  })();
+  
+  return STOCK_FETCH_QUEUE[symbol];
+}
+
+async function fetchStocksBatch(symbols) {
+  // Filter out cached symbols
+  const needed = symbols.filter(s => !stockCache[s] || Date.now() - stockCache[s].ts >= 300000);
+  
+  if (needed.length > 0) {
+    try {
+      const res = await fetch(`/.netlify/functions/stocks?symbols=${needed.join(',')}`);
+      const data = await res.json();
+      Object.entries(data).forEach(([sym, d]) => {
+        stockCache[sym] = { ...d, ts: Date.now() };
+      });
+    } catch(e) {}
+  }
+  
+  return symbols.map(s => stockCache[s] || null);
+}
+
+/* ── TICKER ── */
+async function buildTicker() {
+  const results = await Promise.all(TICKER_SYMS.map(s => fetchStock(s)));
+  const doubled = [...TICKER_SYMS,...TICKER_SYMS];
+  document.getElementById('tickerTrack').innerHTML = doubled.map((s,i) => {
+    const d = results[i % TICKER_SYMS.length];
+    if (!d) return `<span class="t-item"><span class="sym">${s}</span><span style="color:#3a5434">--</span></span>`;
+    const up = d.change >= 0;
+    return `<span class="t-item"><span class="sym">${s}</span>$${d.price.toFixed(2)} <span class="${up?'t-up':'t-dn'}">${up?'+':''}${d.change.toFixed(2)}%</span></span>`;
+  }).join('');
+}
+
+/* ── MINI CHART ── */
+function drawChart(canvas, history, isUp) {
+  if (!canvas || !history || history.length < 2) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.offsetWidth || 200;
+  const h = canvas.offsetHeight || 48;
+  canvas.width = w * 2; canvas.height = h * 2;
+  ctx.scale(2, 2);
+  const min = Math.min(...history), max = Math.max(...history);
+  const range = max - min || 1;
+  const pts = history.map((v, i) => ({ x: (i/(history.length-1))*(w-4)+2, y: h-4 - ((v-min)/range)*(h-8) }));
+  ctx.clearRect(0,0,w,h);
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+  ctx.strokeStyle = isUp ? '#3a8a3a' : '#c04040';
+  ctx.lineWidth = 1.8;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+  ctx.lineTo(pts[pts.length-1].x, h);
+  ctx.lineTo(pts[0].x, h);
+  ctx.closePath();
+  ctx.fillStyle = isUp ? 'rgba(58,138,58,0.08)' : 'rgba(192,64,64,0.08)';
+  ctx.fill();
+}
+
+/* ── WATCHLIST ── */
+function saveWatchlist() { localStorage.setItem('gl_watchlist', JSON.stringify(watchlist)); }
+
+async function addStock() {
+  const input = document.getElementById('wlSearch');
+  const raw = input.value.trim().toUpperCase().replace(/\s+/g,'');
+  if (!raw) { showToast('Enter a ticker symbol like AAPL or TSLA'); return; }
+  if (watchlist.includes(raw)) { showToast(`${raw} is already in your watchlist`); return; }
+  watchlist.push(raw);
+  saveWatchlist();
+  input.value = '';
+  showToast(`${raw} added to watchlist`);
+  renderWatchlist();
+}
+
+function quickAdd(sym) {
+  if (watchlist.includes(sym)) { showToast(`${sym} is already in your watchlist`); return; }
+  watchlist.push(sym);
+  saveWatchlist();
+  showToast(`${sym} added to watchlist`);
+  renderWatchlist();
+}
+
+function removeStock(sym) {
+  watchlist = watchlist.filter(s => s !== sym);
+  saveWatchlist();
+  showToast(`${sym} removed`);
+  renderWatchlist();
+}
+
+async function renderWatchlist() {
+  const grid = document.getElementById('wlGrid');
+  const empty = document.getElementById('wlEmpty');
+  const label = document.getElementById('wlSectionLabel');
+
+  if (watchlist.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    label.textContent = 'Your stocks';
+    return;
+  }
+
+  empty.style.display = 'none';
+  label.textContent = `Your stocks (${watchlist.length})`;
+  grid.innerHTML = watchlist.map(s => `
+    <div class="wl-card wl-loading" id="wlcard-${s}">
+      <div class="wl-card-top">
+        <div class="wl-ticker-wrap">
+          <div class="wl-ticker">${s}</div>
+          <div class="wl-name">${STOCK_NAMES[s] || 'Loading...'}</div>
+        </div>
+        <button class="wl-remove" onclick="removeStock('${s}')" title="Remove">✕</button>
+      </div>
+      <div class="wl-price-row">
+        <div class="wl-price">—</div>
+        <div class="wl-change flat">Loading</div>
+      </div>
+      <canvas class="wl-chart" id="chart-${s}"></canvas>
+      <div class="wl-footer">
+        <div class="wl-vol">Vol: —</div>
+        <button class="wl-news-btn" onclick="searchNews('${s}')">See news →</button>
+      </div>
+    </div>`).join('');
+
+  watchlist.forEach(async (sym) => {
+    const data = await fetchStock(sym);
+    const card = document.getElementById(`wlcard-${sym}`);
+    if (!card) return;
+    card.classList.remove('wl-loading');
+    if (!data) {
+      card.querySelector('.wl-price').textContent = 'N/A';
+      card.querySelector('.wl-change').textContent = 'No data';
+      return;
+    }
+    const up = data.change >= 0;
+    const chgClass = up ? 'up' : 'dn';
+    card.querySelector('.wl-name').textContent = STOCK_NAMES[sym] || sym;
+    card.querySelector('.wl-price').textContent = `$${data.price.toFixed(2)}`;
+    const chgEl = card.querySelector('.wl-change');
+    chgEl.className = `wl-change ${chgClass}`;
+    chgEl.textContent = `${up?'+':''}${data.change.toFixed(2)}%`;
+    card.querySelector('.wl-vol').textContent = `Vol: ${data.vol ? (data.vol/1000000).toFixed(1)+'M' : '—'}`;
+    const canvas = document.getElementById(`chart-${sym}`);
+    if (canvas && data.history) setTimeout(() => drawChart(canvas, data.history, up), 50);
+  });
+}
+
+function searchNews(sym) {
+  showPage('feed');
+  showToast(`Showing news related to ${sym}`);
+}
+
+/* ── MARKET SUMMARY ── */
+async function loadMarketSummary() {
+  const indices = ['SPY','QQQ','DIA','GLD'];
+  const ids = ['SPY','QQQ','DIA','GLD'];
+  const results = await Promise.all(indices.map(s => fetchStock(s)));
+  results.forEach((d, i) => {
+    const sym = ids[i];
+    if (!d) return;
+    const up = d.change >= 0;
+    document.getElementById(`mkt${sym}`).textContent = `$${d.price.toFixed(2)}`;
+    const chgEl = document.getElementById(`mkt${sym}chg`);
+    chgEl.textContent = `${up?'+':''}${d.change.toFixed(2)}%`;
+    chgEl.className = `mkt-chg ${up?'up':'dn'}`;
+  });
+}
+
+/* ── FALLBACK ARTICLES ── */
+const FALLBACK = {
+  all:[
+    {title:'Federal Reserve holds rates steady, signals caution on cuts',description:'Fed officials cited persistent inflation and strong jobs data as reasons to delay interest rate cuts.',source:{name:'Reuters'},publishedAt:new Date(Date.now()-3600000).toISOString(),url:'https://reuters.com'},
+    {title:'NVIDIA posts record revenue driven by AI chip demand',description:'The chipmaker reported quarterly earnings that smashed expectations, with data center revenue more than doubling.',source:{name:'Bloomberg'},publishedAt:new Date(Date.now()-7200000).toISOString(),url:'https://bloomberg.com'},
+    {title:'Oil prices rise as OPEC+ considers extending production cuts',description:'Crude oil climbed above $85 a barrel after reports the cartel is weighing keeping output restrictions in place.',source:{name:'Wall Street Journal'},publishedAt:new Date(Date.now()-10800000).toISOString(),url:'https://wsj.com'},
+    {title:'Goldman Sachs upgrades outlook for S&P 500 amid strong earnings season',description:'The bank raised its year-end target for the index, citing better-than-expected corporate profits.',source:{name:'CNBC'},publishedAt:new Date(Date.now()-14400000).toISOString(),url:'https://cnbc.com'},
+    {title:'Eli Lilly obesity drug trial results exceed analyst expectations',description:'New Phase 3 trial data showed significant weight loss outcomes, reinforcing Lilly\'s lead in the GLP-1 market.',source:{name:'STAT News'},publishedAt:new Date(Date.now()-18000000).toISOString(),url:'https://statnews.com'},
+    {title:'Microsoft and OpenAI expand cloud partnership with new $3B commitment',description:'The deal deepens Microsoft\'s lead in enterprise AI and puts pressure on Google and Amazon.',source:{name:'Financial Times'},publishedAt:new Date(Date.now()-21600000).toISOString(),url:'https://ft.com'},
+  ],
+  business:[
+    {title:'JPMorgan Chase beats Q1 earnings estimates by wide margin',description:'Strong trading revenue and investment banking fees drove profits above Wall Street expectations.',source:{name:'MarketWatch'},publishedAt:new Date(Date.now()-3600000).toISOString(),url:'https://marketwatch.com'},
+    {title:'Amazon announces $10B share buyback program',description:'The e-commerce and cloud giant will repurchase up to $10 billion of its own shares.',source:{name:'Bloomberg'},publishedAt:new Date(Date.now()-7200000).toISOString(),url:'https://bloomberg.com'},
+    {title:'Merger activity picks up as deal-making returns to Wall Street',description:'A wave of strategic acquisitions signals that corporate confidence is returning.',source:{name:'Financial Times'},publishedAt:new Date(Date.now()-10800000).toISOString(),url:'https://ft.com'},
+    {title:'BlackRock assets under management hit record $10 trillion',description:'The world\'s largest asset manager reported record inflows driven by ETF products.',source:{name:'Reuters'},publishedAt:new Date(Date.now()-14400000).toISOString(),url:'https://reuters.com'},
+    {title:'Visa and Mastercard reach $30B settlement with retailers over fees',description:'The landmark agreement could reshape how payment processing fees work for millions of merchants.',source:{name:'CNBC'},publishedAt:new Date(Date.now()-18000000).toISOString(),url:'https://cnbc.com'},
+    {title:'Warren Buffett increases Berkshire stake in Japanese trading houses',description:'Berkshire Hathaway disclosed it has raised its holdings in five major Japanese conglomerates.',source:{name:'Wall Street Journal'},publishedAt:new Date(Date.now()-21600000).toISOString(),url:'https://wsj.com'},
+  ],
+  technology:[
+    {title:'Apple unveils new AI features coming to iPhone this fall',description:'A suite of on-device AI tools will be built into iOS, challenging Google and Samsung.',source:{name:'TechCrunch'},publishedAt:new Date(Date.now()-3600000).toISOString(),url:'https://techcrunch.com'},
+    {title:'NVIDIA GPUs remain in short supply as AI spending accelerates',description:'Demand for the company\'s chips continues to outpace production.',source:{name:'Bloomberg'},publishedAt:new Date(Date.now()-7200000).toISOString(),url:'https://bloomberg.com'},
+    {title:'Microsoft Copilot adoption surges among enterprise customers',description:'The AI assistant built into Microsoft 365 is now used by millions of business customers.',source:{name:'CNBC'},publishedAt:new Date(Date.now()-10800000).toISOString(),url:'https://cnbc.com'},
+    {title:'Google launches new Gemini model to compete with GPT-4',description:'Alphabet unveiled its latest large language model, claiming it outperforms rivals on benchmarks.',source:{name:'The Verge'},publishedAt:new Date(Date.now()-14400000).toISOString(),url:'https://theverge.com'},
+    {title:'Qualcomm wins key patent dispute with Arm Holdings',description:'The ruling clears major legal uncertainty for Qualcomm and its next generation of chips.',source:{name:'Reuters'},publishedAt:new Date(Date.now()-18000000).toISOString(),url:'https://reuters.com'},
+    {title:'Tesla Full Self-Driving software reaches 1 billion miles driven',description:'The EV maker\'s FSD system has accumulated more than one billion miles of real-world data.',source:{name:'Electrek'},publishedAt:new Date(Date.now()-21600000).toISOString(),url:'https://electrek.co'},
+  ],
+  energy:[
+    {title:'OPEC+ agrees to extend oil output cuts through Q3',description:'The cartel decided to maintain production curbs to support crude prices heading into summer.',source:{name:'Wall Street Journal'},publishedAt:new Date(Date.now()-3600000).toISOString(),url:'https://wsj.com'},
+    {title:'U.S. natural gas exports hit record high as Europe diversifies supply',description:'LNG terminal expansions are creating a new era of American energy dominance in global markets.',source:{name:'Reuters'},publishedAt:new Date(Date.now()-7200000).toISOString(),url:'https://reuters.com'},
+    {title:'ExxonMobil completes Pioneer Natural Resources acquisition',description:'The $60 billion deal creates the largest oil producer in the Permian Basin.',source:{name:'Bloomberg'},publishedAt:new Date(Date.now()-10800000).toISOString(),url:'https://bloomberg.com'},
+    {title:'Wind energy capacity breaks record as utilities shift from gas',description:'Renewables now account for nearly 30% of U.S. electricity generation.',source:{name:'Financial Times'},publishedAt:new Date(Date.now()-14400000).toISOString(),url:'https://ft.com'},
+    {title:'Chevron raises dividend as strong oil prices boost profits',description:'The energy giant rewarded shareholders after a quarter of strong free cash flow.',source:{name:'CNBC'},publishedAt:new Date(Date.now()-18000000).toISOString(),url:'https://cnbc.com'},
+    {title:'Solar panel costs fall to all-time low boosting clean energy stocks',description:'Manufacturing improvements have driven solar installation costs down sharply worldwide.',source:{name:'Bloomberg'},publishedAt:new Date(Date.now()-21600000).toISOString(),url:'https://bloomberg.com'},
+  ],
+  health:[
+    {title:'Eli Lilly obesity drug shows 22% weight loss in Phase 3 trials',description:'Results outperform Novo Nordisk\'s Wegovy and could reshape the $50B GLP-1 market.',source:{name:'STAT News'},publishedAt:new Date(Date.now()-3600000).toISOString(),url:'https://statnews.com'},
+    {title:'FDA grants accelerated approval to Biogen Alzheimer\'s treatment',description:'The decision sends Biogen shares higher and opens a new chapter in disease treatment.',source:{name:'Reuters'},publishedAt:new Date(Date.now()-7200000).toISOString(),url:'https://reuters.com'},
+    {title:'CVS Health acquires Oak Street Health in $10.6B deal',description:'The acquisition accelerates CVS\'s push into primary care.',source:{name:'Bloomberg'},publishedAt:new Date(Date.now()-10800000).toISOString(),url:'https://bloomberg.com'},
+    {title:'Pfizer slashes revenue forecast as COVID product demand fades',description:'Sales of COVID vaccine and antiviral treatment have fallen sharply.',source:{name:'Wall Street Journal'},publishedAt:new Date(Date.now()-14400000).toISOString(),url:'https://wsj.com'},
+    {title:'Johnson & Johnson spinoff Kenvue prices IPO above range',description:'The consumer health company raised more than $3.8 billion in one of the year\'s largest IPOs.',source:{name:'CNBC'},publishedAt:new Date(Date.now()-18000000).toISOString(),url:'https://cnbc.com'},
+    {title:'AbbVie acquires neuroscience biotech in $8.7B deal',description:'The pharmaceutical giant is expanding beyond Humira by betting on mental health treatments.',source:{name:'Financial Times'},publishedAt:new Date(Date.now()-21600000).toISOString(),url:'https://ft.com'},
+  ],
+  economy:[
+    {title:'Federal Reserve signals two rate cuts in 2025 as inflation eases',description:'Fed Chair Powell said the central bank is gaining confidence inflation is returning to 2% target.',source:{name:'Reuters'},publishedAt:new Date(Date.now()-3600000).toISOString(),url:'https://reuters.com'},
+    {title:'U.S. jobs report shows 200,000 new positions added in March',description:'The labor market remained resilient with unemployment holding steady at 3.8%.',source:{name:'Bloomberg'},publishedAt:new Date(Date.now()-7200000).toISOString(),url:'https://bloomberg.com'},
+    {title:'Consumer confidence rises to highest level in two years',description:'Americans are feeling more optimistic about the economy and personal finances.',source:{name:'CNBC'},publishedAt:new Date(Date.now()-10800000).toISOString(),url:'https://cnbc.com'},
+    {title:'U.S. GDP grows 2.8% in fourth quarter beating expectations',description:'The economy expanded faster than forecast, driven by consumer spending and business investment.',source:{name:'Wall Street Journal'},publishedAt:new Date(Date.now()-14400000).toISOString(),url:'https://wsj.com'},
+    {title:'China manufacturing data beats forecasts lifting global markets',description:'A stronger-than-expected PMI reading boosted commodity stocks and emerging market currencies.',source:{name:'Financial Times'},publishedAt:new Date(Date.now()-18000000).toISOString(),url:'https://ft.com'},
+    {title:'Treasury yields fall as investors bet on Fed rate cuts',description:'The 10-year yield dropped below 4.2% after cooler inflation data.',source:{name:'MarketWatch'},publishedAt:new Date(Date.now()-21600000).toISOString(),url:'https://marketwatch.com'},
+  ],
+};
+
+/* ── FETCH NEWS via Netlify Function ── */
+async function fetchNews(cat) {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(`/.netlify/functions/news?cat=${cat}`, { signal: controller.signal });
+    clearTimeout(timeout);
+    const data = await res.json();
+    if (data.articles && data.articles.length >= 3) return data.articles;
+  } catch(e) {}
+  return FALLBACK[cat] || FALLBACK.all;
+}
+
+
+
+async function makeCard(article, cat, idx) {
+  const symbols = pickStocks(article, cat);
+  const stockData = await Promise.all(symbols.map(s=>fetchStock(s)));
+  const chipsHtml = symbols.map((s,i)=>{
+    const d=stockData[i];
+    if(!d)return`<div class="stock-chip"><div class="chip-top"><span class="chip-ticker">${s}</span><span class="chip-change flat">—</span></div><div class="chip-price">loading</div></div>`;
+    const up=d.change>=0;
+    return`<div class="stock-chip"><div class="chip-top"><span class="chip-ticker">${s}</span><span class="chip-change ${up?'up':'dn'}">${up?'+':''}${d.change.toFixed(1)}%</span></div><div class="chip-price">$${d.price.toFixed(2)}</div></div>`;
+  }).join('');
+
+  const icon=pickIcon(article,cat), color=CAT_COLORS[cat]||CAT_COLORS.all;
+  const id=`a${idx}`, saved=savedArticleIds.has(id), source=article.source?.name||'News', url=article.url||'#';
+  const div=document.createElement('div');
+  div.className='card'; div.dataset.id=id; div.style.animationDelay=(idx*0.07)+'s';
+  div.innerHTML=`
+    <div class="card-thumb" style="background:${color};">
+      <span>${icon}</span>
+      <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      <span class="cat-pill">${cat==='all'?'market':cat}</span>
+    </div>
+    <div class="card-meta">
+      <div class="source-dot"></div>
+      <span class="source-name">${source}</span>
+      <span class="meta-sep">·</span>
+      <span class="time-ago">${timeAgo(article.publishedAt)}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${article.title}</div>
+      <div class="card-summary">${article.description||'Click to read the full article.'}</div>
+      <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
+    </div>
+    <div class="stock-widget">
+      <div class="sw-label">Stocks that may be affected</div>
+      <div class="stocks-row">${chipsHtml}</div>
+    </div>
+    <div class="card-actions">
+      <button class="act-btn ${saved?'saved':''}" data-saveid="${id}">
+        <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        ${saved?'Saved':'Save'}
+      </button>
+      <button class="act-btn" onclick="copyLink('${url}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="act-btn" onclick="explainArticle(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Explain
+      </button>
+      <button class="act-btn" onclick="showToast('Discussions coming soon!')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Discuss
+      </button>
+    </div>`;
+  div.querySelector('[data-saveid]').onclick=()=>toggleSave(id,div);
+  return div;
+}
+
+function toggleSave(id,card){
+  if(savedArticleIds.has(id)){savedArticleIds.delete(id);showToast('Removed from saved');}
+  else{savedArticleIds.add(id);showToast('Article saved!');}
+  const btn=card.querySelector('[data-saveid]'),s=savedArticleIds.has(id);
+  btn.className='act-btn'+(s?' saved':'');
+  btn.innerHTML=`<svg viewBox="0 0 24 24" fill="${s?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>${s?'Saved':'Save'}`;
+}
+
+function openArticle(el,url){
+  const homepages=['reuters.com','bloomberg.com','wsj.com','cnbc.com','statnews.com','ft.com','marketwatch.com','techcrunch.com','theverge.com','electrek.co'];
+  const isHomepage=homepages.some(h=>url==='https://'+h||url==='http://'+h);
+  if(isHomepage){const card=el.closest('.card');const title=card?card.querySelector('.card-title').textContent:'';window.open('https://www.google.com/search?q='+encodeURIComponent(title+' news'),'_blank');}
+  else{window.open(url,'_blank');}
+}
+
+function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToast('Link copied!');}
+
+/* ── LOAD FEED ── */
+/* ── HELPERS ── */
+function pickStocks(article, cat) {
+  const text = ((article.title||'')+(article.description||'')).toLowerCase();
+  const matched = [];
+  Object.entries(KEYWORD_STOCKS).forEach(([sym,words]) => { if (words.some(w=>text.includes(w))) matched.push(sym); });
+  return [...new Set([...matched,...(CAT_STOCKS[cat]||CAT_STOCKS.all)])].slice(0,4);
+}
+
+function pickIcon(article, cat) {
+  const t = ((article.title||'')+(article.description||'')).toLowerCase();
+  if (t.includes('oil')||t.includes('opec')||t.includes('crude')) return '⛽';
+  if (t.includes('tesla')||t.includes('electric vehicle')) return '⚡';
+  if (t.includes('apple')||t.includes('iphone')||t.includes('nvidia')||t.includes('ai ')) return '💻';
+  if (t.includes('drug')||t.includes('fda')||t.includes('pharma')) return '💊';
+  if (t.includes('fed')||t.includes('inflation')||t.includes('rate')) return '🏦';
+  if (t.includes('merger')||t.includes('acqui')||t.includes('deal')) return '🤝';
+  if (t.includes('gold')) return '🪙';
+  if (t.includes('solar')||t.includes('wind')||t.includes('renewable')) return '🌱';
+  if (t.includes('bank')||t.includes('earnings')) return '📊';
+  return CAT_ICONS[cat] || '📰';
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now()-new Date(dateStr).getTime();
+  const m=Math.floor(diff/60000),h=Math.floor(m/60),d=Math.floor(h/24);
+  if(m<2)return'Just now';if(m<60)return`${m}m ago`;if(h<24)return`${h}h ago`;return`${d}d ago`;
+}
+
+function toggleSave(id,card){
+  if(savedArticleIds.has(id)){savedArticleIds.delete(id);showToast('Removed from saved');}
+  else{savedArticleIds.add(id);showToast('Article saved!');}
+  const btn=card.querySelector('[data-saveid]'),s=savedArticleIds.has(id);
+  btn.className='act-btn'+(s?' saved':'');
+  btn.innerHTML=`<svg viewBox="0 0 24 24" fill="${s?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>${s?'Saved':'Save'}`;
+}
+
+function openArticle(el,url){
+  const homepages=['reuters.com','bloomberg.com','wsj.com','cnbc.com','statnews.com','ft.com','marketwatch.com','techcrunch.com','theverge.com','electrek.co'];
+  const isHomepage=homepages.some(h=>url==='https://'+h||url==='http://'+h);
+  if(isHomepage){const card=el.closest('.card');const title=card?card.querySelector('.card-title').textContent:'';window.open('https://www.google.com/search?q='+encodeURIComponent(title+' news'),'_blank');}
+  else{window.open(url,'_blank');}
+}
+
+function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToast('Link copied!');}
+
+function makeCardFast(article, cat, idx) {
+  const symbols = pickStocks(article, cat);
+  const chipsHtml = symbols.map(s =>
+    `<div class="stock-chip" data-sym="${s}">
+      <div class="chip-top"><span class="chip-ticker">${s}</span><span class="chip-change flat">—</span></div>
+      <div class="chip-price">—</div>
+    </div>`).join('');
+  const icon=pickIcon(article,cat), color=CAT_COLORS[cat]||CAT_COLORS.all;
+  const id=`a${idx}`, saved=savedArticleIds.has(id);
+  const source=article.source?.name||'News', url=article.url||'#';
+  const div=document.createElement('div');
+  div.className='card'; div.dataset.id=id; div.style.animationDelay=(idx*0.05)+'s';
+  div.innerHTML=`
+    <div class="card-thumb" style="background:${color};">
+      <span>${icon}</span>
+      <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      <span class="cat-pill">${cat==='all'?'market':cat}</span>
+    </div>
+    <div class="card-meta">
+      <div class="source-dot"></div>
+      <span class="source-name">${source}</span>
+      <span class="meta-sep">·</span>
+      <span class="time-ago">${timeAgo(article.publishedAt)}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${article.title}</div>
+      <div class="card-summary">${article.description||'Click to read the full article.'}</div>
+      <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
+    </div>
+    <div class="stock-widget">
+      <div class="sw-label">Stocks that may be affected</div>
+      <div class="stocks-row">${chipsHtml}</div>
+    </div>
+    <div class="card-actions">
+      <button class="act-btn ${saved?'saved':''}" data-saveid="${id}">
+        <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        ${saved?'Saved':'Save'}
+      </button>
+      <button class="act-btn" onclick="copyLink('${url}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="act-btn" onclick="explainArticle(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Explain
+      </button>
+    </div>`;
+  div.querySelector('[data-saveid]').onclick=()=>toggleSave(id,div);
+  return div;
+}
+
+async function loadFeed(cat){
+  const grid = document.getElementById('grid');
+
+  // ALWAYS show fallback articles immediately — never blank
+  const fallback = FALLBACK[cat] || FALLBACK.all;
+  grid.innerHTML = '';
+  fallback.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
+  setStatus('live', 'Market news · real-time prices');
+  document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+  // Fill in stock prices using batch fetch
+  const allSymbols = [...new Set(Array.from(grid.children).flatMap((card, i) => {
+    const article = fallback[i];
+    return article ? pickStocks(article, cat) : [];
+  }))];
+  
+  fetchStocksBatch(allSymbols).then(() => {
+    Array.from(grid.children).forEach((card, i) => {
+      const article = fallback[i];
+      if (!article) return;
+      pickStocks(article, cat).forEach(sym => {
+        const data = stockCache[sym];
+        const chip = card.querySelector(`[data-sym="${sym}"]`);
+        if (chip && data) {
+          const up = data.change >= 0;
+          chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
+          chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
+          chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
+        }
+      });
+    });
+  });
+
+  // Try live news quietly in background — swap in if successful
+  fetchNews(cat).then(live => {
+    if (!live || live === fallback || live.length < 3) return;
+    grid.innerHTML = '';
+    live.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
+    setStatus('live', `${live.length} live articles · real-time prices`);
+    document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const liveSymbols = [...new Set(Array.from(grid.children).flatMap((card, i) => {
+      const article = live[i];
+      return article ? pickStocks(article, cat) : [];
+    }))];
+    fetchStocksBatch(liveSymbols).then(() => {
+      Array.from(grid.children).forEach((card, i) => {
+        const article = live[i];
+        if (!article) return;
+        pickStocks(article, cat).forEach(sym => {
+          const data = stockCache[sym];
+          const chip = card.querySelector(`[data-sym="${sym}"]`);
+          if (chip && data) {
+            const up = data.change >= 0;
+            chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
+            chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
+            chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
+          }
+        });
+      });
+    });
+  }).catch(() => {});
+}
+
+async function doRefresh(){
+  const btn=document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  await loadFeed(activeFilter);
+  btn.classList.remove('spinning');
+  showToast('Feed refreshed!');
+}
+
+document.getElementById('filters').onclick=e=>{
+  const btn=e.target.closest('.filter-btn');
+  if(!btn)return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter=btn.dataset.cat;
+  loadFeed(activeFilter);
+};
+
+let toastTimer;
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
+}
+
+/* ── EXPLAIN WITH AI ── */
+async function explainArticle(btn) {
+  const card = btn.closest('.card');
+  const title = card.querySelector('.card-title').textContent.trim();
+  const summary = card.querySelector('.card-summary').textContent.trim();
+  const tickers = [...card.querySelectorAll('.chip-ticker')].map(el => el.textContent.trim());
+  const prices = [...card.querySelectorAll('.stock-chip')].map(el => {
+    const t = el.querySelector('.chip-ticker').textContent.trim();
+    const c = el.querySelector('.chip-change').textContent.trim();
+    const p = el.querySelector('.chip-price').textContent.trim();
+    return `${t} ${p} (${c})`;
+  });
+
+  showTooltipLoading(title);
+
+  const prompt = `You are a friendly stock market explainer for beginners. Explain this news article in simple, plain English.
+
+Article headline: "${title}"
+Article summary: "${summary}"
+Stocks affected: ${prices.join(', ')}
+
+Write 2-3 short paragraphs:
+1. What happened (explain it like talking to a friend who knows nothing about finance)
+2. Why this matters for the stocks shown (explain what "up" or "down" means for investors)
+3. One simple takeaway a beginner investor should know
+
+Keep it friendly, clear, and jargon-free. No bullet points — just conversational paragraphs. Keep total response under 150 words.`;
+
+  try {
+    const res = await fetch('/.netlify/functions/explain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    const text = data.text || 'Could not generate explanation. Try again.';
+    showTooltipContent(title, text, tickers, card);
+  } catch(e) {
+    showTooltipContent(title, 'Could not load explanation right now. Check your connection and try again.', tickers, card);
+  }
+}
+
+function showTooltipLoading(title) {
+  closeTooltip();
+  const overlay = document.createElement('div');
+  overlay.className = 'tooltip-overlay';
+  overlay.id = 'tooltipOverlay';
+  overlay.onclick = (e) => { if (e.target === overlay) closeTooltip(); };
+  overlay.innerHTML = `
+    <div class="tooltip-box">
+      <div class="tooltip-head">
+        <div class="tooltip-head-left">
+          <span class="tooltip-icon">💡</span>
+          <span class="tooltip-label">What does this mean?</span>
+        </div>
+        <button class="tooltip-close" onclick="closeTooltip()">✕</button>
+      </div>
+      <div class="tooltip-title">${title}</div>
+      <div class="tooltip-loading">
+        <div class="tooltip-spinner"></div>
+        <span>Greenline AI is reading this article...</span>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function showTooltipContent(title, text, tickers, card) {
+  const overlay = document.getElementById('tooltipOverlay');
+  if (!overlay) return;
+  const chips = [...card.querySelectorAll('.stock-chip')].map(el => {
+    const t = el.querySelector('.chip-ticker').textContent.trim();
+    const c = el.querySelector('.chip-change').textContent.trim();
+    const isUp = el.querySelector('.chip-change').classList.contains('up');
+    return `<span class="tooltip-chip ${isUp?'up':'dn'}">${t} ${c}</span>`;
+  }).join('');
+
+  const paragraphs = text.split('\n').filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('');
+
+  overlay.querySelector('.tooltip-box').innerHTML = `
+    <div class="tooltip-head">
+      <div class="tooltip-head-left">
+        <span class="tooltip-icon">💡</span>
+        <span class="tooltip-label">What does this mean?</span>
+      </div>
+      <button class="tooltip-close" onclick="closeTooltip()">✕</button>
+    </div>
+    <div class="tooltip-title">${title}</div>
+    <div class="tooltip-body">${paragraphs}</div>
+    <div class="tooltip-footer">
+      <div class="sw-label" style="margin-bottom:8px;">Stocks mentioned</div>
+      <div class="tooltip-stocks">${chips}</div>
+    </div>`;
+}
+
+function closeTooltip() {
+  const el = document.getElementById('tooltipOverlay');
+  if (el) el.remove();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTooltip(); });
+
+/* ── ONBOARDING ── */
+function closeOnboard() {
+  const overlay = document.getElementById('onboardOverlay');
+  if (overlay) overlay.remove();
+  localStorage.setItem('gl_onboarded', '1');
+}
+
+ {
+  const overlay = document.getElementById('onboardOverlay');
+  if (overlay) overlay.remove();
+  localStorage.setItem('gl_onboarded', '1');
+}
+
+function initOnboard() {
+  if (localStorage.getItem('gl_onboarded')) {
+    const overlay = document.getElementById('onboardOverlay');
+    if (overlay) overlay.remove();
+  }
+}
+
+ {
+  if (localStorage.getItem('gl_onboarded')) {
+    const overlay = document.getElementById('onboardOverlay');
+    if (overlay) overlay.remove();
+  }
+}
+
+/* ── INIT ── */
+(async()=>{
+  initOnboard();
+  buildTicker();
+  await loadFeed('all');
+  setInterval(buildTicker,120000);
+  setInterval(()=>loadFeed(activeFilter),300000);
+})();
+</script>
+
+
+<!-- ONBOARDING -->
+<div id="onboardOverlay" style="position:fixed;inset:0;background:rgba(17,26,15,0.75);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:#faf6ee;border-radius:20px;border:1px solid rgba(90,80,60,0.2);max-width:480px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.25);overflow:hidden;font-family:'Sora',sans-serif;">
+
+    <!-- Step 1 -->
+    <div id="ob1">
+      <div style="background:#111a0f;padding:32px;text-align:center;">
+        <div style="width:56px;height:56px;background:#8ab86a;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><polyline points="3,17 8,11 13,14 21,5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.2" fill="white"/></svg></div>
+        <div style="font-size:20px;font-weight:700;color:#f0ead0;margin-bottom:8px;">Welcome to Greenline</div>
+        <div style="font-size:14px;color:#7a9470;line-height:1.6;">Your beginner-friendly stock market news hub</div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="font-size:14px;color:#5a5040;line-height:1.75;margin-bottom:16px;">Greenline makes it easy to stay on top of market news — even if you're completely new to investing. No jargon, no complexity.</div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">📰</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Real news, real time</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Fresh financial headlines from Reuters, Bloomberg, and the Wall Street Journal.</div></div>
+        </div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">📈</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Built for beginners</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Every feature is designed to be simple, clear, and approachable — no trading experience needed.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 28px 22px;border-top:1px solid rgba(90,80,60,0.1);">
+        <div style="display:flex;gap:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#8ab86a;"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button onclick="closeOnboard()" style="font-size:13px;color:#9a8e78;cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;">Skip</button>
+          <button onclick="document.getElementById('ob1').style.display='none';document.getElementById('ob2').style.display='block';" style="padding:10px 24px;border-radius:100px;background:#8ab86a;color:#111a0f;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="ob2" style="display:none;">
+      <div style="background:#111a0f;padding:32px;text-align:center;">
+        <div style="width:56px;height:56px;background:#8ab86a;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><polyline points="3,17 8,11 13,14 21,5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.2" fill="white"/></svg></div>
+        <div style="font-size:20px;font-weight:700;color:#f0ead0;margin-bottom:8px;">News meets stock data</div>
+        <div style="font-size:14px;color:#7a9470;line-height:1.6;">See exactly which stocks each story might affect</div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="font-size:14px;color:#5a5040;line-height:1.75;margin-bottom:16px;">Under every article you'll find a widget showing the stocks most likely to be affected — with live prices and % change.</div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">🟢</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Green means up, red means down</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Stock chips show the % change in price. Green = stock went up. Red = it went down. Simple as that.</div></div>
+        </div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">🔄</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Always fresh</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Hit Refresh any time to pull the latest headlines. The feed updates automatically every 5 minutes.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 28px 22px;border-top:1px solid rgba(90,80,60,0.1);">
+        <div style="display:flex;gap:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#8ab86a;"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button onclick="closeOnboard()" style="font-size:13px;color:#9a8e78;cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;">Skip</button>
+          <button onclick="document.getElementById('ob2').style.display='none';document.getElementById('ob3').style.display='block';" style="padding:10px 24px;border-radius:100px;background:#8ab86a;color:#111a0f;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="ob3" style="display:none;">
+      <div style="background:#111a0f;padding:32px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">💡</div>
+        <div style="font-size:20px;font-weight:700;color:#f0ead0;margin-bottom:8px;">Two powerful tools</div>
+        <div style="font-size:14px;color:#7a9470;line-height:1.6;">Explain and Watchlist — your investing sidekicks</div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="font-size:14px;color:#5a5040;line-height:1.75;margin-bottom:16px;">Greenline has two features that set it apart from every other news app out there.</div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">🤖</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">AI Explain button</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Confused by a headline? Hit Explain and AI breaks it down in plain English — what happened and what it means for investors.</div></div>
+        </div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">⭐</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Your Watchlist</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Add any stock to your personal watchlist to track its price, % change, and mini chart all in one place.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 28px 22px;border-top:1px solid rgba(90,80,60,0.1);">
+        <div style="display:flex;gap:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#8ab86a;"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button onclick="closeOnboard()" style="font-size:13px;color:#9a8e78;cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;">Skip</button>
+          <button onclick="closeOnboard()" style="padding:10px 24px;border-radius:100px;background:#8ab86a;color:#111a0f;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Get started 🚀</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
