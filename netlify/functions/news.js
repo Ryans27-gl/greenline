@@ -88,7 +88,7 @@ exports.handler = async (event) => {
 
   return {
     statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, s-maxage=900, max-age=300' },
     body: JSON.stringify({
       articles: fresh.length >= 3 ? fresh : unique.slice(0, 10),
       feedErrors: errors.length > 0 ? errors : undefined,

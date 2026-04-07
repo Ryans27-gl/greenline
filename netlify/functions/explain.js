@@ -47,7 +47,7 @@ exports.handler = async (event) => {
     const text = data.content?.[0]?.text || 'Could not generate explanation.';
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
       body: JSON.stringify({ text })
     };
   } catch (e) {
