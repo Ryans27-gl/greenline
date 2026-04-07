@@ -218,7 +218,6 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 .wl-chart { height: 48px; width: 100%; }
 
 .wl-footer { display: flex; justify-content: space-between; align-items: center; }
-.wl-vol { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
 .wl-news-btn { font-size: 11px; font-weight: 600; color: var(--matcha); cursor: pointer; background: none; border: none; font-family: 'Sora', sans-serif; padding: 0; }
 .wl-news-btn:hover { text-decoration: underline; }
 
@@ -374,7 +373,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
   .status-bar { font-size: 12px; }
   .updated-at { font-size: 12px; }
   .sw-label { font-size: 11px; }
-  .wl-vol { font-size: 12px; }
+
   .chip-ticker { font-size: 12px; }
   .chip-change { font-size: 11px; }
   .chip-price { font-size: 12px; }
@@ -777,14 +776,13 @@ async function renderWatchlist() {
       </div>
       <canvas class="wl-chart" id="chart-${s}"></canvas>
       <div class="wl-footer">
-        <div class="wl-vol">Vol: —</div>
         <button class="wl-news-btn" onclick="searchNews('${s}')">See news →</button>
       </div>
     </div>`).join('');
 
   // Batch fetch with profiles
   try {
-    const needed = watchlist.filter(s => !stockCache[s] || Date.now() - stockCache[s].ts >= 300000);
+    const needed = watchlist.filter(s => !stockCache[s] || !stockCache[s].profile || Date.now() - stockCache[s].ts >= 300000);
     if (needed.length > 0) {
       const res = await fetch(`/.netlify/functions/stocks?symbols=${needed.join(',')}&profile=1`);
       const data = await res.json();
@@ -812,7 +810,7 @@ async function renderWatchlist() {
     const chgEl = card.querySelector('.wl-change');
     chgEl.className = `wl-change ${chgClass}`;
     chgEl.textContent = `${up?'+':''}${data.change.toFixed(2)}%`;
-    card.querySelector('.wl-vol').textContent = `Vol: ${data.vol ? (data.vol/1000000).toFixed(1)+'M' : '—'}`;
+
 
     // Profile info
     const profileEl = document.getElementById(`profile-${sym}`);
