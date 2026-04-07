@@ -1,6 +1,5 @@
-const POLY_KEY = '5yZz_lFOat0OcFGjE_d41p1WFAKGh03v';
 const cache = {};
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 5 * 60 * 1000;
 
 exports.handler = async (event) => {
   const symbols = (event.queryStringParameters?.symbols || '').split(',').filter(Boolean).slice(0, 10);
@@ -10,43 +9,38 @@ exports.handler = async (event) => {
   }
 
   const results = {};
-  const toFetch = [];
-
-  // Check cache first
   const now = Date.now();
-  for (const sym of symbols) {
-    if (cache[sym] && now - cache[sym].ts < CACHE_TTL) {
-      results[sym] = cache[sym].data;
-    } else {
-      toFetch.push(sym);
+  const toFetch = symbols.filter(s => !cache[s] || now - cache[s].ts >= CACHE_TTL);
+
+  if (toFetch.length > 0) {
+    try {
+      // Use Yahoo Finance via a public proxy
+      const query = toFetch.join(',');
+      const res = await fetch(
+        `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${query}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketVolume`,
+        { headers: { 'User-Agent': 'Mozilla/5.0' } }
+      );
+      const data = await res.json();
+      const quotes = data?.quoteResponse?.result || [];
+      
+      for (const q of quotes) {
+        const stockData = {
+          price: q.regularMarketPrice,
+          change: q.regularMarketChangePercent,
+          vol: q.regularMarketVolume
+        };
+        cache[q.symbol] = { data: stockData, ts: now };
+        results[q.symbol] = stockData;
+      }
+    } catch(e) {
+      console.log('Yahoo Finance error:', e.message);
     }
   }
 
-  // Fetch uncached symbols with delay to avoid rate limits
-  for (let i = 0; i < toFetch.length; i++) {
-    const sym = toFetch[i];
-    if (i > 0) await new Promise(r => setTimeout(r, 300)); // 300ms delay between requests
-    
-    try {
-      const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${sym}/prev?adjusted=true&apiKey=${POLY_KEY}`);
-      const data = await res.json();
-      
-      if (data.results && data.results.length > 0) {
-        const cur = data.results[0];
-        const change = (cur.c - cur.o) / cur.o * 100;
-        const stockData = {
-          price: cur.c,
-          change,
-          open: cur.o,
-          high: cur.h,
-          low: cur.l,
-          vol: cur.v
-        };
-        cache[sym] = { data: stockData, ts: now };
-        results[sym] = stockData;
-      }
-    } catch(e) {
-      // Skip failed symbols
+  // Add cached results
+  for (const sym of symbols) {
+    if (!results[sym] && cache[sym]) {
+      results[sym] = cache[sym].data;
     }
   }
 
@@ -54,7 +48,7 @@ exports.handler = async (event) => {
     statusCode: 200,
     headers: { 
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, max-age=300' // Cache for 5 min at CDN level too
+      'Cache-Control': 'public, max-age=300'
     },
     body: JSON.stringify(results)
   };
