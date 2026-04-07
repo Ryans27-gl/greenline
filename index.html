@@ -1102,9 +1102,7 @@ function initOnboard() {
   if (localStorage.getItem('gl_onboarded')) {
     const overlay = document.getElementById('onboardOverlay');
     if (overlay) overlay.remove();
-    return;
   }
-  renderOnboard();
 }
 
 /* ── INIT ── */
@@ -1117,10 +1115,104 @@ function initOnboard() {
 })();
 </script>
 
+
 <!-- ONBOARDING -->
-<div class="onboard-overlay" id="onboardOverlay">
-  <div class="onboard-box" id="onboardBox">
-    <!-- Step content injected by JS -->
+<div id="onboardOverlay" style="position:fixed;inset:0;background:rgba(17,26,15,0.75);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:#faf6ee;border-radius:20px;border:1px solid rgba(90,80,60,0.2);max-width:480px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.25);overflow:hidden;font-family:'Sora',sans-serif;">
+
+    <!-- Step 1 -->
+    <div id="ob1">
+      <div style="background:#111a0f;padding:32px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">🌿</div>
+        <div style="font-size:20px;font-weight:700;color:#f0ead0;margin-bottom:8px;">Welcome to Greenline</div>
+        <div style="font-size:14px;color:#7a9470;line-height:1.6;">Your beginner-friendly stock market news hub</div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="font-size:14px;color:#5a5040;line-height:1.75;margin-bottom:16px;">Greenline makes it easy to stay on top of market news — even if you're completely new to investing. No jargon, no complexity.</div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">📰</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Real news, real time</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Fresh financial headlines from Reuters, Bloomberg, and the Wall Street Journal.</div></div>
+        </div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">📈</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Built for beginners</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Every feature is designed to be simple, clear, and approachable — no trading experience needed.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 28px 22px;border-top:1px solid rgba(90,80,60,0.1);">
+        <div style="display:flex;gap:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#8ab86a;"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button onclick="closeOnboard()" style="font-size:13px;color:#9a8e78;cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;">Skip</button>
+          <button onclick="document.getElementById('ob1').style.display='none';document.getElementById('ob2').style.display='block';" style="padding:10px 24px;border-radius:100px;background:#8ab86a;color:#111a0f;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="ob2" style="display:none;">
+      <div style="background:#111a0f;padding:32px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">💹</div>
+        <div style="font-size:20px;font-weight:700;color:#f0ead0;margin-bottom:8px;">News meets stock data</div>
+        <div style="font-size:14px;color:#7a9470;line-height:1.6;">See exactly which stocks each story might affect</div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="font-size:14px;color:#5a5040;line-height:1.75;margin-bottom:16px;">Under every article you'll find a widget showing the stocks most likely to be affected — with live prices and % change.</div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">🟢</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Green means up, red means down</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Stock chips show the % change in price. Green = stock went up. Red = it went down. Simple as that.</div></div>
+        </div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">🔄</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Always fresh</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Hit Refresh any time to pull the latest headlines. The feed updates automatically every 5 minutes.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 28px 22px;border-top:1px solid rgba(90,80,60,0.1);">
+        <div style="display:flex;gap:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#8ab86a;"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button onclick="closeOnboard()" style="font-size:13px;color:#9a8e78;cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;">Skip</button>
+          <button onclick="document.getElementById('ob2').style.display='none';document.getElementById('ob3').style.display='block';" style="padding:10px 24px;border-radius:100px;background:#8ab86a;color:#111a0f;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="ob3" style="display:none;">
+      <div style="background:#111a0f;padding:32px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:12px;">💡</div>
+        <div style="font-size:20px;font-weight:700;color:#f0ead0;margin-bottom:8px;">Two powerful tools</div>
+        <div style="font-size:14px;color:#7a9470;line-height:1.6;">Explain and Watchlist — your investing sidekicks</div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="font-size:14px;color:#5a5040;line-height:1.75;margin-bottom:16px;">Greenline has two features that set it apart from every other news app out there.</div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">🤖</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">AI Explain button</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Confused by a headline? Hit Explain and AI breaks it down in plain English — what happened and what it means for investors.</div></div>
+        </div>
+        <div style="background:#f0e8d4;border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">⭐</span>
+          <div><div style="font-size:13px;font-weight:600;color:#1e1a10;margin-bottom:2px;">Your Watchlist</div><div style="font-size:13px;color:#5a5040;line-height:1.5;">Add any stock to your personal watchlist to track its price, % change, and mini chart all in one place.</div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 28px 22px;border-top:1px solid rgba(90,80,60,0.1);">
+        <div style="display:flex;gap:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:rgba(90,80,60,0.18);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#8ab86a;"></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button onclick="closeOnboard()" style="font-size:13px;color:#9a8e78;cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;">Skip</button>
+          <button onclick="closeOnboard()" style="padding:10px 24px;border-radius:100px;background:#8ab86a;color:#111a0f;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Get started 🚀</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
