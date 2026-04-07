@@ -825,6 +825,51 @@ function openArticle(el,url){
 function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToast('Link copied!');}
 
 /* ── LOAD FEED ── */
+/* ── HELPERS ── */
+function pickStocks(article, cat) {
+  const text = ((article.title||'')+(article.description||'')).toLowerCase();
+  const matched = [];
+  Object.entries(KEYWORD_STOCKS).forEach(([sym,words]) => { if (words.some(w=>text.includes(w))) matched.push(sym); });
+  return [...new Set([...matched,...(CAT_STOCKS[cat]||CAT_STOCKS.all)])].slice(0,4);
+}
+
+function pickIcon(article, cat) {
+  const t = ((article.title||'')+(article.description||'')).toLowerCase();
+  if (t.includes('oil')||t.includes('opec')||t.includes('crude')) return '🛢';
+  if (t.includes('tesla')||t.includes('electric vehicle')) return '⚡';
+  if (t.includes('apple')||t.includes('iphone')||t.includes('nvidia')||t.includes('ai ')) return '💻';
+  if (t.includes('drug')||t.includes('fda')||t.includes('pharma')) return '💊';
+  if (t.includes('fed')||t.includes('inflation')||t.includes('rate')) return '🏦';
+  if (t.includes('merger')||t.includes('acqui')||t.includes('deal')) return '🤝';
+  if (t.includes('gold')) return '🪙';
+  if (t.includes('solar')||t.includes('wind')||t.includes('renewable')) return '🌱';
+  if (t.includes('bank')||t.includes('earnings')) return '📊';
+  return CAT_ICONS[cat] || '📰';
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now()-new Date(dateStr).getTime();
+  const m=Math.floor(diff/60000),h=Math.floor(m/60),d=Math.floor(h/24);
+  if(m<2)return'Just now';if(m<60)return`${m}m ago`;if(h<24)return`${h}h ago`;return`${d}d ago`;
+}
+
+function toggleSave(id,card){
+  if(savedArticleIds.has(id)){savedArticleIds.delete(id);showToast('Removed from saved');}
+  else{savedArticleIds.add(id);showToast('Article saved!');}
+  const btn=card.querySelector('[data-saveid]'),s=savedArticleIds.has(id);
+  btn.className='act-btn'+(s?' saved':'');
+  btn.innerHTML=`<svg viewBox="0 0 24 24" fill="${s?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>${s?'Saved':'Save'}`;
+}
+
+function openArticle(el,url){
+  const homepages=['reuters.com','bloomberg.com','wsj.com','cnbc.com','statnews.com','ft.com','marketwatch.com','techcrunch.com','theverge.com','electrek.co'];
+  const isHomepage=homepages.some(h=>url==='https://'+h||url==='http://'+h);
+  if(isHomepage){const card=el.closest('.card');const title=card?card.querySelector('.card-title').textContent:'';window.open('https://www.google.com/search?q='+encodeURIComponent(title+' news'),'_blank');}
+  else{window.open(url,'_blank');}
+}
+
+function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToast('Link copied!');}
+
 function makeCardFast(article, cat, idx) {
   const symbols = pickStocks(article, cat);
   const chipsHtml = symbols.map(s =>
