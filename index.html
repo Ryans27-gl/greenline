@@ -869,17 +869,13 @@ Write 2-3 short paragraphs:
 Keep it friendly, clear, and jargon-free. No bullet points — just conversational paragraphs. Keep total response under 150 words.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/.netlify/functions/explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 300,
-        messages: [{ role: 'user', content: prompt }]
-      })
+      body: JSON.stringify({ prompt })
     });
     const data = await res.json();
-    const text = data.content?.[0]?.text || 'Could not generate explanation. Try again.';
+    const text = data.text || 'Could not generate explanation. Try again.';
     showTooltipContent(title, text, tickers, card);
   } catch(e) {
     showTooltipContent(title, 'Could not load explanation right now. Check your connection and try again.', tickers, card);
