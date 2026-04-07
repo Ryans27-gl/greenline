@@ -504,45 +504,48 @@ function showSkeletons() {
     <div class="skel-line w80"></div><div class="skel-line w60"></div></div></div>`).join('');
 }
 
-/* ── STOCK PRICE ── */
+/* ── STOCK PRICE via Netlify Function ── */
+const STOCK_FETCH_QUEUE = {};
+
 async function fetchStock(symbol) {
   if (stockCache[symbol] && Date.now() - stockCache[symbol].ts < 300000) return stockCache[symbol];
+  
+  // Deduplicate concurrent requests for same symbol
+  if (STOCK_FETCH_QUEUE[symbol]) return STOCK_FETCH_QUEUE[symbol];
+  
+  STOCK_FETCH_QUEUE[symbol] = (async () => {
+    try {
+      const res = await fetch(`/.netlify/functions/stocks?symbols=${symbol}`);
+      const data = await res.json();
+      if (data[symbol]) {
+        const result = { ...data[symbol], ts: Date.now() };
+        stockCache[symbol] = result;
+        delete STOCK_FETCH_QUEUE[symbol];
+        return result;
+      }
+    } catch(e) {}
+    delete STOCK_FETCH_QUEUE[symbol];
+    return null;
+  })();
+  
+  return STOCK_FETCH_QUEUE[symbol];
+}
 
-  // Try previous close endpoint first (most reliable on free tier)
-  try {
-    const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/prev?adjusted=true&apiKey=${POLY_KEY}`);
-    const data = await res.json();
-    if (data.results && data.results.length > 0) {
-      const cur = data.results[0];
-      const change = (cur.c - cur.o) / cur.o * 100;
-      const result = { price: cur.c, change, open: cur.o, high: cur.h, low: cur.l, vol: cur.v, history: [cur.o, (cur.o+cur.c)/2, cur.h, cur.l, cur.c], ts: Date.now() };
-      stockCache[symbol] = result;
-      return result;
-    }
-  } catch(e) {}
-
-  // Fallback: range endpoint going back 10 days to catch weekends/holidays
-  try {
-    const to = new Date();
-    const from = new Date(to); from.setDate(from.getDate()-10);
-    const toStr = to.toISOString().split('T')[0];
-    const fromStr = from.toISOString().split('T')[0];
-    const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${fromStr}/${toStr}?adjusted=true&sort=desc&limit=5&apiKey=${POLY_KEY}`);
-    const data = await res.json();
-    if (data.results && data.results.length >= 2) {
-      const cur = data.results[0], prev = data.results[1];
-      const result = { price: cur.c, change: (cur.c-prev.c)/prev.c*100, open: cur.o, high: cur.h, low: cur.l, vol: cur.v, history: data.results.reverse().map(r=>r.c), ts: Date.now() };
-      stockCache[symbol] = result;
-      return result;
-    } else if (data.results && data.results.length === 1) {
-      const cur = data.results[0];
-      const result = { price: cur.c, change: (cur.c-cur.o)/cur.o*100, open: cur.o, high: cur.h, low: cur.l, vol: cur.v, history: [cur.o, cur.c], ts: Date.now() };
-      stockCache[symbol] = result;
-      return result;
-    }
-  } catch(e) {}
-
-  return null;
+async function fetchStocksBatch(symbols) {
+  // Filter out cached symbols
+  const needed = symbols.filter(s => !stockCache[s] || Date.now() - stockCache[s].ts >= 300000);
+  
+  if (needed.length > 0) {
+    try {
+      const res = await fetch(`/.netlify/functions/stocks?symbols=${needed.join(',')}`);
+      const data = await res.json();
+      Object.entries(data).forEach(([sym, d]) => {
+        stockCache[sym] = { ...d, ts: Date.now() };
+      });
+    } catch(e) {}
+  }
+  
+  return symbols.map(s => stockCache[s] || null);
 }
 
 /* ── TICKER ── */
@@ -939,19 +942,26 @@ async function loadFeed(cat){
   setStatus('live', 'Market news · real-time prices');
   document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 
-  // Fill in stock prices
-  Array.from(grid.children).forEach((card, i) => {
+  // Fill in stock prices using batch fetch
+  const allSymbols = [...new Set(Array.from(grid.children).flatMap((card, i) => {
     const article = fallback[i];
-    if (!article) return;
-    pickStocks(article, cat).forEach(async sym => {
-      const data = await fetchStock(sym);
-      const chip = card.querySelector(`[data-sym="${sym}"]`);
-      if (chip && data) {
-        const up = data.change >= 0;
-        chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
-        chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
-        chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
-      }
+    return article ? pickStocks(article, cat) : [];
+  }))];
+  
+  fetchStocksBatch(allSymbols).then(() => {
+    Array.from(grid.children).forEach((card, i) => {
+      const article = fallback[i];
+      if (!article) return;
+      pickStocks(article, cat).forEach(sym => {
+        const data = stockCache[sym];
+        const chip = card.querySelector(`[data-sym="${sym}"]`);
+        if (chip && data) {
+          const up = data.change >= 0;
+          chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
+          chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
+          chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
+        }
+      });
     });
   });
 
@@ -962,18 +972,24 @@ async function loadFeed(cat){
     live.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
     setStatus('live', `${live.length} live articles · real-time prices`);
     document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    Array.from(grid.children).forEach((card, i) => {
+    const liveSymbols = [...new Set(Array.from(grid.children).flatMap((card, i) => {
       const article = live[i];
-      if (!article) return;
-      pickStocks(article, cat).forEach(async sym => {
-        const data = await fetchStock(sym);
-        const chip = card.querySelector(`[data-sym="${sym}"]`);
-        if (chip && data) {
-          const up = data.change >= 0;
-          chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
-          chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
-          chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
-        }
+      return article ? pickStocks(article, cat) : [];
+    }))];
+    fetchStocksBatch(liveSymbols).then(() => {
+      Array.from(grid.children).forEach((card, i) => {
+        const article = live[i];
+        if (!article) return;
+        pickStocks(article, cat).forEach(sym => {
+          const data = stockCache[sym];
+          const chip = card.querySelector(`[data-sym="${sym}"]`);
+          if (chip && data) {
+            const up = data.change >= 0;
+            chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
+            chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
+            chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
+          }
+        });
       });
     });
   }).catch(() => {});
