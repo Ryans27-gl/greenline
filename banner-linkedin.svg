@@ -13,6 +13,10 @@
       <stop offset="0%" stop-color="#8ab86a" stop-opacity="0.1"/>
       <stop offset="100%" stop-color="#8ab86a" stop-opacity="0"/>
     </linearGradient>
+    <clipPath id="iconClip"><rect x="48" y="50" width="52" height="52" rx="13"/></clipPath>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M0,1 L10,5 L0,9 Z" fill="white"/>
+    </marker>
   </defs>
 
   <!-- Background -->
@@ -37,18 +41,18 @@
   <path d="M0,160 C80,155 160,148 240,140 C320,132 380,138 460,128 C540,118 600,105 680,95 C760,85 820,90 900,78 C960,70 1020,58 1128,40" fill="none" stroke="#4ade80" stroke-width="5" opacity="0.08" stroke-linecap="round"/>
 
   <!-- Logo icon -->
-  <rect x="48" y="60" width="52" height="52" rx="13" fill="#8ab86a"/>
-  <polyline points="63,96 74,82 85,88 93,74" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="93" cy="74" r="3.5" fill="white"/>
+  <rect x="48" y="50" width="52" height="52" rx="13" fill="#8ab86a"/>
+  <polyline points="58,92 68,76 78,84 92,62" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#iconClip)" marker-end="url(#arrow)"/>
 
   <!-- Logo text -->
-  <text x="114" y="98" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="32" font-weight="700" fill="#f0ead0" letter-spacing="-0.5">Green<tspan fill="#8ab86a">line</tspan></text>
+  <text x="114" y="82" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="32" font-weight="700" fill="#f0ead0" letter-spacing="-0.5">green<tspan fill="#8ab86a">line</tspan></text>
+  <text x="114" y="104" font-family="ui-monospace, 'SF Mono', monospace" font-size="11" font-weight="500" fill="#7a9470" letter-spacing="5">NEWS</text>
 
   <!-- Separator dot -->
-  <circle cx="330" cy="90" r="3" fill="#2a3a26"/>
+  <circle cx="340" cy="82" r="3" fill="#2a3a26"/>
 
   <!-- Tagline -->
-  <text x="348" y="98" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="18" font-weight="300" fill="#f0ead0" opacity="0.8">Live Market News &amp; Stock Tracker</text>
+  <text x="358" y="90" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="18" font-weight="300" fill="#f0ead0" opacity="0.8">Live Market News &amp; Stock Tracker</text>
 
   <!-- URL -->
   <text x="1080" y="166" text-anchor="end" font-family="ui-monospace, 'SF Mono', monospace" font-size="12" font-weight="400" fill="#3a5434" letter-spacing="0.5">greenlinenews.com</text>

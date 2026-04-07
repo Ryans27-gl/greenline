@@ -18,18 +18,18 @@
   </g>
 
   <!-- Logo icon -->
+  <defs>
+    <clipPath id="iconClip"><rect x="178" y="120" width="144" height="144" rx="36"/></clipPath>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,1 L10,5 L0,9 Z" fill="white"/>
+    </marker>
+  </defs>
   <rect x="178" y="120" width="144" height="144" rx="36" fill="#8ab86a"/>
 
-  <!-- Chart polyline inside icon -->
-  <polyline points="213,210 237,182 265,198 307,158" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="307" cy="158" r="7.5" fill="white"/>
+  <!-- Chart line: up, dip, then up with arrowhead -->
+  <polyline points="190,240 220,185 248,215 300,140" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#iconClip)" marker-end="url(#arrow)"/>
 
-  <!-- Greenline text -->
-  <text x="250" y="340" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#f0ead0" letter-spacing="-1">Green<tspan fill="#8ab86a">line</tspan></text>
-
-  <!-- Tagline -->
-  <text x="250" y="385" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="400" fill="#3a5434" letter-spacing="3" text-transform="uppercase">MARKET NEWS</text>
-
-  <!-- Bottom accent line -->
-  <line x1="180" y1="430" x2="320" y2="430" stroke="#8ab86a" stroke-width="2" opacity="0.3"/>
+  <!-- Brand name: two lines for visual balance -->
+  <text x="250" y="330" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="52" font-weight="700" fill="#f0ead0" letter-spacing="-1">green<tspan fill="#8ab86a">line</tspan></text>
+  <text x="250" y="374" text-anchor="middle" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', monospace" font-size="22" font-weight="500" fill="#7a9470" letter-spacing="8">NEWS</text>
 </svg>

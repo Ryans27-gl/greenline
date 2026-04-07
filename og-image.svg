@@ -13,11 +13,10 @@
       <stop offset="0%" stop-color="#8ab86a" stop-opacity="0.15"/>
       <stop offset="100%" stop-color="#8ab86a" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="glowLine" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#4ade80" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#4ade80" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
-    </linearGradient>
+    <clipPath id="iconClip"><rect x="80" y="165" width="56" height="56" rx="14"/></clipPath>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse">
+      <path d="M0,1 L10,5 L0,9 Z" fill="white"/>
+    </marker>
   </defs>
 
   <!-- Background -->
@@ -46,16 +45,13 @@
   <circle cx="1160" cy="110" r="6" fill="#4ade80"/>
   <circle cx="1160" cy="110" r="12" fill="#4ade80" opacity="0.2"/>
 
-  <!-- Decorative horizontal glow line -->
-  <rect x="0" y="410" width="1200" height="1" fill="url(#glowLine)"/>
-
   <!-- Logo icon -->
-  <rect x="80" y="180" width="56" height="56" rx="14" fill="#8ab86a"/>
-  <polyline points="95,216 105,204 115,210 129,196" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="129" cy="196" r="3" fill="white"/>
+  <rect x="80" y="165" width="56" height="56" rx="14" fill="#8ab86a"/>
+  <polyline points="88,210 100,188 110,200 128,175" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#iconClip)" marker-end="url(#arrow)"/>
 
   <!-- Logo text -->
-  <text x="152" y="224" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="46" font-weight="700" fill="#f0ead0" letter-spacing="-1">Green<tspan fill="#8ab86a">line</tspan></text>
+  <text x="152" y="200" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="46" font-weight="700" fill="#f0ead0" letter-spacing="-1">green<tspan fill="#8ab86a">line</tspan></text>
+  <text x="152" y="228" font-family="ui-monospace, 'SF Mono', monospace" font-size="15" font-weight="500" fill="#7a9470" letter-spacing="6">NEWS</text>
 
   <!-- Tagline -->
   <text x="82" y="290" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="32" font-weight="300" fill="#f0ead0" opacity="0.95">Live Market News &amp; Stock Tracker</text>
