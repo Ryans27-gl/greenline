@@ -410,10 +410,27 @@ function showSkeletons() {
 /* ── STOCK PRICE ── */
 async function fetchStock(symbol) {
   if (stockCache[symbol] && Date.now() - stockCache[symbol].ts < 90000) return stockCache[symbol];
+
+  // Try previous close endpoint first (most reliable on free tier)
   try {
-    const to = new Date(); to.setDate(to.getDate()-1);
-    const from = new Date(to); from.setDate(from.getDate()-6);
-    const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${from.toISOString().split('T')[0]}/${to.toISOString().split('T')[0]}?adjusted=true&sort=desc&limit=5&apiKey=${POLY_KEY}`);
+    const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/prev?adjusted=true&apiKey=${POLY_KEY}`);
+    const data = await res.json();
+    if (data.results && data.results.length > 0) {
+      const cur = data.results[0];
+      const change = (cur.c - cur.o) / cur.o * 100;
+      const result = { price: cur.c, change, open: cur.o, high: cur.h, low: cur.l, vol: cur.v, history: [cur.o, (cur.o+cur.c)/2, cur.h, cur.l, cur.c], ts: Date.now() };
+      stockCache[symbol] = result;
+      return result;
+    }
+  } catch(e) {}
+
+  // Fallback: range endpoint going back 10 days to catch weekends/holidays
+  try {
+    const to = new Date();
+    const from = new Date(to); from.setDate(from.getDate()-10);
+    const toStr = to.toISOString().split('T')[0];
+    const fromStr = from.toISOString().split('T')[0];
+    const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${fromStr}/${toStr}?adjusted=true&sort=desc&limit=5&apiKey=${POLY_KEY}`);
     const data = await res.json();
     if (data.results && data.results.length >= 2) {
       const cur = data.results[0], prev = data.results[1];
@@ -427,6 +444,7 @@ async function fetchStock(symbol) {
       return result;
     }
   } catch(e) {}
+
   return null;
 }
 
