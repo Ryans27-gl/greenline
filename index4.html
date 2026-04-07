@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greenline — Market News</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --nav-bg:     #111a0f;
+  --ticker-bg:  #172014;
+  --bg:         #f2ead8;
+  --card:       #faf6ee;
+  --card2:      #f0e8d4;
+  --border:     rgba(90,80,60,0.10);
+  --border2:    rgba(90,80,60,0.18);
+  --text:       #1e1a10;
+  --text2:      #5a5040;
+  --text3:      #9a8e78;
+  --nav-text:   #f0ead0;
+  --nav-text2:  #7a9470;
+  --nav-text3:  #3a5434;
+  --matcha:     #6a9e52;
+  --matcha-lt:  #8ab86a;
+  --green:      #3a8a3a;
+  --red:        #c04040;
+  --radius:     16px;
+  --radius-sm:  10px;
+}
+
+body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+nav { background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); }
+.nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; height: 68px; display: flex; align-items: center; gap: 32px; }
+
+.logo { display: flex; align-items: center; gap: 11px; flex-shrink: 0; text-decoration: none; }
+.logo-icon { width: 40px; height: 40px; background: var(--matcha-lt); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+.logo-top { font-size: 17px; font-weight: 700; color: var(--nav-text); letter-spacing: -0.3px; }
+.logo-top span { color: var(--matcha-lt); }
+.logo-bottom { font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--nav-text3); margin-top: 4px; }
+
+.nav-filters { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.nav-filters::-webkit-scrollbar { display: none; }
+.filter-btn { padding: 6px 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.12); background: transparent; color: var(--nav-text2); font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+.filter-btn:hover { background: rgba(255,255,255,0.06); color: var(--nav-text); }
+.filter-btn.active { background: var(--matcha-lt); color: #111a0f; border-color: var(--matcha-lt); font-weight: 600; }
+
+.refresh-btn { display: flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 100px; background: var(--matcha-lt); color: #111a0f; border: none; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: opacity 0.15s, transform 0.1s; }
+.refresh-btn:hover { opacity: 0.88; }
+.refresh-btn:active { transform: scale(0.97); }
+.refresh-btn svg { width: 14px; height: 14px; transition: transform 0.55s ease; }
+.refresh-btn.spinning svg { transform: rotate(360deg); }
+
+.ticker-strip { background: var(--ticker-bg); border-bottom: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #3a5434; padding: 7px 0; overflow: hidden; white-space: nowrap; }
+.ticker-track { display: inline-block; animation: ticker 55s linear infinite; }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.t-item { display: inline-block; margin-right: 48px; }
+.t-item .sym { color: #c8d5a0; font-weight: 500; margin-right: 7px; }
+.t-up { color: #8ab86a; }
+.t-dn { color: #e08060; }
+
+main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
+.feed-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.feed-left { display: flex; align-items: center; gap: 14px; }
+.feed-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); }
+.status-bar { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text3); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--matcha); flex-shrink: 0; }
+.status-dot.loading { background: #c8a020; animation: blink 0.8s infinite; }
+.status-dot.error { background: var(--red); }
+.status-dot.live { background: var(--matcha); animation: blink 2.5s infinite; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.updated-at { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+
+/* SKELETONS */
+.skeleton { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+.skel-thumb { height: 118px; background: linear-gradient(90deg, #ede5d0 25%, #e0d8c0 50%, #ede5d0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+.skel-body { padding: 16px 18px 14px; }
+.skel-line { height: 11px; border-radius: 6px; background: linear-gradient(90deg, #ede5d0 25%, #e0d8c0 50%, #ede5d0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; margin-bottom: 10px; }
+.skel-line.w40 { width: 40%; }
+.skel-line.w60 { width: 60%; }
+.skel-line.w80 { width: 80%; }
+.skel-line.w100 { width: 100%; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* CARDS */
+.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; animation: fadeUp 0.35s ease both; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+.card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(60,50,30,0.10); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+.card-thumb { width: 100%; height: 118px; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; font-size: 44px; }
+.cat-pill { position: absolute; bottom: 10px; left: 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 11px; border-radius: 100px; background: rgba(0,0,0,0.28); color: rgba(255,255,255,0.88); }
+.new-pill { position: absolute; top: 10px; right: 12px; font-size: 9px; font-weight: 700; padding: 3px 10px; border-radius: 100px; background: var(--matcha-lt); color: #111a0f; letter-spacing: 0.07em; text-transform: uppercase; }
+.live-badge { position: absolute; top: 10px; left: 12px; font-size: 9px; font-weight: 600; padding: 3px 9px; border-radius: 100px; background: rgba(0,0,0,0.45); color: #8ab86a; display: flex; align-items: center; gap: 4px; }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: #8ab86a; animation: blink 1.5s infinite; }
+
+.card-meta { display: flex; align-items: center; gap: 8px; padding: 14px 18px 6px; flex-wrap: wrap; }
+.source-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--matcha); flex-shrink: 0; }
+.source-name { font-size: 12px; font-weight: 500; color: var(--text2); }
+.meta-sep { font-size: 11px; color: var(--text3); }
+.time-ago { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+
+.card-body { padding: 4px 18px 16px; flex: 1; }
+.card-title { font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--text); margin-bottom: 8px; letter-spacing: -0.1px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card-summary { font-size: 13px; font-weight: 300; line-height: 1.75; color: var(--text2); margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.read-link { font-size: 12px; font-weight: 600; color: var(--matcha); text-decoration: none; }
+.read-link:hover { text-decoration: underline; }
+
+.stock-widget { border-top: 1px solid var(--border); padding: 12px 18px 14px; background: var(--card2); }
+.sw-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+.stocks-row { display: flex; gap: 7px; flex-wrap: wrap; }
+
+.stock-chip { background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 7px 11px; min-width: 80px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+.stock-chip:hover { border-color: var(--matcha); box-shadow: 0 2px 8px rgba(106,158,82,0.15); }
+.chip-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.chip-ticker { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--text); }
+.chip-change { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; }
+.chip-change.up { color: var(--green); }
+.chip-change.dn { color: var(--red); }
+.chip-change.flat { color: var(--text3); }
+.chip-price { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+
+.card-actions { display: flex; border-top: 1px solid var(--border); }
+.act-btn { flex: 1; padding: 10px 0; background: none; border: none; border-right: 1px solid var(--border); font-family: 'Sora', sans-serif; font-size: 12px; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.12s, color 0.12s; }
+.act-btn:last-child { border-right: none; }
+.act-btn:hover { background: var(--card2); color: var(--text2); }
+.act-btn.saved { color: var(--matcha); }
+.act-btn svg { width: 13px; height: 13px; }
+
+.empty { grid-column: 1/-1; text-align: center; padding: 80px 0; color: var(--text3); font-size: 15px; line-height: 2; }
+
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(70px); background: #1d2c1a; border: 1px solid var(--matcha-lt); color: #f0ead0; padding: 11px 24px; border-radius: 100px; font-size: 13px; font-weight: 500; z-index: 999; transition: transform 0.28s ease; pointer-events: none; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .nav-inner { padding: 0 16px; gap: 14px; } main { padding: 24px 16px 60px; } .logo-bottom { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <polyline points="3,17 8,11 13,14 21,5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="21" cy="5" r="2.2" fill="white"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-top">Green<span>line</span></div>
+        <div class="logo-bottom">Market News</div>
+      </div>
+    </a>
+    <div class="nav-filters" id="filters">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="business">Business</button>
+      <button class="filter-btn" data-cat="technology">Technology</button>
+      <button class="filter-btn" data-cat="energy">Energy</button>
+      <button class="filter-btn" data-cat="health">Health</button>
+      <button class="filter-btn" data-cat="economy">Economy</button>
+    </div>
+    <button class="refresh-btn" id="refreshBtn" onclick="doRefresh()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Refresh
+    </button>
+  </div>
+</nav>
+
+<div class="ticker-strip">
+  <div class="ticker-track" id="tickerTrack">Loading live market data...</div>
+</div>
+
+<main>
+  <div class="feed-bar">
+    <div class="feed-left">
+      <span class="feed-label">Live Feed</span>
+      <div class="status-bar">
+        <div class="status-dot loading" id="statusDot"></div>
+        <span id="statusText">Loading...</span>
+      </div>
+    </div>
+    <span class="updated-at" id="updatedAt">—</span>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GNEWS_KEY = '04cf44912073cf109e176446b9ce1dca';
+const POLY_KEY  = '5yZz_lFOat0OcFGjE_d41p1WFAKGh03v';
+
+const CAT_QUERIES = {
+  all:        'stock market OR Wall Street OR earnings OR Federal Reserve',
+  business:   'earnings OR merger OR acquisition OR IPO OR stocks',
+  technology: 'technology stocks OR Apple OR Microsoft OR NVIDIA OR semiconductor',
+  energy:     'oil prices OR OPEC OR energy stocks OR natural gas OR crude oil',
+  health:     'pharmaceutical OR FDA approval OR biotech OR drug trial OR healthcare stocks',
+  economy:    'Federal Reserve OR inflation OR interest rates OR GDP OR jobs report',
+};
+
+const CAT_COLORS = {
+  all:        '#1e3040',
+  business:   '#1e2e40',
+  technology: '#1a2040',
+  energy:     '#1e3a20',
+  health:     '#1a3028',
+  economy:    '#201e40',
+};
+
+const CAT_ICONS = {
+  all: '📰', business: '📊', technology: '💻', energy: '🛢', health: '💊', economy: '🏦',
+};
+
+const CAT_STOCKS = {
+  all:        ['AAPL','MSFT','JPM','XOM','SPY'],
+  business:   ['JPM','GS','MS','BAC','BRK-A'],
+  technology: ['AAPL','MSFT','NVDA','GOOGL','META'],
+  energy:     ['XOM','CVX','COP','SLB','NEE'],
+  health:     ['LLY','JNJ','PFE','ABBV','MRK'],
+  economy:    ['SPY','TLT','GLD','DIA','QQQ'],
+};
+
+const TICKER_SYMS = ['AAPL','MSFT','NVDA','GOOGL','AMZN','META','TSLA','XOM','JPM','LLY','V','JNJ','WMT','GS','BRK-A'];
+
+const KEYWORD_STOCKS = {
+  'AAPL':  ['apple','iphone','ipad','macos','tim cook'],
+  'MSFT':  ['microsoft','azure','windows','openai','copilot'],
+  'NVDA':  ['nvidia','gpu','cuda','jensen huang','ai chip'],
+  'GOOGL': ['google','alphabet','youtube','gemini','waymo'],
+  'AMZN':  ['amazon','aws','bezos','prime','alexa'],
+  'META':  ['meta','facebook','instagram','zuckerberg','whatsapp'],
+  'TSLA':  ['tesla','musk','electric vehicle','ev','cybertruck'],
+  'XOM':   ['exxon','mobil','opec','crude','oil price'],
+  'CVX':   ['chevron','chevron oil'],
+  'COP':   ['conocophillips','permian'],
+  'JPM':   ['jpmorgan','jamie dimon','chase bank'],
+  'GS':    ['goldman sachs','goldman'],
+  'BAC':   ['bank of america'],
+  'LLY':   ['eli lilly','lilly','ozempic','wegovy','glp-1','obesity drug'],
+  'PFE':   ['pfizer'],
+  'JNJ':   ['johnson & johnson','johnson and johnson'],
+  'ABBV':  ['abbvie'],
+  'MRK':   ['merck'],
+  'SPY':   ['s&p 500','s&p500','stock market rally','market selloff'],
+  'GLD':   ['gold price','gold rally','precious metals'],
+  'TLT':   ['treasury','bond yield','10-year yield'],
+  'NEE':   ['nextera','renewable energy','solar','wind energy'],
+  'SLB':   ['schlumberger','oilfield services'],
+};
+
+let stockCache = {};
+let activeFilter = 'all';
+let savedIds = new Set();
+
+/* ── STATUS ── */
+function setStatus(type, text) {
+  document.getElementById('statusDot').className = 'status-dot ' + type;
+  document.getElementById('statusText').textContent = text;
+}
+
+/* ── SKELETONS ── */
+function showSkeletons() {
+  document.getElementById('grid').innerHTML = [0,1,2,3].map(() => `
+    <div class="skeleton">
+      <div class="skel-thumb"></div>
+      <div class="skel-body">
+        <div class="skel-line w40"></div>
+        <div class="skel-line w100"></div>
+        <div class="skel-line w80"></div>
+        <div class="skel-line w60"></div>
+      </div>
+    </div>`).join('');
+}
+
+/* ── FALLBACK ARTICLES ── */
+const FALLBACK = {
+  all: [
+    { title:'Federal Reserve holds rates steady, signals caution on cuts', description:'Fed officials cited persistent inflation and strong jobs data as reasons to delay interest rate cuts, sending mixed signals to markets.', source:{name:'Reuters'}, publishedAt: new Date(Date.now()-3600000).toISOString(), url:'https://reuters.com' },
+    { title:'NVIDIA posts record revenue driven by AI chip demand', description:'The chipmaker reported quarterly earnings that smashed expectations, with data center revenue more than doubling year over year.', source:{name:'Bloomberg'}, publishedAt: new Date(Date.now()-7200000).toISOString(), url:'https://bloomberg.com' },
+    { title:'Oil prices rise as OPEC+ considers extending production cuts', description:'Crude oil climbed above $85 a barrel after reports that the cartel is weighing keeping output restrictions in place through the end of the year.', source:{name:'Wall Street Journal'}, publishedAt: new Date(Date.now()-10800000).toISOString(), url:'https://wsj.com' },
+    { title:'Goldman Sachs upgrades outlook for S&P 500 amid strong earnings season', description:'The bank raised its year-end target for the index, citing better-than-expected corporate profits and resilient consumer spending.', source:{name:'CNBC'}, publishedAt: new Date(Date.now()-14400000).toISOString(), url:'https://cnbc.com' },
+    { title:'Eli Lilly obesity drug trial results exceed analyst expectations', description:'New data from Phase 3 trials showed significant weight loss outcomes, reinforcing Lilly\'s dominant position in the fast-growing GLP-1 market.', source:{name:'STAT News'}, publishedAt: new Date(Date.now()-18000000).toISOString(), url:'https://statnews.com' },
+    { title:'Microsoft and OpenAI expand cloud partnership with new $3B commitment', description:'The deal deepens Microsoft\'s lead in enterprise AI and puts pressure on Google and Amazon to accelerate their own AI infrastructure investments.', source:{name:'Financial Times'}, publishedAt: new Date(Date.now()-21600000).toISOString(), url:'https://ft.com' },
+  ],
+  business: [
+    { title:'JPMorgan Chase beats Q1 earnings estimates by wide margin', description:'Strong trading revenue and investment banking fees drove profits above Wall Street expectations in the first quarter.', source:{name:'MarketWatch'}, publishedAt: new Date(Date.now()-3600000).toISOString(), url:'https://marketwatch.com' },
+    { title:'Amazon announces $10B share buyback program', description:'The e-commerce and cloud giant said it would repurchase up to $10 billion of its own shares, signaling confidence in its long-term growth.', source:{name:'Bloomberg'}, publishedAt: new Date(Date.now()-7200000).toISOString(), url:'https://bloomberg.com' },
+    { title:'Merger activity picks up as deal-making returns to Wall Street', description:'A wave of strategic acquisitions signals that corporate confidence is returning after a slow period for M&A activity.', source:{name:'Financial Times'}, publishedAt: new Date(Date.now()-10800000).toISOString(), url:'https://ft.com' },
+    { title:'BlackRock assets under management hit record $10 trillion', description:'The world\'s largest asset manager reported record inflows driven by demand for its ETF products and fixed income strategies.', source:{name:'Reuters'}, publishedAt: new Date(Date.now()-14400000).toISOString(), url:'https://reuters.com' },
+    { title:'Visa and Mastercard reach $30B settlement with retailers over fees', description:'The landmark agreement could reshape how payment processing fees work for millions of merchants across the United States.', source:{name:'CNBC'}, publishedAt: new Date(Date.now()-18000000).toISOString(), url:'https://cnbc.com' },
+    { title:'Warren Buffett increases Berkshire stake in Japanese trading houses', description:'Berkshire Hathaway disclosed it has raised its holdings in five major Japanese conglomerates, betting on their long-term value.', source:{name:'Wall Street Journal'}, publishedAt: new Date(Date.now()-21600000).toISOString(), url:'https://wsj.com' },
+  ],
+  technology: [
+    { title:'Apple unveils new AI features coming to iPhone this fall', description:'The company announced a suite of on-device artificial intelligence tools that will be built into iOS, challenging Google and Samsung.', source:{name:'TechCrunch'}, publishedAt: new Date(Date.now()-3600000).toISOString(), url:'https://techcrunch.com' },
+    { title:'NVIDIA GPUs remain in short supply as AI spending accelerates', description:'Demand for the company\'s chips continues to outpace production, with major cloud providers placing orders months in advance.', source:{name:'Bloomberg'}, publishedAt: new Date(Date.now()-7200000).toISOString(), url:'https://bloomberg.com' },
+    { title:'Microsoft Copilot adoption surges among enterprise customers', description:'The AI assistant built into Microsoft 365 is now used by millions of business customers, adding a significant new revenue stream.', source:{name:'CNBC'}, publishedAt: new Date(Date.now()-10800000).toISOString(), url:'https://cnbc.com' },
+    { title:'Google launches new Gemini model to compete with GPT-4', description:'Alphabet unveiled its latest large language model, claiming it outperforms rivals on several key benchmarks.', source:{name:'The Verge'}, publishedAt: new Date(Date.now()-14400000).toISOString(), url:'https://theverge.com' },
+    { title:'Qualcomm wins key patent dispute with Arm Holdings', description:'The ruling clears a major legal uncertainty for Qualcomm and its next generation of PC and mobile chips.', source:{name:'Reuters'}, publishedAt: new Date(Date.now()-18000000).toISOString(), url:'https://reuters.com' },
+    { title:'Tesla Full Self-Driving software reaches 1 billion miles driven', description:'The electric vehicle maker said its FSD system has now accumulated more than one billion miles of real-world driving data.', source:{name:'Electrek'}, publishedAt: new Date(Date.now()-21600000).toISOString(), url:'https://electrek.co' },
+  ],
+  energy: [
+    { title:'OPEC+ agrees to extend oil output cuts through Q3', description:'The cartel decided to maintain its production curbs to support crude prices, which could push gasoline costs higher heading into summer.', source:{name:'Wall Street Journal'}, publishedAt: new Date(Date.now()-3600000).toISOString(), url:'https://wsj.com' },
+    { title:'U.S. natural gas exports hit record high as Europe diversifies supply', description:'LNG terminal expansions are creating a new era of American energy dominance in global markets.', source:{name:'Reuters'}, publishedAt: new Date(Date.now()-7200000).toISOString(), url:'https://reuters.com' },
+    { title:'ExxonMobil completes Pioneer Natural Resources acquisition', description:'The $60 billion deal creates the largest oil producer in the Permian Basin and reshapes the U.S. energy landscape.', source:{name:'Bloomberg'}, publishedAt: new Date(Date.now()-10800000).toISOString(), url:'https://bloomberg.com' },
+    { title:'Wind energy capacity breaks record as utilities shift from gas', description:'Renewable energy now accounts for nearly 30% of U.S. electricity generation, accelerating the transition away from fossil fuels.', source:{name:'Financial Times'}, publishedAt: new Date(Date.now()-14400000).toISOString(), url:'https://ft.com' },
+    { title:'Chevron raises dividend as strong oil prices boost profits', description:'The energy giant rewarded shareholders with a higher payout after a quarter of strong free cash flow generation.', source:{name:'CNBC'}, publishedAt: new Date(Date.now()-18000000).toISOString(), url:'https://cnbc.com' },
+    { title:'Solar panel costs fall to all-time low boosting clean energy stocks', description:'Manufacturing improvements and economies of scale have driven solar installation costs down sharply, accelerating adoption worldwide.', source:{name:'Bloomberg'}, publishedAt: new Date(Date.now()-21600000).toISOString(), url:'https://bloomberg.com' },
+  ],
+  health: [
+    { title:'Eli Lilly obesity drug shows 22% weight loss in Phase 3 trials', description:'The results significantly outperform Novo Nordisk\'s Wegovy and could reshape the $50 billion GLP-1 weight loss drug market.', source:{name:'STAT News'}, publishedAt: new Date(Date.now()-3600000).toISOString(), url:'https://statnews.com' },
+    { title:'FDA grants accelerated approval to Biogen Alzheimer\'s treatment', description:'The decision sends Biogen shares sharply higher and opens a new chapter in the treatment of one of the most challenging diseases.', source:{name:'Reuters'}, publishedAt: new Date(Date.now()-7200000).toISOString(), url:'https://reuters.com' },
+    { title:'CVS Health acquires Oak Street Health in $10.6B deal', description:'The acquisition accelerates CVS\'s push into primary care and puts it in direct competition with Amazon and UnitedHealth Group.', source:{name:'Bloomberg'}, publishedAt: new Date(Date.now()-10800000).toISOString(), url:'https://bloomberg.com' },
+    { title:'Pfizer slashes revenue forecast as COVID product demand fades', description:'The drugmaker said sales of its COVID vaccine and antiviral treatment have fallen sharply, forcing a significant cut to its outlook.', source:{name:'Wall Street Journal'}, publishedAt: new Date(Date.now()-14400000).toISOString(), url:'https://wsj.com' },
+    { title:'Johnson & Johnson spinoff Kenvue prices IPO above range', description:'The consumer health company behind Tylenol and Band-Aid raised more than $3.8 billion in one of the year\'s largest IPOs.', source:{name:'CNBC'}, publishedAt: new Date(Date.now()-18000000).toISOString(), url:'https://cnbc.com' },
+    { title:'AbbVie acquires neuroscience biotech in $8.7B deal', description:'The pharmaceutical giant is expanding beyond its blockbuster Humira franchise by betting on treatments for mental health conditions.', source:{name:'Financial Times'}, publishedAt: new Date(Date.now()-21600000).toISOString(), url:'https://ft.com' },
+  ],
+  economy: [
+    { title:'Federal Reserve signals two rate cuts in 2025 as inflation eases', description:'Fed Chair Jerome Powell said the central bank is gaining confidence that inflation is returning to its 2% target, paving the way for lower borrowing costs.', source:{name:'Reuters'}, publishedAt: new Date(Date.now()-3600000).toISOString(), url:'https://reuters.com' },
+    { title:'U.S. jobs report shows 200,000 new positions added in March', description:'The labor market remained resilient last month, with unemployment holding steady at 3.8% and wages growing faster than expected.', source:{name:'Bloomberg'}, publishedAt: new Date(Date.now()-7200000).toISOString(), url:'https://bloomberg.com' },
+    { title:'Consumer confidence rises to highest level in two years', description:'Americans are feeling more optimistic about the economy and their personal finances, according to the latest Conference Board survey.', source:{name:'CNBC'}, publishedAt: new Date(Date.now()-10800000).toISOString(), url:'https://cnbc.com' },
+    { title:'U.S. GDP grows 2.8% in fourth quarter beating expectations', description:'The economy expanded faster than forecast at the end of last year, driven by strong consumer spending and business investment.', source:{name:'Wall Street Journal'}, publishedAt: new Date(Date.now()-14400000).toISOString(), url:'https://wsj.com' },
+    { title:'China manufacturing data beats forecasts lifting global markets', description:'A stronger-than-expected PMI reading from China boosted commodity stocks and emerging market currencies around the world.', source:{name:'Financial Times'}, publishedAt: new Date(Date.now()-18000000).toISOString(), url:'https://ft.com' },
+    { title:'Treasury yields fall as investors bet on Fed rate cuts', description:'The 10-year yield dropped below 4.2% after cooler inflation data reinforced expectations that the Fed will begin cutting rates this year.', source:{name:'MarketWatch'}, publishedAt: new Date(Date.now()-21600000).toISOString(), url:'https://marketwatch.com' },
+  ],
+};
+
+/* ── FETCH NEWS via GNews ── */
+async function fetchNews(cat) {
+  const q = encodeURIComponent(CAT_QUERIES[cat] || CAT_QUERIES.all);
+  const url = `https://gnews.io/api/v4/search?q=${q}&lang=en&country=us&max=6&sortby=publishedAt&apikey=${GNEWS_KEY}`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.articles && data.articles.length > 0) return data.articles;
+  } catch(e) { console.warn('GNews error:', e); }
+  return FALLBACK[cat] || FALLBACK.all;
+}
+
+/* ── FETCH STOCK PRICE via Polygon ── */
+async function fetchStock(symbol) {
+  if (stockCache[symbol] && Date.now() - stockCache[symbol].ts < 90000) return stockCache[symbol];
+  try {
+    const to = new Date(); to.setDate(to.getDate() - 1);
+    const from = new Date(to); from.setDate(from.getDate() - 6);
+    const toStr = to.toISOString().split('T')[0];
+    const fromStr = from.toISOString().split('T')[0];
+    const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${fromStr}/${toStr}?adjusted=true&sort=desc&limit=2&apiKey=${POLY_KEY}`);
+    const data = await res.json();
+    if (data.results && data.results.length >= 2) {
+      const cur = data.results[0], prev = data.results[1];
+      const result = { price: cur.c, change: (cur.c - prev.c) / prev.c * 100, ts: Date.now() };
+      stockCache[symbol] = result;
+      return result;
+    } else if (data.results && data.results.length === 1) {
+      const cur = data.results[0];
+      const result = { price: cur.c, change: (cur.c - cur.o) / cur.o * 100, ts: Date.now() };
+      stockCache[symbol] = result;
+      return result;
+    }
+  } catch(e) {}
+  return null;
+}
+
+/* ── TICKER ── */
+async function buildTicker() {
+  const results = await Promise.all(TICKER_SYMS.map(s => fetchStock(s)));
+  const doubled = [...TICKER_SYMS, ...TICKER_SYMS];
+  const html = doubled.map((s, i) => {
+    const d = results[i % TICKER_SYMS.length];
+    if (!d) return `<span class="t-item"><span class="sym">${s}</span><span style="color:#3a5434">--</span></span>`;
+    const up = d.change >= 0;
+    return `<span class="t-item"><span class="sym">${s}</span>$${d.price.toFixed(2)} <span class="${up?'t-up':'t-dn'}">${up?'+':''}${d.change.toFixed(2)}%</span></span>`;
+  }).join('');
+  document.getElementById('tickerTrack').innerHTML = html;
+}
+
+/* ── SMART STOCK PICKER ── */
+function pickStocks(article, cat) {
+  const text = ((article.title||'') + ' ' + (article.description||'')).toLowerCase();
+  const matched = [];
+  Object.entries(KEYWORD_STOCKS).forEach(([sym, words]) => {
+    if (words.some(w => text.includes(w))) matched.push(sym);
+  });
+  const fallback = CAT_STOCKS[cat] || CAT_STOCKS.all;
+  return [...new Set([...matched, ...fallback])].slice(0, 4);
+}
+
+/* ── ICON PICKER ── */
+function pickIcon(article, cat) {
+  const t = ((article.title||'') + ' ' + (article.description||'')).toLowerCase();
+  if (t.includes('oil') || t.includes('opec') || t.includes('crude')) return '🛢';
+  if (t.includes('tesla') || t.includes('electric vehicle') || t.includes(' ev ')) return '⚡';
+  if (t.includes('apple') || t.includes('iphone') || t.includes('microsoft') || t.includes('nvidia') || t.includes('ai ')) return '💻';
+  if (t.includes('drug') || t.includes('fda') || t.includes('pharma') || t.includes('cancer') || t.includes('obesity')) return '💊';
+  if (t.includes('fed') || t.includes('inflation') || t.includes('rate') || t.includes('gdp') || t.includes('jobs')) return '🏦';
+  if (t.includes('merger') || t.includes('acqui') || t.includes('deal') || t.includes('billion')) return '🤝';
+  if (t.includes('gold') || t.includes('commodity')) return '🪙';
+  if (t.includes('solar') || t.includes('wind') || t.includes('renewable')) return '🌱';
+  if (t.includes('bank') || t.includes('earnings') || t.includes('profit') || t.includes('revenue')) return '📊';
+  return CAT_ICONS[cat] || '📰';
+}
+
+/* ── TIME AGO ── */
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff / 60000);
+  const h = Math.floor(m / 60);
+  const d = Math.floor(h / 24);
+  if (m < 2) return 'Just now';
+  if (m < 60) return `${m}m ago`;
+  if (h < 24) return `${h}h ago`;
+  return `${d}d ago`;
+}
+
+/* ── MAKE CARD ── */
+async function makeCard(article, cat, idx) {
+  const symbols = pickStocks(article, cat);
+  const stockData = await Promise.all(symbols.map(s => fetchStock(s)));
+
+  const chipsHtml = symbols.map((s, i) => {
+    const d = stockData[i];
+    if (!d) return `<div class="stock-chip"><div class="chip-top"><span class="chip-ticker">${s}</span><span class="chip-change flat">—</span></div><div class="chip-price">loading</div></div>`;
+    const up = d.change >= 0;
+    return `<div class="stock-chip">
+      <div class="chip-top">
+        <span class="chip-ticker">${s}</span>
+        <span class="chip-change ${up?'up':'dn'}">${up?'+':''}${d.change.toFixed(1)}%</span>
+      </div>
+      <div class="chip-price">$${d.price.toFixed(2)}</div>
+    </div>`;
+  }).join('');
+
+  const icon  = pickIcon(article, cat);
+  const color = CAT_COLORS[cat] || CAT_COLORS.all;
+  const id    = `a${idx}`;
+  const saved = savedIds.has(id);
+  const source = article.source?.name || 'News';
+  const url   = article.url || '#';
+  const desc  = article.description || 'Click to read the full article.';
+
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.dataset.id = id;
+  div.style.animationDelay = (idx * 0.07) + 's';
+
+  div.innerHTML = `
+    <div class="card-thumb" style="background:${color};">
+      <span>${icon}</span>
+      <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      <span class="cat-pill">${cat === 'all' ? 'market' : cat}</span>
+    </div>
+    <div class="card-meta">
+      <div class="source-dot"></div>
+      <span class="source-name">${source}</span>
+      <span class="meta-sep">·</span>
+      <span class="time-ago">${timeAgo(article.publishedAt)}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${article.title}</div>
+      <div class="card-summary">${desc}</div>
+      <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="window.open('${url}','_blank');return false;">Read full article →</a>
+    </div>
+    <div class="stock-widget">
+      <div class="sw-label">Stocks that may be affected</div>
+      <div class="stocks-row">${chipsHtml}</div>
+    </div>
+    <div class="card-actions">
+      <button class="act-btn ${saved?'saved':''}" data-saveid="${id}">
+        <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        ${saved?'Saved':'Save'}
+      </button>
+      <button class="act-btn" onclick="copyLink('${url}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="act-btn" onclick="showToast('Discussions coming soon!')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Discuss
+      </button>
+    </div>`;
+
+  div.querySelector('[data-saveid]').onclick = () => toggleSave(id, div);
+  return div;
+}
+
+function toggleSave(id, card) {
+  if (savedIds.has(id)) { savedIds.delete(id); showToast('Removed from saved'); }
+  else { savedIds.add(id); showToast('Article saved!'); }
+  const btn = card.querySelector('[data-saveid]');
+  const s = savedIds.has(id);
+  btn.className = 'act-btn' + (s?' saved':'');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="${s?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>${s?'Saved':'Save'}`;
+}
+
+function copyLink(url) {
+  navigator.clipboard.writeText(url).catch(()=>{});
+  showToast('Link copied!');
+}
+
+/* ── LOAD FEED ── */
+async function loadFeed(cat) {
+  setStatus('loading', 'Fetching latest headlines...');
+  showSkeletons();
+
+  const articles = await fetchNews(cat);
+
+  if (!articles || articles.length === 0) articles = FALLBACK[cat] || FALLBACK.all;
+  if (false) {
+    setStatus('error', 'Could not load news right now');
+    document.getElementById('grid').innerHTML = `
+      <div class="empty">
+        Could not load live news right now.<br>
+        <span style="font-size:13px;color:var(--text3);">Check your connection and hit Refresh to try again.</span>
+      </div>`;
+    return;
+  }
+
+  setStatus('loading', 'Loading stock prices...');
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  const cards = await Promise.all(articles.slice(0, 6).map((a, i) => makeCard(a, cat, i)));
+  grid.innerHTML = '';
+  cards.forEach(c => grid.appendChild(c));
+
+  setStatus('live', `${articles.length} live articles · real-time prices`);
+  document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+async function doRefresh() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  await loadFeed(activeFilter);
+  btn.classList.remove('spinning');
+  showToast('Feed refreshed!');
+}
+
+document.getElementById('filters').onclick = e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.cat;
+  loadFeed(activeFilter);
+};
+
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ── INIT ── */
+(async () => {
+  buildTicker();
+  await loadFeed('all');
+  setInterval(buildTicker, 120000);
+  setInterval(() => loadFeed(activeFilter), 300000);
+})();
+</script>
+</body>
+</html>
