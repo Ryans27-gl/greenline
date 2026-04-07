@@ -1007,98 +1007,26 @@ function closeTooltip() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTooltip(); });
 
 /* ── ONBOARDING ── */
-const ONBOARD_STEPS = [
-  {
-    emoji: '🌿',
-    title: 'Welcome to Greenline',
-    sub: 'Your beginner-friendly stock market news hub',
-    desc: 'Greenline makes it easy to stay on top of market news — even if you're completely new to investing. No jargon, no complexity.',
-    features: [
-      { icon: '📰', title: 'Real news, real time', text: 'Fresh financial headlines pulled from top sources like Reuters, Bloomberg, and the Wall Street Journal.' },
-      { icon: '📈', title: 'Built for beginners', text: 'Every feature is designed to be simple, clear, and approachable — no trading experience needed.' },
-    ]
-  },
-  {
-    emoji: '💹',
-    title: 'News meets stock data',
-    sub: 'See exactly which stocks each story might affect',
-    desc: 'Under every article you'll find a widget showing the stocks most likely to be affected by that news — with live prices and % change.',
-    features: [
-      { icon: '🟢', title: 'Green means up, red means down', text: 'Stock chips show the % change in price. Green = the stock went up. Red = it went down. Simple as that.' },
-      { icon: '🔄', title: 'Always fresh', text: 'Hit Refresh any time to pull the latest headlines. The feed updates automatically every 5 minutes.' },
-    ]
-  },
-  {
-    emoji: '💡',
-    title: 'Two powerful tools',
-    sub: 'Explain and Watchlist — your investing sidekicks',
-    desc: 'Greenline has two features that set it apart from every other news app out there.',
-    features: [
-      { icon: '🤖', title: 'AI Explain button', text: 'Confused by a headline? Hit Explain and our AI will break it down in plain English — what happened, why it matters, and what it means for the stocks shown.' },
-      { icon: '⭐', title: 'Your Watchlist', text: 'Add any stock to your personal watchlist to track its price, % change, and mini chart all in one place.' },
-    ]
-  }
-];
-
-let onboardStep = 0;
-
-function renderOnboard() {
-  const step = ONBOARD_STEPS[onboardStep];
-  const box = document.getElementById('onboardBox');
-  const isLast = onboardStep === ONBOARD_STEPS.length - 1;
-
-  const dots = ONBOARD_STEPS.map((_, i) =>
-    `<div class="onboard-dot ${i === onboardStep ? 'active' : ''}"></div>`
-  ).join('');
-
-  const features = step.features.map(f =>
-    `<div class="onboard-feature">
-      <span class="onboard-feature-icon">${f.icon}</span>
-      <div class="onboard-feature-text"><strong>${f.title}</strong>${f.text}</div>
-    </div>`
-  ).join('');
-
-  box.innerHTML = `
-    <div class="onboard-top">
-      <div class="onboard-emoji">${step.emoji}</div>
-      <div class="onboard-step-title">${step.title}</div>
-      <div class="onboard-step-sub">${step.sub}</div>
-    </div>
-    <div class="onboard-body">
-      <div class="onboard-desc">${step.desc}</div>
-      ${features}
-    </div>
-    <div class="onboard-footer">
-      <div class="onboard-dots">${dots}</div>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button class="onboard-skip" onclick="closeOnboard()">Skip</button>
-        <button class="onboard-next" onclick="nextOnboard()">
-          ${isLast ? 'Get started 🚀' : 'Next →'}
-        </button>
-      </div>
-    </div>`;
-}
-
-function nextOnboard() {
-  if (onboardStep < ONBOARD_STEPS.length - 1) {
-    onboardStep++;
-    renderOnboard();
-  } else {
-    closeOnboard();
-  }
-}
-
 function closeOnboard() {
   const overlay = document.getElementById('onboardOverlay');
-  if (overlay) {
-    overlay.style.opacity = '0';
-    overlay.style.transition = 'opacity 0.3s ease';
-    setTimeout(() => overlay.remove(), 300);
-  }
+  if (overlay) overlay.remove();
+  localStorage.setItem('gl_onboarded', '1');
+}
+
+ {
+  const overlay = document.getElementById('onboardOverlay');
+  if (overlay) overlay.remove();
   localStorage.setItem('gl_onboarded', '1');
 }
 
 function initOnboard() {
+  if (localStorage.getItem('gl_onboarded')) {
+    const overlay = document.getElementById('onboardOverlay');
+    if (overlay) overlay.remove();
+  }
+}
+
+ {
   if (localStorage.getItem('gl_onboarded')) {
     const overlay = document.getElementById('onboardOverlay');
     if (overlay) overlay.remove();
