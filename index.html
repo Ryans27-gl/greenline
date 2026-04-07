@@ -689,7 +689,10 @@ const FALLBACK = {
 async function fetchNews(cat) {
   const q = encodeURIComponent(CAT_QUERIES[cat] || CAT_QUERIES.all);
   try {
-    const res = await fetch(`https://gnews.io/api/v4/search?q=${q}&lang=en&country=us&max=6&sortby=publishedAt&apikey=${GNEWS_KEY}`);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch(`https://gnews.io/api/v4/search?q=${q}&lang=en&country=us&max=6&sortby=publishedAt&apikey=${GNEWS_KEY}`, { signal: controller.signal });
+    clearTimeout(timeout);
     const data = await res.json();
     if (data.articles && data.articles.length > 0) return data.articles;
   } catch(e) {}
@@ -801,18 +804,30 @@ function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToas
 
 /* ── LOAD FEED ── */
 async function loadFeed(cat){
-  setStatus('loading','Fetching latest headlines...');
-  showSkeletons();
-  let articles=await fetchNews(cat);
-  if(!articles||articles.length===0) articles=FALLBACK[cat]||FALLBACK.all;
-  setStatus('loading','Loading stock prices...');
-  const grid=document.getElementById('grid');
-  grid.innerHTML='';
-  const cards=await Promise.all(articles.slice(0,6).map((a,i)=>makeCard(a,cat,i)));
-  grid.innerHTML='';
-  cards.forEach(c=>grid.appendChild(c));
-  setStatus('live',`${articles.length} live articles · real-time prices`);
-  document.getElementById('updatedAt').textContent='Updated at '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  setStatus('loading','Loading...');
+
+  // Show fallback immediately so page never hangs
+  const fallback = FALLBACK[cat] || FALLBACK.all;
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const fallbackCards = await Promise.all(fallback.slice(0,6).map((a,i) => makeCard(a,cat,i)));
+  grid.innerHTML = '';
+  fallbackCards.forEach(c => grid.appendChild(c));
+  setStatus('live', 'Market news · real-time prices');
+  document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+  // Then try to get live news in background
+  try {
+    const liveArticles = await fetchNews(cat);
+    if (liveArticles && liveArticles.length > 0 && liveArticles !== fallback) {
+      grid.innerHTML = '';
+      const liveCards = await Promise.all(liveArticles.slice(0,6).map((a,i) => makeCard(a,cat,i)));
+      grid.innerHTML = '';
+      liveCards.forEach(c => grid.appendChild(c));
+      setStatus('live', `${liveArticles.length} live articles · real-time prices`);
+      document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    }
+  } catch(e) {}
 }
 
 async function doRefresh(){
