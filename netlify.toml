@@ -1,9 +1,6 @@
 [build]
-  publish = "."
   functions = "netlify/functions"
 
-# Netlify serves existing files (*.html, icons, etc.) first.
-# This catch-all handles SPA routing for unknown paths.
 [[redirects]]
   from = "/*"
   to = "/index.html"
