@@ -248,6 +248,56 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 .tooltip-chip.up { color: var(--green); background: rgba(58,138,58,0.08); border-color: rgba(58,138,58,0.2); }
 .tooltip-chip.dn { color: var(--red); background: rgba(192,64,64,0.08); border-color: rgba(192,64,64,0.2); }
 
+/* ONBOARDING */
+.onboard-overlay {
+  position: fixed; inset: 0; background: rgba(17,26,15,0.7);
+  z-index: 300; display: flex; align-items: center; justify-content: center;
+  padding: 24px; animation: fadeIn 0.3s ease;
+}
+.onboard-box {
+  background: var(--card); border-radius: 20px;
+  border: 1px solid var(--border2); max-width: 480px; width: 100%;
+  box-shadow: 0 32px 80px rgba(17,26,15,0.3);
+  animation: slideUp 0.25s ease; overflow: hidden;
+}
+.onboard-top {
+  background: var(--nav-bg);
+  padding: 32px 32px 24px;
+  text-align: center;
+}
+.onboard-emoji { font-size: 48px; margin-bottom: 12px; }
+.onboard-step-title { font-size: 20px; font-weight: 700; color: var(--nav-text); margin-bottom: 8px; }
+.onboard-step-sub { font-size: 14px; color: var(--nav-text2); font-weight: 300; line-height: 1.6; }
+.onboard-body { padding: 24px 32px 28px; }
+.onboard-desc { font-size: 14px; color: var(--text2); line-height: 1.75; font-weight: 300; margin-bottom: 20px; }
+.onboard-feature {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--card2); border: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.onboard-feature-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.onboard-feature-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.onboard-feature-text strong { color: var(--text); font-weight: 600; display: block; margin-bottom: 2px; }
+.onboard-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px 24px; border-top: 1px solid var(--border);
+}
+.onboard-dots { display: flex; gap: 6px; }
+.onboard-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); transition: background 0.2s; }
+.onboard-dot.active { background: var(--matcha-lt); }
+.onboard-skip { font-size: 13px; color: var(--text3); cursor: pointer; background: none; border: none; font-family: 'Sora', sans-serif; }
+.onboard-skip:hover { color: var(--text2); }
+.onboard-next {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 24px; border-radius: 100px;
+  background: var(--matcha-lt); color: #111a0f;
+  border: none; font-family: 'Sora', sans-serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.onboard-next:hover { opacity: 0.88; }
+
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(70px); background: #1d2c1a; border: 1px solid var(--matcha-lt); color: #f0ead0; padding: 11px 24px; border-radius: 100px; font-size: 13px; font-weight: 500; z-index: 999; transition: transform 0.28s ease; pointer-events: none; white-space: nowrap; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
@@ -956,13 +1006,123 @@ function closeTooltip() {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTooltip(); });
 
+/* ── ONBOARDING ── */
+const ONBOARD_STEPS = [
+  {
+    emoji: '🌿',
+    title: 'Welcome to Greenline',
+    sub: 'Your beginner-friendly stock market news hub',
+    desc: 'Greenline makes it easy to stay on top of market news — even if you're completely new to investing. No jargon, no complexity.',
+    features: [
+      { icon: '📰', title: 'Real news, real time', text: 'Fresh financial headlines pulled from top sources like Reuters, Bloomberg, and the Wall Street Journal.' },
+      { icon: '📈', title: 'Built for beginners', text: 'Every feature is designed to be simple, clear, and approachable — no trading experience needed.' },
+    ]
+  },
+  {
+    emoji: '💹',
+    title: 'News meets stock data',
+    sub: 'See exactly which stocks each story might affect',
+    desc: 'Under every article you'll find a widget showing the stocks most likely to be affected by that news — with live prices and % change.',
+    features: [
+      { icon: '🟢', title: 'Green means up, red means down', text: 'Stock chips show the % change in price. Green = the stock went up. Red = it went down. Simple as that.' },
+      { icon: '🔄', title: 'Always fresh', text: 'Hit Refresh any time to pull the latest headlines. The feed updates automatically every 5 minutes.' },
+    ]
+  },
+  {
+    emoji: '💡',
+    title: 'Two powerful tools',
+    sub: 'Explain and Watchlist — your investing sidekicks',
+    desc: 'Greenline has two features that set it apart from every other news app out there.',
+    features: [
+      { icon: '🤖', title: 'AI Explain button', text: 'Confused by a headline? Hit Explain and our AI will break it down in plain English — what happened, why it matters, and what it means for the stocks shown.' },
+      { icon: '⭐', title: 'Your Watchlist', text: 'Add any stock to your personal watchlist to track its price, % change, and mini chart all in one place.' },
+    ]
+  }
+];
+
+let onboardStep = 0;
+
+function renderOnboard() {
+  const step = ONBOARD_STEPS[onboardStep];
+  const box = document.getElementById('onboardBox');
+  const isLast = onboardStep === ONBOARD_STEPS.length - 1;
+
+  const dots = ONBOARD_STEPS.map((_, i) =>
+    `<div class="onboard-dot ${i === onboardStep ? 'active' : ''}"></div>`
+  ).join('');
+
+  const features = step.features.map(f =>
+    `<div class="onboard-feature">
+      <span class="onboard-feature-icon">${f.icon}</span>
+      <div class="onboard-feature-text"><strong>${f.title}</strong>${f.text}</div>
+    </div>`
+  ).join('');
+
+  box.innerHTML = `
+    <div class="onboard-top">
+      <div class="onboard-emoji">${step.emoji}</div>
+      <div class="onboard-step-title">${step.title}</div>
+      <div class="onboard-step-sub">${step.sub}</div>
+    </div>
+    <div class="onboard-body">
+      <div class="onboard-desc">${step.desc}</div>
+      ${features}
+    </div>
+    <div class="onboard-footer">
+      <div class="onboard-dots">${dots}</div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="onboard-skip" onclick="closeOnboard()">Skip</button>
+        <button class="onboard-next" onclick="nextOnboard()">
+          ${isLast ? 'Get started 🚀' : 'Next →'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function nextOnboard() {
+  if (onboardStep < ONBOARD_STEPS.length - 1) {
+    onboardStep++;
+    renderOnboard();
+  } else {
+    closeOnboard();
+  }
+}
+
+function closeOnboard() {
+  const overlay = document.getElementById('onboardOverlay');
+  if (overlay) {
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => overlay.remove(), 300);
+  }
+  localStorage.setItem('gl_onboarded', '1');
+}
+
+function initOnboard() {
+  if (localStorage.getItem('gl_onboarded')) {
+    const overlay = document.getElementById('onboardOverlay');
+    if (overlay) overlay.remove();
+    return;
+  }
+  renderOnboard();
+}
+
 /* ── INIT ── */
 (async()=>{
+  initOnboard();
   buildTicker();
   await loadFeed('all');
   setInterval(buildTicker,120000);
   setInterval(()=>loadFeed(activeFilter),300000);
 })();
 </script>
+
+<!-- ONBOARDING -->
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="onboard-box" id="onboardBox">
+    <!-- Step content injected by JS -->
+  </div>
+</div>
+
 </body>
 </html>
