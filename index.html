@@ -826,22 +826,20 @@ function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToas
 
 /* ── LOAD FEED ── */
 async function loadFeed(cat){
-  setStatus('loading','Loading...');
   const grid = document.getElementById('grid');
 
-  // Step 1: Show articles instantly with placeholder stock chips
+  // ALWAYS show fallback articles immediately — never blank
   const fallback = FALLBACK[cat] || FALLBACK.all;
   grid.innerHTML = '';
-  const cards = fallback.slice(0,6).map((a,i) => makeCardFast(a,cat,i));
-  cards.forEach(c => grid.appendChild(c));
-  setStatus('live', 'Market news · loading prices...');
+  fallback.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
+  setStatus('live', 'Market news · real-time prices');
   document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 
-  // Step 2: Load stock prices in background and fill them in
-  cards.forEach((card, i) => {
+  // Fill in stock prices
+  Array.from(grid.children).forEach((card, i) => {
     const article = fallback[i];
-    const symbols = pickStocks(article, cat);
-    symbols.forEach(async (sym) => {
+    if (!article) return;
+    pickStocks(article, cat).forEach(async sym => {
       const data = await fetchStock(sym);
       const chip = card.querySelector(`[data-sym="${sym}"]`);
       if (chip && data) {
@@ -853,35 +851,28 @@ async function loadFeed(cat){
     });
   });
 
-  // Step 3: Try live news in background — swap if available
-  try {
-    const liveArticles = await fetchNews(cat);
-    if (liveArticles && liveArticles.length > 0) {
-      grid.innerHTML = '';
-      const liveCards = liveArticles.slice(0,6).map((a,i) => makeCardFast(a,cat,i));
-      liveCards.forEach(c => grid.appendChild(c));
-      setStatus('live', `${liveArticles.length} live articles · loading prices...`);
-      liveCards.forEach((card, i) => {
-        const article = liveArticles[i];
-        const symbols = pickStocks(article, cat);
-        symbols.forEach(async (sym) => {
-          const data = await fetchStock(sym);
-          const chip = card.querySelector(`[data-sym="${sym}"]`);
-          if (chip && data) {
-            const up = data.change >= 0;
-            chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
-            chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
-            chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
-          }
-        });
+  // Try live news quietly in background — swap in if successful
+  fetchNews(cat).then(live => {
+    if (!live || live === fallback || live.length < 3) return;
+    grid.innerHTML = '';
+    live.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
+    setStatus('live', `${live.length} live articles · real-time prices`);
+    document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    Array.from(grid.children).forEach((card, i) => {
+      const article = live[i];
+      if (!article) return;
+      pickStocks(article, cat).forEach(async sym => {
+        const data = await fetchStock(sym);
+        const chip = card.querySelector(`[data-sym="${sym}"]`);
+        if (chip && data) {
+          const up = data.change >= 0;
+          chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
+          chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
+          chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
+        }
       });
-      setStatus('live', `${liveArticles.length} live articles · real-time prices`);
-    } else {
-      setStatus('live', 'Market news · real-time prices');
-    }
-  } catch(e) {
-    setStatus('live', 'Market news · real-time prices');
-  }
+    });
+  }).catch(() => {});
 }
 
 async function doRefresh(){
