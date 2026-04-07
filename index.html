@@ -469,6 +469,55 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
   font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer; min-height: 44px; }
 .promo-dismiss:hover { color: #7a9470; }
 
+/* EMAIL SIGNUP BANNER */
+.signup-banner {
+  background: var(--nav-bg); padding: 48px 24px;
+  border-top: 1px solid rgba(138,184,106,0.12);
+}
+.signup-inner {
+  max-width: 560px; margin: 0 auto; text-align: center;
+}
+.signup-title {
+  font-size: 22px; font-weight: 700; color: #f0ead0;
+  font-family: 'Sora', sans-serif; margin-bottom: 6px;
+}
+.signup-title span { color: #8ab86a; }
+.signup-sub {
+  font-size: 14px; color: #7a9470; line-height: 1.6;
+  font-family: 'Sora', sans-serif; font-weight: 300; margin-bottom: 20px;
+}
+.signup-form {
+  display: flex; gap: 10px; max-width: 440px; margin: 0 auto;
+}
+.signup-email {
+  flex: 1; padding: 14px 16px; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06); color: #f0ead0;
+  font-family: 'Sora', sans-serif; font-size: 15px;
+  outline: none; min-height: 48px;
+}
+.signup-email::placeholder { color: #3a5434; }
+.signup-email:focus { border-color: #8ab86a; }
+.signup-btn {
+  padding: 14px 28px; border-radius: 12px; background: #8ab86a;
+  color: #111a0f; border: none; font-family: 'Sora', sans-serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  white-space: nowrap; min-height: 48px; transition: opacity 0.15s;
+}
+.signup-btn:hover { opacity: 0.88; }
+.signup-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.signup-msg {
+  margin-top: 12px; font-size: 13px; font-family: 'Sora', sans-serif;
+  min-height: 20px;
+}
+.signup-msg.success { color: #8ab86a; }
+.signup-msg.error { color: #c04040; }
+@media (max-width: 760px) {
+  .signup-banner { padding: 36px 16px; }
+  .signup-form { flex-direction: column; }
+  .signup-title { font-size: 19px; }
+}
+
 /* FOOTER */
 .site-footer { background: var(--nav-bg); border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 32px; }
 .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
@@ -1420,12 +1469,22 @@ function showPromo() {
   document.body.appendChild(overlay);
 }
 
-function submitPromo() {
-  const email = document.getElementById('promoEmail')?.value?.trim();
-  if (!email || !email.includes('@')) { showToast('Enter a valid email address'); return; }
+async function submitPromo() {
+  const input = document.getElementById('promoEmail');
+  const email = input?.value?.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Enter a valid email address'); return; }
+  const btn = document.querySelector('.promo-submit');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+  try {
+    const res = await fetch('/.netlify/functions/waitlist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'mobile-popup' })
+    });
+    const data = await res.json();
+    showToast(data.message || data.error || 'Something went wrong');
+  } catch { showToast('Network error. Please try again.'); }
   sessionStorage.setItem('gl_promo_dismissed', '1');
   document.getElementById('promoOverlay')?.remove();
-  showToast('You\'re on the list! We\'ll notify you at launch.');
 }
 
 function dismissPromo() {
@@ -1434,6 +1493,36 @@ function dismissPromo() {
 }
 
 setTimeout(showPromo, 3000);
+
+/* ── EMAIL SIGNUP (main page) ── */
+async function submitSignup() {
+  const input = document.getElementById('signupEmail');
+  const btn = document.getElementById('signupBtn');
+  const msg = document.getElementById('signupMsg');
+  const email = input?.value?.trim();
+  msg.textContent = ''; msg.className = 'signup-msg';
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msg.textContent = 'Please enter a valid email address.';
+    msg.classList.add('error'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    const res = await fetch('/.netlify/functions/waitlist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'main-signup' })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      msg.textContent = data.message; msg.classList.add('success');
+      input.value = '';
+    } else {
+      msg.textContent = data.error || 'Something went wrong.'; msg.classList.add('error');
+    }
+  } catch {
+    msg.textContent = 'Network error. Please try again.'; msg.classList.add('error');
+  }
+  btn.disabled = false; btn.textContent = 'Subscribe';
+}
 
 /* ── SERVICE WORKER ── */
 if ('serviceWorker' in navigator) {
@@ -1541,6 +1630,18 @@ if ('serviceWorker' in navigator) {
 
   </div>
 </div>
+
+<section class="signup-banner">
+  <div class="signup-inner">
+    <div class="signup-title">Get <span>Greenline</span> updates</div>
+    <div class="signup-sub">Early access to new features, market insights, and app launch news. No spam, unsubscribe anytime.</div>
+    <div class="signup-form">
+      <input class="signup-email" id="signupEmail" type="email" placeholder="your@email.com" />
+      <button class="signup-btn" id="signupBtn" onclick="submitSignup()">Subscribe</button>
+    </div>
+    <div class="signup-msg" id="signupMsg"></div>
+  </div>
+</section>
 
 <footer class="site-footer">
   <div class="footer-inner">
