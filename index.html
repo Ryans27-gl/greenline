@@ -466,7 +466,7 @@ async function makeCard(article, cat, idx) {
     <div class="card-body">
       <div class="card-title">${article.title}</div>
       <div class="card-summary">${desc}</div>
-      <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle('${url}', encodeURIComponent('${article.title}'));return false;">Read full article →</a>
+      <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this, '${url}');return false;">Read full article →</a>
     </div>
     <div class="stock-widget">
       <div class="sw-label">Stocks that may be affected</div>
@@ -500,12 +500,13 @@ function toggleSave(id, card) {
   btn.innerHTML = `<svg viewBox="0 0 24 24" fill="${s?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>${s?'Saved':'Save'}`;
 }
 
-function openArticle(url, title) {
-  const homepages = ["reuters.com", "bloomberg.com", "wsj.com", "cnbc.com", "statnews.com", "ft.com", "marketwatch.com", "techcrunch.com", "theverge.com", "electrek.co", "marketwatch.com"];
+function openArticle(el, url) {
+  const homepages = ["reuters.com","bloomberg.com","wsj.com","cnbc.com","statnews.com","ft.com","marketwatch.com","techcrunch.com","theverge.com","electrek.co"];
   const isHomepage = homepages.some(h => url === "https://" + h || url === "http://" + h);
   if (isHomepage) {
-    const q = encodeURIComponent(title);
-    window.open("https://news.google.com/search?q=" + q, "_blank");
+    const card = el.closest('.card');
+    const title = card ? card.querySelector('.card-title').textContent : '';
+    window.open("https://www.google.com/search?q=" + encodeURIComponent(title + " news"), "_blank");
   } else {
     window.open(url, "_blank");
   }
