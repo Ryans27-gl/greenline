@@ -778,6 +778,61 @@ function timeAgo(dateStr) {
 }
 
 /* ── MAKE CARD ── */
+function makeCardFast(article, cat, idx) {
+  const symbols = pickStocks(article, cat);
+  const chipsHtml = symbols.map(s =>
+    `<div class="stock-chip" data-sym="${s}">
+      <div class="chip-top">
+        <span class="chip-ticker">${s}</span>
+        <span class="chip-change flat">—</span>
+      </div>
+      <div class="chip-price">loading</div>
+    </div>`
+  ).join('');
+
+  const icon=pickIcon(article,cat), color=CAT_COLORS[cat]||CAT_COLORS.all;
+  const id=`a${idx}`, saved=savedArticleIds.has(id), source=article.source?.name||'News', url=article.url||'#';
+  const div=document.createElement('div');
+  div.className='card'; div.dataset.id=id; div.style.animationDelay=(idx*0.05)+'s';
+  div.innerHTML=`
+    <div class="card-thumb" style="background:${color};">
+      <span>${icon}</span>
+      <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+      <span class="cat-pill">${cat==='all'?'market':cat}</span>
+    </div>
+    <div class="card-meta">
+      <div class="source-dot"></div>
+      <span class="source-name">${source}</span>
+      <span class="meta-sep">·</span>
+      <span class="time-ago">${timeAgo(article.publishedAt)}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">${article.title}</div>
+      <div class="card-summary">${article.description||'Click to read the full article.'}</div>
+      <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
+    </div>
+    <div class="stock-widget">
+      <div class="sw-label">Stocks that may be affected</div>
+      <div class="stocks-row">${chipsHtml}</div>
+    </div>
+    <div class="card-actions">
+      <button class="act-btn ${saved?'saved':''}" data-saveid="${id}">
+        <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        ${saved?'Saved':'Save'}
+      </button>
+      <button class="act-btn" onclick="copyLink('${url}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="act-btn" onclick="explainArticle(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Explain
+      </button>
+    </div>`;
+  div.querySelector('[data-saveid]').onclick=()=>toggleSave(id,div);
+  return div;
+}
+
 async function makeCard(article, cat, idx) {
   const symbols = pickStocks(article, cat);
   const stockData = await Promise.all(symbols.map(s=>fetchStock(s)));
@@ -855,29 +910,61 @@ function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToas
 /* ── LOAD FEED ── */
 async function loadFeed(cat){
   setStatus('loading','Loading...');
-
-  // Show fallback immediately so page never hangs
-  const fallback = FALLBACK[cat] || FALLBACK.all;
   const grid = document.getElementById('grid');
+
+  // Step 1: Show articles instantly with placeholder stock chips
+  const fallback = FALLBACK[cat] || FALLBACK.all;
   grid.innerHTML = '';
-  const fallbackCards = await Promise.all(fallback.slice(0,6).map((a,i) => makeCard(a,cat,i)));
-  grid.innerHTML = '';
-  fallbackCards.forEach(c => grid.appendChild(c));
-  setStatus('live', 'Market news · real-time prices');
+  const cards = fallback.slice(0,6).map((a,i) => makeCardFast(a,cat,i));
+  cards.forEach(c => grid.appendChild(c));
+  setStatus('live', 'Market news · loading prices...');
   document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 
-  // Then try to get live news in background
+  // Step 2: Load stock prices in background and fill them in
+  cards.forEach((card, i) => {
+    const article = fallback[i];
+    const symbols = pickStocks(article, cat);
+    symbols.forEach(async (sym) => {
+      const data = await fetchStock(sym);
+      const chip = card.querySelector(`[data-sym="${sym}"]`);
+      if (chip && data) {
+        const up = data.change >= 0;
+        chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
+        chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
+        chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
+      }
+    });
+  });
+
+  // Step 3: Try live news in background — swap if available
   try {
     const liveArticles = await fetchNews(cat);
-    if (liveArticles && liveArticles.length > 0 && liveArticles !== fallback) {
+    if (liveArticles && liveArticles.length > 0) {
       grid.innerHTML = '';
-      const liveCards = await Promise.all(liveArticles.slice(0,6).map((a,i) => makeCard(a,cat,i)));
-      grid.innerHTML = '';
+      const liveCards = liveArticles.slice(0,6).map((a,i) => makeCardFast(a,cat,i));
       liveCards.forEach(c => grid.appendChild(c));
+      setStatus('live', `${liveArticles.length} live articles · loading prices...`);
+      liveCards.forEach((card, i) => {
+        const article = liveArticles[i];
+        const symbols = pickStocks(article, cat);
+        symbols.forEach(async (sym) => {
+          const data = await fetchStock(sym);
+          const chip = card.querySelector(`[data-sym="${sym}"]`);
+          if (chip && data) {
+            const up = data.change >= 0;
+            chip.querySelector('.chip-change').className = `chip-change ${up?'up':'dn'}`;
+            chip.querySelector('.chip-change').textContent = `${up?'+':''}${data.change.toFixed(1)}%`;
+            chip.querySelector('.chip-price').textContent = `$${data.price.toFixed(2)}`;
+          }
+        });
+      });
       setStatus('live', `${liveArticles.length} live articles · real-time prices`);
-      document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    } else {
+      setStatus('live', 'Market news · real-time prices');
     }
-  } catch(e) {}
+  } catch(e) {
+    setStatus('live', 'Market news · real-time prices');
+  }
 }
 
 async function doRefresh(){
