@@ -468,6 +468,18 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 .promo-dismiss { width: 100%; padding: 12px; background: none; border: none; color: #3a5434;
   font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer; min-height: 44px; }
 .promo-dismiss:hover { color: #7a9470; }
+
+/* FOOTER */
+.site-footer { background: var(--nav-bg); border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 32px; }
+.footer-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.footer-links a { font-size: 12px; color: #3a5434; text-decoration: none; font-family: 'Sora', sans-serif; transition: color 0.15s; }
+.footer-links a:hover { color: #8ab86a; }
+.footer-copy { font-size: 11px; color: #2a3a26; font-family: 'Sora', sans-serif; }
+@media (max-width: 760px) {
+  .site-footer { padding: 20px 16px; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+  .footer-inner { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+}
 </style>
 </head>
 <body>
@@ -1529,6 +1541,17 @@ if ('serviceWorker' in navigator) {
 
   </div>
 </div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="/privacy-policy.html">Privacy Policy</a>
+      <a href="/terms-of-service.html">Terms of Service</a>
+      <a href="/disclaimer.html">Disclaimer</a>
+    </div>
+    <div class="footer-copy">greenlinenews.com</div>
+  </div>
+</footer>
 
 </body>
 </html>
