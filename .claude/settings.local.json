@@ -4,7 +4,11 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "WebSearch",
+      "WebFetch(domain:about.seekingalpha.com)",
+      "WebFetch(domain:www.benzinga.com)",
+      "WebFetch(domain:rss.feedspot.com)"
     ]
   }
 }

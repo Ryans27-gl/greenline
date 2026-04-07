@@ -442,6 +442,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
       <button class="filter-btn" data-cat="energy">Energy</button>
       <button class="filter-btn" data-cat="health">Health</button>
       <button class="filter-btn" data-cat="economy">Economy</button>
+      <button class="filter-btn" data-cat="markets">Markets</button>
     </div>
 
     <button class="refresh-btn" id="refreshBtn" onclick="doRefresh()">
@@ -549,13 +550,15 @@ const CAT_QUERIES = {
   energy:'oil prices OR OPEC OR energy stocks OR natural gas OR crude oil',
   health:'pharmaceutical OR FDA approval OR biotech OR drug trial OR healthcare stocks',
   economy:'Federal Reserve OR inflation OR interest rates OR GDP OR jobs report',
+  markets:'stocks OR investing OR S&P 500 OR Nasdaq OR trading OR ETF',
 };
-const CAT_COLORS = { all:'#111a0f', business:'#111a0f', technology:'#111a0f', energy:'#111a0f', health:'#111a0f', economy:'#111a0f' };
-const CAT_ICONS  = { all:'📰', business:'📊', technology:'💻', energy:'🛢', health:'💊', economy:'🏦' };
+const CAT_COLORS = { all:'#111a0f', business:'#111a0f', technology:'#111a0f', energy:'#111a0f', health:'#111a0f', economy:'#111a0f', markets:'#111a0f' };
+const CAT_ICONS  = { all:'📰', business:'📊', technology:'💻', energy:'🛢', health:'💊', economy:'🏦', markets:'📈' };
 const CAT_STOCKS = {
   all:['AAPL','MSFT','JPM','XOM','SPY'], business:['JPM','GS','MS','BAC','BRK-A'],
   technology:['AAPL','MSFT','NVDA','GOOGL','META'], energy:['XOM','CVX','COP','SLB','NEE'],
   health:['LLY','JNJ','PFE','ABBV','MRK'], economy:['SPY','TLT','GLD','DIA','QQQ'],
+  markets:['SPY','QQQ','DIA','AAPL','NVDA'],
 };
 const KEYWORD_STOCKS = {
   'AAPL':['apple','iphone','ipad','macos','tim cook'],'MSFT':['microsoft','azure','windows','openai'],
