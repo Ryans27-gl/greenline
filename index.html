@@ -931,8 +931,7 @@ function showTooltipContent(title, text, tickers, card) {
     return `<span class="tooltip-chip ${isUp?'up':'dn'}">${t} ${c}</span>`;
   }).join('');
 
-  const paragraphs = text.split(/
-+/).filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('');
+  const paragraphs = text.split('\n').filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('');
 
   overlay.querySelector('.tooltip-box').innerHTML = `
     <div class="tooltip-head">
