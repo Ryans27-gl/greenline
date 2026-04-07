@@ -735,18 +735,79 @@ const FALLBACK = {
   ],
 };
 
-/* ── FETCH NEWS ── */
-async function fetchNews(cat) {
-  const q = encodeURIComponent(CAT_QUERIES[cat] || CAT_QUERIES.all);
+/* ── RSS FEEDS — today's real financial news, free & unlimited ── */
+const RSS_FEEDS = {
+  all: [
+    'https://feeds.reuters.com/reuters/businessNews',
+    'https://feeds.reuters.com/reuters/technologyNews',
+    'https://www.cnbc.com/id/100003114/device/rss/rss.html',
+    'https://feeds.marketwatch.com/marketwatch/topstories',
+  ],
+  business: [
+    'https://feeds.reuters.com/reuters/businessNews',
+    'https://feeds.marketwatch.com/marketwatch/topstories',
+    'https://www.cnbc.com/id/10001147/device/rss/rss.html',
+  ],
+  technology: [
+    'https://feeds.reuters.com/reuters/technologyNews',
+    'https://www.cnbc.com/id/19854910/device/rss/rss.html',
+  ],
+  energy: [
+    'https://feeds.reuters.com/reuters/energy',
+    'https://www.cnbc.com/id/19836768/device/rss/rss.html',
+  ],
+  health: [
+    'https://feeds.reuters.com/reuters/health',
+    'https://www.cnbc.com/id/10000108/device/rss/rss.html',
+  ],
+  economy: [
+    'https://feeds.reuters.com/reuters/economy',
+    'https://www.cnbc.com/id/20910258/device/rss/rss.html',
+  ],
+};
+
+const RSS_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
+
+async function fetchRSSFeed(url) {
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 4000);
-    const res = await fetch(`https://gnews.io/api/v4/search?q=${q}&lang=en&country=us&max=6&sortby=publishedAt&apikey=${GNEWS_KEY}`, { signal: controller.signal });
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(RSS_PROXY + encodeURIComponent(url), { signal: controller.signal });
     clearTimeout(timeout);
     const data = await res.json();
-    if (data.articles && data.articles.length > 0) return data.articles;
+    if (data.status === 'ok' && data.items && data.items.length > 0) {
+      return data.items.map(item => ({
+        title: item.title,
+        description: item.description ? item.description.replace(/<[^>]*>/g, '').slice(0, 200) : '',
+        url: item.link,
+        publishedAt: item.pubDate || new Date().toISOString(),
+        source: { name: data.feed?.title || 'News' }
+      }));
+    }
   } catch(e) {}
-  return FALLBACK[cat] || FALLBACK.all;
+  return [];
+}
+
+async function fetchNews(cat) {
+  const feeds = RSS_FEEDS[cat] || RSS_FEEDS.all;
+  
+  // Fetch first two feeds in parallel
+  const results = await Promise.all(feeds.slice(0,2).map(url => fetchRSSFeed(url)));
+  const combined = results.flat();
+  
+  if (combined.length === 0) return FALLBACK[cat] || FALLBACK.all;
+
+  // Filter to today's articles only
+  const now = new Date();
+  const today = combined.filter(a => {
+    const age = now - new Date(a.publishedAt);
+    return age < 48 * 60 * 60 * 1000; // last 48 hours
+  });
+
+  // Sort by newest first
+  today.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+  return today.length >= 3 ? today.slice(0, 6) : combined.slice(0, 6);
 }
 
 /* ── SMART STOCK PICKER ── */
