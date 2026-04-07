@@ -21,7 +21,14 @@ exports.handler = async (event) => {
   }
 
   try {
-    const store = getStore("waitlist");
+    const siteID = process.env.NETLIFY_SITE_ID;
+    const token = process.env.NETLIFY_API_TOKEN;
+
+    if (!siteID || !token) {
+      return { statusCode: 500, headers, body: JSON.stringify({ error: "Server configuration error" }) };
+    }
+
+    const store = getStore({ name: "waitlist", siteID, token });
     const { blobs } = await store.list();
 
     const entries = [];
@@ -39,7 +46,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ total: entries.length, emails: entries }),
     };
   } catch (err) {
-    console.error("Waitlist admin error:", err);
+    console.error("Waitlist admin error:", err.message, err.stack);
     return { statusCode: 500, headers, body: JSON.stringify({ error: "Failed to fetch emails" }) };
   }
 };
