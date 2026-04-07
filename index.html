@@ -843,7 +843,7 @@ function pickStocks(article, cat) {
 
 function pickIcon(article, cat) {
   const t = ((article.title||'')+(article.description||'')).toLowerCase();
-  if (t.includes('oil')||t.includes('opec')||t.includes('crude')) return '🛢';
+  if (t.includes('oil')||t.includes('opec')||t.includes('crude')) return '⛽';
   if (t.includes('tesla')||t.includes('electric vehicle')) return '⚡';
   if (t.includes('apple')||t.includes('iphone')||t.includes('nvidia')||t.includes('ai ')) return '💻';
   if (t.includes('drug')||t.includes('fda')||t.includes('pharma')) return '💊';
