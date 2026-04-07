@@ -947,7 +947,7 @@ async function makeCard(article, cat, idx) {
     </div>
     <div class="card-body">
       <div class="card-title">${article.title}</div>
-      <div class="card-summary">${article.description||'Click to read the full article.'}</div>
+      ${(article.description && !/^click to read/i.test(article.description.trim()) && article.description.trim().length > 20) ? `<div class="card-summary">${article.description}</div>` : ''}
       <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
     </div>
     <div class="stock-widget">
@@ -1016,6 +1016,34 @@ function pickIcon(article, cat) {
   return CAT_ICONS[cat] || '📰';
 }
 
+const MARKET_KEYWORDS = [
+  'stock','stocks','share','shares','market','markets','investor','investors','trading',
+  'earnings','revenue','profit','dividend','ipo','merger','acquisition','buyback',
+  'wall street','s&p','nasdaq','dow jones','fed','federal reserve','interest rate',
+  'inflation','gdp','jobs report','unemployment','treasury','bond','yield',
+  'oil','crude','opec','energy','solar','renewable',
+  'bank','goldman','jpmorgan','morgan stanley',
+  'apple','microsoft','nvidia','google','amazon','meta','tesla',
+  'ai ','semiconductor','chip','pharma','fda','biotech','drug',
+  'etf','index','rally','crash','bull','bear','recession','tariff','trade war',
+  'billion','million','quarterly','forecast','upgrade','downgrade','analyst',
+  'crypto','bitcoin','ethereum','sec','ipo','spac',
+];
+
+function hasMarketRelevance(article) {
+  const t = ((article.title||'')+(article.description||'')).toLowerCase();
+  return MARKET_KEYWORDS.some(k => t.includes(k));
+}
+
+function filterByRelevance(articles, cat) {
+  if (cat !== 'all') return articles;
+  const relevant = articles.filter(a => hasMarketRelevance(a));
+  if (relevant.length >= 6) return relevant;
+  // If not enough relevant articles, fill with the rest
+  const rest = articles.filter(a => !hasMarketRelevance(a));
+  return [...relevant, ...rest];
+}
+
 function timeAgo(dateStr) {
   const diff = Date.now()-new Date(dateStr).getTime();
   const m=Math.floor(diff/60000),h=Math.floor(m/60),d=Math.floor(h/24);
@@ -1065,7 +1093,7 @@ function makeCardFast(article, cat, idx) {
     </div>
     <div class="card-body">
       <div class="card-title">${article.title}</div>
-      <div class="card-summary">${article.description||'Click to read the full article.'}</div>
+      ${(article.description && !/^click to read/i.test(article.description.trim()) && article.description.trim().length > 20) ? `<div class="card-summary">${article.description}</div>` : ''}
       <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
     </div>
     <div class="stock-widget">
@@ -1094,7 +1122,7 @@ async function loadFeed(cat){
   const grid = document.getElementById('grid');
 
   // ALWAYS show fallback articles immediately — never blank
-  const fallback = FALLBACK[cat] || FALLBACK.all;
+  const fallback = filterByRelevance(FALLBACK[cat] || FALLBACK.all, cat);
   grid.innerHTML = '';
   fallback.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
   setStatus('live', 'Market news · real-time prices');
@@ -1125,18 +1153,19 @@ async function loadFeed(cat){
 
   // Try live news quietly in background — swap in if successful
   fetchNews(cat).then(live => {
-    if (!live || live === fallback || live.length < 3) return;
+    if (!live || live.length < 3) return;
+    const filtered = filterByRelevance(live, cat);
     grid.innerHTML = '';
-    live.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
-    setStatus('live', `${live.length} live articles · real-time prices`);
+    filtered.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
+    setStatus('live', `${filtered.length} live articles · real-time prices`);
     document.getElementById('updatedAt').textContent = 'Updated at ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
     const liveSymbols = [...new Set(Array.from(grid.children).flatMap((card, i) => {
-      const article = live[i];
+      const article = filtered[i];
       return article ? pickStocks(article, cat) : [];
     }))];
     fetchStocksBatch(liveSymbols).then(() => {
       Array.from(grid.children).forEach((card, i) => {
-        const article = live[i];
+        const article = filtered[i];
         if (!article) return;
         pickStocks(article, cat).forEach(sym => {
           const data = stockCache[sym];
