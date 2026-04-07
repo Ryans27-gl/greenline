@@ -3,43 +3,38 @@ exports.handler = async (event) => {
 
   const FEEDS = {
     all: [
-      'https://feeds.reuters.com/reuters/businessNews',
       'https://www.cnbc.com/id/100003114/device/rss/rss.html',
       'https://seekingalpha.com/market_currents.xml',
       'https://www.benzinga.com/news/feed',
     ],
     business: [
-      'https://feeds.reuters.com/reuters/businessNews',
       'https://feeds.marketwatch.com/marketwatch/topstories',
       'https://seekingalpha.com/feed.xml',
       'https://www.benzinga.com/news/earnings/feed',
     ],
     technology: [
-      'https://feeds.reuters.com/reuters/technologyNews',
       'https://www.cnbc.com/id/19854910/device/rss/rss.html',
       'https://seekingalpha.com/tag/long-ideas.xml',
       'https://www.benzinga.com/tech/feed',
     ],
     energy: [
-      'https://feeds.reuters.com/reuters/energy',
       'https://www.cnbc.com/id/19836768/device/rss/rss.html',
       'https://seekingalpha.com/tag/etf-portfolio-strategy.xml',
     ],
     health: [
-      'https://feeds.reuters.com/reuters/health',
       'https://www.cnbc.com/id/10000108/device/rss/rss.html',
+      'https://seekingalpha.com/feed.xml',
     ],
     economy: [
-      'https://feeds.reuters.com/reuters/economy',
       'https://www.cnbc.com/id/20910258/device/rss/rss.html',
       'https://seekingalpha.com/tag/wall-st-breakfast.xml',
+      'https://feeds.marketwatch.com/marketwatch/topstories',
     ],
     markets: [
       'https://seekingalpha.com/market_currents.xml',
       'https://www.benzinga.com/markets/feed',
       'https://www.benzinga.com/trading-ideas/feed',
       'https://feeds.marketwatch.com/marketwatch/topstories',
-      'https://www.cnbc.com/id/100003114/device/rss/rss.html',
     ],
   };
 
@@ -47,30 +42,34 @@ exports.handler = async (event) => {
   const articles = [];
   const errors = [];
 
-  const results = await Promise.allSettled(feeds.map(async (feedUrl) => {
-    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=12`);
-    if (!res.ok) throw new Error(`${feedUrl} returned ${res.status}`);
-    const data = await res.json();
-    if (data.status !== 'ok' || !data.items) throw new Error(`${feedUrl} returned status: ${data.status}`);
-    const sourceName = data.feed?.title || 'News';
-    return data.items.map(item => ({
-      title: item.title,
-      description: item.description ? item.description.replace(/<[^>]*>/g, '').slice(0, 250) : '',
-      url: item.link,
-      publishedAt: item.pubDate || new Date().toISOString(),
-      source: { name: sourceName },
+  // Fetch feeds sequentially in pairs to avoid rss2json rate limits
+  for (let i = 0; i < feeds.length; i += 2) {
+    const batch = feeds.slice(i, i + 2);
+    const results = await Promise.allSettled(batch.map(async (feedUrl) => {
+      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`);
+      if (!res.ok) throw new Error(`${feedUrl} returned ${res.status}`);
+      const data = await res.json();
+      if (data.status !== 'ok' || !data.items) throw new Error(`${feedUrl}: ${data.message || 'no items'}`);
+      const sourceName = data.feed?.title || 'News';
+      return data.items.map(item => ({
+        title: item.title,
+        description: item.description ? item.description.replace(/<[^>]*>/g, '').slice(0, 250) : '',
+        url: item.link,
+        publishedAt: item.pubDate || new Date().toISOString(),
+        source: { name: sourceName },
+      }));
     }));
-  }));
 
-  for (const result of results) {
-    if (result.status === 'fulfilled') {
-      articles.push(...result.value);
-    } else {
-      errors.push(result.reason.message);
+    for (const result of results) {
+      if (result.status === 'fulfilled') {
+        articles.push(...result.value);
+      } else {
+        errors.push(result.reason.message);
+      }
     }
   }
 
-  // Deduplicate by title (different feeds can carry the same story)
+  // Deduplicate by title
   const seen = new Set();
   const unique = articles.filter(a => {
     const key = a.title.toLowerCase().trim();

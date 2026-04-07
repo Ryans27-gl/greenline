@@ -8,7 +8,25 @@
       "WebSearch",
       "WebFetch(domain:about.seekingalpha.com)",
       "WebFetch(domain:www.benzinga.com)",
-      "WebFetch(domain:rss.feedspot.com)"
+      "WebFetch(domain:rss.feedspot.com)",
+      "WebFetch(domain:api.rss2json.com)",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fseekingalpha.com%2Fmarket_currents.xml&count=2\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Fnews%2Ffeed&count=2\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Ffeeds.reuters.com%2Freuters%2FbusinessNews&count=2\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.cnbc.com%2Fid%2F100003114%2Fdevice%2Frss%2Frss.html&count=2\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fseekingalpha.com%2Fmarket_currents.xml\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Fnews%2Ffeed\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Ffeeds.reuters.com%2Freuters%2FbusinessNews\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.cnbc.com%2Fid%2F100003114%2Fdevice%2Frss%2Frss.html\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Ffeeds.marketwatch.com%2Fmarketwatch%2Ftopstories\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fseekingalpha.com%2Ffeed.xml\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fseekingalpha.com%2Ftag%2Fwall-st-breakfast.xml\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fseekingalpha.com%2Ftag%2Flong-ideas.xml\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fseekingalpha.com%2Ftag%2Fetf-portfolio-strategy.xml\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Fmarkets%2Ffeed\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Ftrading-ideas%2Ffeed\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Ftech%2Ffeed\")",
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Fnews%2Fearnings%2Ffeed\")"
     ]
   }
 }
