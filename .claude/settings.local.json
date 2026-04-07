@@ -26,7 +26,8 @@
       "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Fmarkets%2Ffeed\")",
       "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Ftrading-ideas%2Ffeed\")",
       "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Ftech%2Ffeed\")",
-      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Fnews%2Fearnings%2Ffeed\")"
+      "Bash(curl -s \"https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.benzinga.com%2Fnews%2Fearnings%2Ffeed\")",
+      "Bash(node:*)"
     ]
   }
 }

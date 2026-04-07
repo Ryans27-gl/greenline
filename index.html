@@ -11,7 +11,25 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Greenline — Market News</title>
+<title>Greenline | Live Market News & Stock Tracker</title>
+<meta name="description" content="Stay ahead of the market with Greenline. Live financial news, real-time stock prices, AI-powered explanations, and a personal watchlist — all in one clean, fast dashboard.">
+<meta name="theme-color" content="#111a0f">
+<link rel="manifest" href="/manifest.json">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://greenlinenews.com">
+<meta property="og:title" content="Greenline | Live Market News & Stock Tracker">
+<meta property="og:description" content="Live financial news, real-time stock prices, AI-powered explanations, and a personal watchlist — all in one clean, fast dashboard.">
+<meta property="og:image" content="https://greenlinenews.com/og-image.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Greenline | Live Market News & Stock Tracker">
+<meta name="twitter:description" content="Live financial news, real-time stock prices, AI-powered explanations, and a personal watchlist.">
+<meta name="twitter:image" content="https://greenlinenews.com/og-image.png">
+
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -419,6 +437,37 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
   .onboard-footer { padding: 14px 20px 20px; }
   .onboard-step-title { font-size: 18px; }
 }
+
+/* APP PROMO POPUP (mobile only) */
+.promo-overlay {
+  position: fixed; inset: 0; background: rgba(17,26,15,0.6);
+  z-index: 400; display: flex; align-items: flex-end; justify-content: center;
+  padding: 0; animation: fadeIn 0.25s ease;
+}
+.promo-sheet {
+  background: #111a0f; border-radius: 20px 20px 0 0; width: 100%;
+  max-width: 480px; padding: 28px 24px max(24px, env(safe-area-inset-bottom));
+  animation: sheetUp 0.3s ease;
+}
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.promo-handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.15); margin: 0 auto 20px; }
+.promo-emoji { font-size: 36px; margin-bottom: 12px; }
+.promo-title { font-size: 20px; font-weight: 700; color: #f0ead0; margin-bottom: 6px; }
+.promo-title span { color: #8ab86a; }
+.promo-sub { font-size: 14px; color: #7a9470; line-height: 1.6; font-weight: 300; margin-bottom: 20px; }
+.promo-input-row { display: flex; gap: 10px; margin-bottom: 14px; }
+.promo-email { flex: 1; padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06); color: #f0ead0; font-family: 'Sora', sans-serif;
+  font-size: 15px; outline: none; min-height: 48px; }
+.promo-email::placeholder { color: #3a5434; }
+.promo-email:focus { border-color: #8ab86a; }
+.promo-submit { padding: 14px 22px; border-radius: 12px; background: #8ab86a; color: #111a0f;
+  border: none; font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; min-height: 48px; transition: opacity 0.15s; }
+.promo-submit:hover { opacity: 0.88; }
+.promo-dismiss { width: 100%; padding: 12px; background: none; border: none; color: #3a5434;
+  font-family: 'Sora', sans-serif; font-size: 13px; cursor: pointer; min-height: 44px; }
+.promo-dismiss:hover { color: #7a9470; }
 </style>
 </head>
 <body>
@@ -1335,6 +1384,49 @@ function initOnboard() {
   setInterval(buildTicker,120000);
   setInterval(()=>loadFeed(activeFilter),300000);
 })();
+
+/* ── APP PROMO POPUP (mobile only) ── */
+function showPromo() {
+  if (window.innerWidth > 760) return;
+  if (sessionStorage.getItem('gl_promo_dismissed')) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'promo-overlay';
+  overlay.id = 'promoOverlay';
+  overlay.onclick = (e) => { if (e.target === overlay) dismissPromo(); };
+  overlay.innerHTML = `
+    <div class="promo-sheet">
+      <div class="promo-handle"></div>
+      <div class="promo-emoji">📱</div>
+      <div class="promo-title">Green<span>line</span> App — Coming Soon</div>
+      <div class="promo-sub">We're building a native app with push alerts for breaking market news, live portfolio tracking, and offline access. Join the waitlist to get early access.</div>
+      <div class="promo-input-row">
+        <input class="promo-email" id="promoEmail" type="email" placeholder="your@email.com" />
+        <button class="promo-submit" onclick="submitPromo()">Notify me</button>
+      </div>
+      <button class="promo-dismiss" onclick="dismissPromo()">No thanks, maybe later</button>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function submitPromo() {
+  const email = document.getElementById('promoEmail')?.value?.trim();
+  if (!email || !email.includes('@')) { showToast('Enter a valid email address'); return; }
+  sessionStorage.setItem('gl_promo_dismissed', '1');
+  document.getElementById('promoOverlay')?.remove();
+  showToast('You\'re on the list! We\'ll notify you at launch.');
+}
+
+function dismissPromo() {
+  sessionStorage.setItem('gl_promo_dismissed', '1');
+  document.getElementById('promoOverlay')?.remove();
+}
+
+setTimeout(showPromo, 3000);
+
+/* ── SERVICE WORKER ── */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
 </script>
 
 
