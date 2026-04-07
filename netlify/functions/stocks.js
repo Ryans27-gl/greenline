@@ -1,5 +1,5 @@
 // Using Finnhub free tier - 60 calls/minute, no rate limit issues
-const FINNHUB_KEY = 'd7ajr1hr01qmvlmg84rgd7ajr1hr01qmvlmg84s0';
+const FINNHUB_KEY = process.env.FINNHUB_KEY;
 const cache = {};
 const CACHE_TTL = 5 * 60 * 1000;
 
