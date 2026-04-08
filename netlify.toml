@@ -1,6 +1,39 @@
 [build]
   functions = "netlify/functions"
 
+# Redirect old legal paths to new /legal/ folder
+[[redirects]]
+  from = "/privacy-policy.html"
+  to = "/legal/privacy-policy.html"
+  status = 301
+
+[[redirects]]
+  from = "/terms-of-service.html"
+  to = "/legal/terms-of-service.html"
+  status = 301
+
+[[redirects]]
+  from = "/disclaimer.html"
+  to = "/legal/disclaimer.html"
+  status = 301
+
+[[redirects]]
+  from = "/nda.html"
+  to = "/legal/nda.html"
+  status = 301
+
+[[redirects]]
+  from = "/contractor-agreement.html"
+  to = "/legal/contractor-agreement.html"
+  status = 301
+
+# Redirect old brand asset paths
+[[redirects]]
+  from = "/og-image.svg"
+  to = "/brand/og-image.svg"
+  status = 301
+
+# SPA fallback — serves index.html for unknown paths
 [[redirects]]
   from = "/*"
   to = "/index.html"

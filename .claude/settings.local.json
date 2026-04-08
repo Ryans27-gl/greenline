@@ -30,7 +30,8 @@
       "Bash(node:*)",
       "Bash(start:*)",
       "WebFetch(domain:greenlinenews.com)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git mv:*)"
     ]
   }
 }
