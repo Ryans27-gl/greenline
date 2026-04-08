@@ -13,8 +13,8 @@
       <stop offset="0%" stop-color="#8ab86a" stop-opacity="0.15"/>
       <stop offset="100%" stop-color="#8ab86a" stop-opacity="0"/>
     </linearGradient>
-    <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
-      <path d="M0,1 L10,5 L0,9 Z" fill="#f0ead0"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,1.5 L10,5 L0,8.5 Z" fill="#f0ead0"/>
     </marker>
   </defs>
 
@@ -49,7 +49,7 @@
   <!-- Icon square inside pill -->
   <rect x="322" y="212" width="74" height="74" rx="13" fill="#6a9e52"/>
   <!-- Chart arrow in icon -->
-  <polyline points="336,270 352,253 361,259 381,226" fill="none" stroke="#f0ead0" stroke-width="4" stroke-linecap="butt" stroke-linejoin="round" marker-end="url(#arr)"/>
+  <polyline points="334,272 350,252 362,262 384,228" fill="none" stroke="#f0ead0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
   <!-- Text: greenlinenews.com -->
   <text x="414" y="262" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="38" font-weight="700">
     <tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan>
