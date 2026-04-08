@@ -1,35 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+<svg xmlns="http://www.w3.org/2000/svg" width="74" height="74" viewBox="0 0 74 74">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d150b"/>
-      <stop offset="100%" stop-color="#162012"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Background -->
-  <rect width="500" height="500" rx="60" fill="url(#bg)"/>
-
-  <!-- Subtle grid -->
-  <g stroke="#1a2a16" stroke-width="0.5" opacity="0.4">
-    <line x1="0" y1="167" x2="500" y2="167"/>
-    <line x1="0" y1="333" x2="500" y2="333"/>
-    <line x1="167" y1="0" x2="167" y2="500"/>
-    <line x1="333" y1="0" x2="333" y2="500"/>
-  </g>
-
-  <!-- Logo icon -->
-  <defs>
-    <clipPath id="iconClip"><rect x="178" y="120" width="144" height="144" rx="36"/></clipPath>
-    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-      <path d="M0,1 L10,5 L0,9 Z" fill="white"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M0,1 L10,5 L0,9 Z" fill="#f0ead0"/>
     </marker>
   </defs>
-  <rect x="178" y="120" width="144" height="144" rx="36" fill="#8ab86a"/>
-
-  <!-- Chart line: up, dip, then up with arrowhead -->
-  <polyline points="190,240 220,185 248,215 300,140" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#iconClip)" marker-end="url(#arrow)"/>
-
-  <!-- Brand name: two lines for visual balance -->
-  <text x="250" y="330" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="52" font-weight="700" fill="#f0ead0" letter-spacing="-1">green<tspan fill="#8ab86a">line</tspan></text>
-  <text x="250" y="374" text-anchor="middle" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', monospace" font-size="22" font-weight="500" fill="#7a9470" letter-spacing="8">NEWS</text>
+  <rect width="74" height="74" rx="13" fill="#6a9e52"/>
+  <polyline points="14,54 30,37 39,43 59,10" fill="none" stroke="#f0ead0" stroke-width="4" stroke-linecap="butt" stroke-linejoin="round" marker-end="url(#arr)"/>
 </svg>

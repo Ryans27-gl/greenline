@@ -25,15 +25,9 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 .learn-logo {
-  display: flex; align-items: center; gap: 10px;
-  text-decoration: none; color: #f0ead0;
+  display: flex; align-items: center;
+  text-decoration: none;
 }
-.learn-logo-icon {
-  width: 36px; height: 36px; background: #8ab86a; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-}
-.learn-logo-text { font-size: 18px; font-weight: 700; }
-.learn-logo-text span { color: #8ab86a; }
 
 /* CONTAINER */
 .learn-container {
@@ -179,8 +173,13 @@ body {
 
 <header class="learn-header">
   <a class="learn-logo" href="/">
-    <div class="learn-logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polyline points="3,17 8,11 13,14 21,5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.2" fill="white"/></svg></div>
-    <div class="learn-logo-text">Green<span>line</span></div>
+    <svg viewBox="0 0 440 74" xmlns="http://www.w3.org/2000/svg" style="height:36px;width:auto;">
+      <defs><marker id="lArr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#f0ead0"/></marker></defs>
+      <rect width="440" height="74" rx="45" fill="#111a0f"/>
+      <rect x="8" y="8" width="58" height="58" rx="13" fill="#6a9e52"/>
+      <polyline points="18,54 30,40 37,45 57,18" fill="none" stroke="#f0ead0" stroke-width="3.5" stroke-linecap="butt" stroke-linejoin="round" marker-end="url(#lArr)"/>
+      <text x="82" y="46" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="30" font-weight="700"><tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan></text>
+    </svg>
   </a>
 </header>
 
@@ -257,13 +256,17 @@ body {
     </div>
     <div class="learn-result-badge">Our pick for you</div>
     <div class="learn-app-card" id="learnAppCard"></div>
-    <a class="learn-btn-ghost" href="/" style="margin-top:8px;">Go to Greenline News Feed</a>
   </section>
 
 </main>
 
 <script>
 const APPS = {
+  // Affiliate links — replace these with real URLs when ready:
+  // Acorns:    #acorns-affiliate-link
+  // Robinhood: #robinhood-affiliate-link
+  // Webull:    #webull-affiliate-link
+  // Fidelity:  #fidelity-affiliate-link
   passive: {
     name: 'Acorns',
     emoji: '🌱',
@@ -271,7 +274,7 @@ const APPS = {
     desc: 'Acorns rounds up your everyday purchases to the nearest dollar and invests the spare change into a diversified portfolio. You can also set up recurring investments. It\'s the easiest way to start building wealth without ever having to pick a stock.',
     pros: ['Automatic round-up investing', 'Set it and truly forget it', 'Starts with just $1', 'Built-in retirement accounts'],
     cons: ['$3-5/month subscription fee', 'Limited control over investments', 'No individual stock picking'],
-    link: '#acorns-affiliate',
+    link: '#acorns-affiliate-link',
   },
   stocks: {
     name: 'Robinhood',
@@ -280,7 +283,7 @@ const APPS = {
     desc: 'Robinhood pioneered commission-free stock trading and makes it simple to buy and sell stocks, ETFs, and crypto. The clean interface is perfect for beginners who want to pick their own investments without getting overwhelmed by complex trading tools.',
     pros: ['Zero commission trades', 'Clean, beginner-friendly interface', 'Fractional shares (buy $1 of any stock)', 'Instant deposits up to $1,000'],
     cons: ['Limited research tools', 'No mutual funds', 'Can encourage frequent trading'],
-    link: '#robinhood-affiliate',
+    link: '#robinhood-affiliate-link',
   },
   active: {
     name: 'Webull',
@@ -289,7 +292,7 @@ const APPS = {
     desc: 'Webull is built for people who want to learn technical analysis and trade actively. It offers advanced charting tools, extended trading hours, and paper trading to practice without risking real money. A great step up when you\'re ready to get serious.',
     pros: ['Advanced charts & indicators', 'Paper trading to practice free', 'Extended hours trading (4am-8pm)', 'Zero commissions'],
     cons: ['Steeper learning curve', 'Interface can feel overwhelming', 'No fractional shares on all stocks'],
-    link: '#webull-affiliate',
+    link: '#webull-affiliate-link',
   },
   retirement: {
     name: 'Fidelity',
@@ -298,7 +301,7 @@ const APPS = {
     desc: 'Fidelity is one of the most trusted names in investing, managing over $4 trillion in assets. They offer excellent retirement accounts (Traditional IRA, Roth IRA, 401k rollovers) with zero minimums, zero fees on index funds, and world-class research.',
     pros: ['Zero-fee index funds (FZROX, FZILX)', 'No account minimums', 'Excellent retirement account options', 'Top-tier research & education'],
     cons: ['Interface less modern than fintech apps', 'Can feel overwhelming at first', 'Crypto not available'],
-    link: '#fidelity-affiliate',
+    link: '#fidelity-affiliate-link',
   },
 };
 
@@ -334,7 +337,10 @@ function pickInvestorType(type) {
         <ul>${consHTML}</ul>
       </div>
     </div>
-    <a class="learn-app-cta" href="${app.link}" target="_blank" rel="noopener">Get Started Free</a>`;
+    <a class="learn-app-cta" href="${app.link}" target="_blank" rel="noopener">Get Started Free</a>
+    <div style="margin-top:16px;">
+      <a class="learn-btn-ghost" href="/" style="display:block;">Go to Greenline News Feed</a>
+    </div>`;
 
   showLearnStep(3);
 }

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="74" viewBox="0 0 440 74">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+      <path d="M0,1 L10,5 L0,9 Z" fill="#f0ead0"/>
+    </marker>
+  </defs>
+  <!-- Pill background -->
+  <rect width="440" height="74" rx="45" fill="#111a0f"/>
+  <!-- Icon square -->
+  <rect x="8" y="8" width="58" height="58" rx="13" fill="#6a9e52"/>
+  <!-- Chart line with arrow -->
+  <polyline points="18,54 30,40 37,45 57,18" fill="none" stroke="#f0ead0" stroke-width="3.5" stroke-linecap="butt" stroke-linejoin="round" marker-end="url(#arr)"/>
+  <!-- Text: greenlinenews.com -->
+  <text x="82" y="46" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="30" font-weight="700">
+    <tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan>
+  </text>
+</svg>
