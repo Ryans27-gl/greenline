@@ -3,347 +3,622 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Get Started Investing — Greenline</title>
-<meta name="description" content="New to investing? Take the Greenline quiz to find the best investing app for your goals.">
+<title>Find Your Perfect Investing App — Greenline</title>
+<meta name="description" content="New to investing? Take our 2-minute quiz to find the best broker for your goals. Greenline matches you with Robinhood, Acorns, Webull, or Fidelity.">
 <meta name="theme-color" content="#111a0f">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --nav-bg: #111a0f; --bg: #f2ead8; --card: #faf6ee;
+  --nav-text: #f0ead0; --nav-text2: #7a9470; --nav-text3: #3a5434;
+  --matcha: #6a9e52; --matcha-lt: #8ab86a;
+  --text: #1e1a10; --text2: #5a5040; --text3: #9a8e78;
+}
 
 body {
   font-family: 'Sora', sans-serif;
-  background: #0d140b;
-  color: #f0ead0;
-  min-height: 100vh;
+  background: #0d140b; color: var(--nav-text);
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
 }
 
-/* HEADER */
-.learn-header {
-  background: #111a0f;
-  border-bottom: 1px solid rgba(138,184,106,0.1);
-  padding: 16px 24px;
-  display: flex; align-items: center; justify-content: center;
+/* NAV — matches index.html */
+nav {
+  background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px);
 }
-.learn-logo {
-  display: flex; align-items: center;
-  text-decoration: none;
+.nav-inner {
+  max-width: 1080px; margin: 0 auto; padding: 0 32px;
+  height: 68px; display: flex; align-items: center; gap: 24px;
+}
+.logo { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; cursor: pointer; }
+.logo svg { height: 38px; width: auto; display: block; }
+
+/* PROGRESS BAR */
+.progress-wrap {
+  position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
+  background: rgba(17,26,15,0.95); padding: 0; height: 4px;
+}
+.progress-bar {
+  height: 100%; background: var(--matcha-lt); border-radius: 0 2px 2px 0;
+  transition: width 0.4s ease; width: 0%;
 }
 
 /* CONTAINER */
 .learn-container {
-  max-width: 560px;
-  margin: 0 auto;
-  padding: 48px 24px 64px;
+  max-width: 600px; margin: 0 auto;
+  padding: 56px 24px 80px; min-height: calc(100vh - 72px);
 }
 
-/* STEP SECTIONS */
-.learn-step { display: none; animation: learnFadeIn 0.35s ease; }
-.learn-step.active { display: block; }
-@keyframes learnFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-/* STEP 1: INTRO */
-.learn-intro-emoji { font-size: 56px; text-align: center; margin-bottom: 20px; }
-.learn-intro-title {
-  font-size: 28px; font-weight: 700; text-align: center;
-  margin-bottom: 12px; line-height: 1.3;
-}
-.learn-intro-title span { color: #8ab86a; }
-.learn-intro-text {
-  font-size: 15px; color: #9a9480; line-height: 1.8;
-  text-align: center; margin-bottom: 32px; font-weight: 300;
+/* PAGES */
+.page { display: none; animation: pageFadeIn 0.4s ease; }
+.page.active { display: block; }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* STEP 2: QUIZ */
-.learn-quiz-title {
-  font-size: 24px; font-weight: 700; text-align: center;
-  margin-bottom: 8px;
+/* TYPOGRAPHY */
+.page-icon { font-size: 56px; text-align: center; margin-bottom: 20px; }
+.page-headline {
+  font-size: 32px; font-weight: 700; text-align: center;
+  line-height: 1.25; margin-bottom: 16px;
 }
-.learn-quiz-sub {
-  font-size: 14px; color: #7a9470; text-align: center;
-  margin-bottom: 28px; font-weight: 300;
+.page-headline span { color: var(--matcha-lt); }
+.page-sub {
+  font-size: 16px; color: var(--nav-text2); text-align: center;
+  line-height: 1.7; font-weight: 300; margin-bottom: 40px;
+  max-width: 480px; margin-left: auto; margin-right: auto;
 }
-.learn-quiz-option {
-  display: flex; align-items: center; gap: 14px; width: 100%;
-  padding: 18px 20px; border-radius: 16px;
+.page-body {
+  font-size: 15px; color: #9a9480; line-height: 1.8; font-weight: 300;
+  margin-bottom: 32px; text-align: center;
+  max-width: 480px; margin-left: auto; margin-right: auto;
+}
+.page-analogy {
+  background: rgba(138,184,106,0.08); border: 1px solid rgba(138,184,106,0.12);
+  border-radius: 16px; padding: 20px 24px; margin-bottom: 36px;
+  font-size: 14px; color: var(--matcha-lt); line-height: 1.7; font-weight: 400;
+  text-align: center;
+}
+.page-analogy::before {
+  content: '💡'; display: block; font-size: 24px; margin-bottom: 8px;
+}
+
+/* INVESTOR TYPE CARDS */
+.type-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+.type-card {
   background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-  color: #f0ead0; font-family: 'Sora', sans-serif; font-size: 15px;
+  border-radius: 18px; padding: 24px 20px; text-align: center;
+}
+.type-card-icon { font-size: 36px; margin-bottom: 12px; }
+.type-card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--nav-text); }
+.type-card-desc { font-size: 13px; color: var(--nav-text2); line-height: 1.6; font-weight: 300; }
+
+/* QUIZ OPTIONS */
+.quiz-q { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 28px; }
+.quiz-option {
+  display: block; width: 100%; padding: 20px 24px; border-radius: 16px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  color: var(--nav-text); font-family: 'Sora', sans-serif; font-size: 15px;
   font-weight: 500; cursor: pointer; transition: all 0.2s;
   margin-bottom: 12px; text-align: left;
 }
-.learn-quiz-option:hover {
-  background: rgba(138,184,106,0.1); border-color: #8ab86a;
+.quiz-option:hover {
+  background: rgba(138,184,106,0.1); border-color: var(--matcha-lt);
   transform: translateY(-1px);
 }
-.learn-quiz-option .q-emoji { font-size: 24px; flex-shrink: 0; }
-.learn-quiz-option .q-text { flex: 1; }
-.learn-quiz-option .q-label { display: block; font-weight: 600; margin-bottom: 2px; }
-.learn-quiz-option .q-desc { display: block; font-size: 12px; color: #7a9470; font-weight: 300; }
-
-/* STEP 3: RESULT */
-.learn-result-badge {
-  text-align: center; font-size: 13px; font-weight: 600;
-  color: #8ab86a; text-transform: uppercase; letter-spacing: 1.5px;
-  margin-bottom: 20px;
-}
-.learn-app-card {
-  background: #111a0f; border: 1px solid rgba(138,184,106,0.15);
-  border-radius: 20px; padding: 36px 28px; text-align: center;
-  margin-bottom: 28px;
-}
-.learn-app-icon { font-size: 56px; margin-bottom: 16px; }
-.learn-app-name { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
-.learn-app-tagline { font-size: 14px; color: #8ab86a; font-weight: 500; margin-bottom: 24px; }
-.learn-app-desc {
-  font-size: 14px; color: #9a9480; line-height: 1.7; font-weight: 300;
-  margin-bottom: 28px; text-align: left;
-}
-
-/* Pros & Cons */
-.learn-proscons {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  margin-bottom: 28px; text-align: left;
-}
-.learn-proscons-col h4 {
-  font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 10px; font-weight: 600;
-}
-.learn-proscons-col.pros h4 { color: #8ab86a; }
-.learn-proscons-col.cons h4 { color: #c09040; }
-.learn-proscons-col ul {
-  list-style: none; padding: 0;
-}
-.learn-proscons-col ul li {
-  font-size: 13px; color: #9a9480; line-height: 1.6;
-  padding: 4px 0; padding-left: 18px; position: relative; font-weight: 300;
-}
-.learn-proscons-col.pros ul li::before { content: '+'; position: absolute; left: 0; color: #8ab86a; font-weight: 700; }
-.learn-proscons-col.cons ul li::before { content: '-'; position: absolute; left: 2px; color: #c09040; font-weight: 700; }
-
-.learn-app-cta {
-  display: block; width: 100%; padding: 18px; border-radius: 14px;
-  background: #8ab86a; color: #111a0f; border: none;
-  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s; text-decoration: none;
-  text-align: center;
-}
-.learn-app-cta:hover { opacity: 0.88; }
 
 /* BUTTONS */
-.learn-btn-primary {
-  display: block; width: 100%; padding: 18px; border-radius: 14px;
-  background: #8ab86a; color: #111a0f; border: none;
-  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s;
+.btn-primary {
+  display: block; width: 100%; padding: 20px; border-radius: 16px;
+  background: var(--matcha-lt); color: var(--nav-bg); border: none;
+  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-align: center;
+  text-decoration: none;
 }
-.learn-btn-primary:hover { opacity: 0.88; }
-.learn-btn-ghost {
+.btn-primary:hover { opacity: 0.88; }
+.btn-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; color: var(--nav-text3);
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; padding: 8px 0; margin-bottom: 32px; transition: color 0.15s;
+}
+.btn-back:hover { color: var(--nav-text2); }
+.btn-back svg { width: 16px; height: 16px; }
+.btn-ghost {
   display: block; width: 100%; padding: 16px; border-radius: 14px;
-  background: none; color: #7a9470; border: 1px solid rgba(255,255,255,0.08);
+  background: none; color: var(--nav-text2); border: 1px solid rgba(255,255,255,0.08);
   font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500;
   cursor: pointer; transition: all 0.15s; text-decoration: none; text-align: center;
+  margin-top: 12px;
 }
-.learn-btn-ghost:hover { background: rgba(255,255,255,0.04); color: #f0ead0; }
+.btn-ghost:hover { background: rgba(255,255,255,0.04); color: var(--nav-text); }
 
-/* PROGRESS DOTS */
-.learn-dots {
-  display: flex; gap: 8px; justify-content: center; margin-bottom: 32px;
+/* RESULT PAGE */
+.result-badge {
+  text-align: center; font-size: 12px; font-weight: 700;
+  color: var(--matcha-lt); text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 24px;
 }
-.learn-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: rgba(255,255,255,0.08); transition: all 0.3s;
+.result-card {
+  background: var(--nav-bg); border: 1px solid rgba(138,184,106,0.18);
+  border-radius: 24px; padding: 40px 32px; text-align: center;
+  margin-bottom: 24px;
 }
-.learn-dot.active { background: #8ab86a; width: 28px; border-radius: 5px; }
+.result-card.main { border-color: var(--matcha-lt); border-width: 2px; }
+.result-name { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.result-tagline { font-size: 14px; color: var(--matcha-lt); font-weight: 500; margin-bottom: 20px; }
+.result-reasons { text-align: left; margin-bottom: 24px; }
+.result-reasons li {
+  font-size: 14px; color: #9a9480; line-height: 1.7; font-weight: 300;
+  padding: 6px 0 6px 24px; position: relative; list-style: none;
+}
+.result-reasons li::before {
+  content: '✓'; position: absolute; left: 0; color: var(--matcha-lt); font-weight: 700;
+}
+.result-features {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 28px;
+}
+.result-feat {
+  padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 500;
+  background: rgba(138,184,106,0.08); color: var(--matcha-lt);
+  border: 1px solid rgba(138,184,106,0.12);
+}
+.result-cta {
+  display: block; width: 100%; padding: 20px; border-radius: 16px;
+  background: var(--matcha-lt); color: var(--nav-bg); border: none;
+  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-decoration: none; text-align: center;
+}
+.result-cta:hover { opacity: 0.88; }
 
-/* DIVIDER */
-.learn-divider {
-  height: 1px; background: rgba(255,255,255,0.06);
-  margin: 20px 0;
+/* RUNNER-UP CARDS */
+.runners-title {
+  font-size: 14px; font-weight: 600; color: var(--nav-text3);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+  text-align: center;
 }
+.runner-card {
+  background: var(--nav-bg); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px; padding: 24px; display: flex; align-items: center;
+  gap: 16px; margin-bottom: 12px;
+}
+.runner-info { flex: 1; }
+.runner-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.runner-tag { font-size: 12px; color: var(--nav-text2); font-weight: 300; }
+.runner-btn {
+  padding: 10px 20px; border-radius: 100px; background: rgba(255,255,255,0.06);
+  color: var(--nav-text2); border: 1px solid rgba(255,255,255,0.08);
+  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.15s;
+}
+.runner-btn:hover { background: rgba(138,184,106,0.1); border-color: var(--matcha-lt); color: var(--nav-text); }
+
+.retake {
+  display: block; text-align: center; margin-top: 32px;
+  color: var(--nav-text3); font-size: 13px; text-decoration: none;
+  cursor: pointer; background: none; border: none;
+  font-family: 'Sora', sans-serif; transition: color 0.15s;
+}
+.retake:hover { color: var(--nav-text2); }
+
+/* HOW IT WORKS DROPDOWN */
+.how-toggle {
+  display: block; width: 100%; padding: 12px 0; margin-top: 12px;
+  background: none; border: none; color: var(--nav-text2);
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: color 0.15s;
+}
+.how-toggle:hover { color: var(--nav-text); }
+.how-toggle svg {
+  width: 14px; height: 14px; vertical-align: -2px; margin-left: 4px;
+  transition: transform 0.25s ease;
+}
+.how-toggle.open svg { transform: rotate(180deg); }
+.how-panel {
+  max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+}
+.how-panel.open { max-height: 300px; }
+.how-panel-inner {
+  padding: 16px 20px; margin-top: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+}
+.how-row {
+  display: flex; justify-content: space-between; padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px;
+}
+.how-row:last-child { border-bottom: none; }
+.how-label { color: var(--nav-text2); font-weight: 500; }
+.how-val { color: var(--nav-text); font-weight: 400; text-align: right; flex: 1; margin-left: 16px; }
+
+/* COMING SOON CTA */
+.result-cta-soon {
+  display: block; width: 100%; padding: 20px; border-radius: 16px;
+  background: rgba(138,184,106,0.15); color: var(--matcha-lt); border: 1px solid rgba(138,184,106,0.2);
+  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; text-decoration: none; text-align: center;
+}
+.result-cta-soon:hover { background: rgba(138,184,106,0.22); }
+.runner-btn-soon {
+  padding: 10px 20px; border-radius: 100px; background: rgba(138,184,106,0.1);
+  color: var(--matcha-lt); border: 1px solid rgba(138,184,106,0.15);
+  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.15s;
+}
+.runner-btn-soon:hover { background: rgba(138,184,106,0.2); }
 
 @media (max-width: 760px) {
-  .learn-container { padding: 32px 16px 48px; }
-  .learn-intro-title { font-size: 24px; }
-  .learn-quiz-title { font-size: 20px; }
-  .learn-app-card { padding: 28px 20px; }
-  .learn-proscons { grid-template-columns: 1fr; gap: 12px; }
+  .nav-inner { padding: 0 16px; }
+  .logo svg { height: 30px; }
+  .learn-container { padding: 40px 16px 64px; }
+  .page-headline { font-size: 26px; }
+  .page-sub { font-size: 15px; }
+  .type-cards { grid-template-columns: 1fr; }
+  .result-card { padding: 32px 20px; }
+  .runner-card { flex-wrap: wrap; }
 }
 </style>
 </head>
 <body>
 
-<header class="learn-header">
-  <a class="learn-logo" href="/">
-    <svg viewBox="0 0 440 74" xmlns="http://www.w3.org/2000/svg" style="height:36px;width:auto;">
-      <defs><marker id="lArr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#f0ead0"/></marker></defs>
-      <rect width="440" height="74" rx="45" fill="#111a0f"/>
-      <rect x="8" y="8" width="58" height="58" rx="13" fill="#6a9e52"/>
-      <polyline points="16,56 28,38 38,48 58,18" fill="none" stroke="#f0ead0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#lArr)"/>
-      <text x="82" y="46" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="30" font-weight="700"><tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan></text>
-    </svg>
-  </a>
-</header>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <svg viewBox="0 0 440 74" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="lArr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#f0ead0"/></marker></defs>
+        <rect width="440" height="74" rx="45" fill="#111a0f"/>
+        <rect x="8" y="8" width="58" height="58" rx="13" fill="#6a9e52"/>
+        <polyline points="16,56 28,38 38,48 58,18" fill="none" stroke="#f0ead0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#lArr)"/>
+        <text x="82" y="46" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="30" font-weight="700"><tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan></text>
+      </svg>
+    </a>
+  </div>
+</nav>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
 <main class="learn-container">
 
-  <!-- STEP 1: What is investing? -->
-  <section class="learn-step active" id="learnStep1">
-    <div class="learn-dots">
-      <div class="learn-dot active"></div>
-      <div class="learn-dot"></div>
-      <div class="learn-dot"></div>
-    </div>
-    <div class="learn-intro-emoji">🌱</div>
-    <h1 class="learn-intro-title">New to <span>investing</span>?</h1>
-    <p class="learn-intro-text">
-      Investing means putting your money into things — like stocks, funds, or bonds — with the goal of growing it over time.
-      When you buy a stock, you own a tiny piece of that company. If the company does well, your investment can grow.
-      You don't need a lot of money or experience to start. Most apps let you begin with as little as $1.
-    </p>
-    <button class="learn-btn-primary" onclick="showLearnStep(2)">Next — find my investing style</button>
-    <div class="learn-divider"></div>
-    <a class="learn-btn-ghost" href="/">Skip — take me to the news</a>
+  <!-- PAGE 1: HERO -->
+  <section class="page active" id="page1">
+    <div class="page-icon">📈</div>
+    <h1 class="page-headline">Find Your Perfect <span>Investing App</span></h1>
+    <p class="page-sub">Answer a few quick questions and we'll match you with the best broker for your goals. Takes 2 minutes.</p>
+    <button class="btn-primary" onclick="goTo(2)">Get Started</button>
+    <a class="btn-ghost" href="/">Skip — take me to the news</a>
   </section>
 
-  <!-- STEP 2: Quiz -->
-  <section class="learn-step" id="learnStep2">
-    <div class="learn-dots">
-      <div class="learn-dot"></div>
-      <div class="learn-dot active"></div>
-      <div class="learn-dot"></div>
-    </div>
-    <h2 class="learn-quiz-title">What kind of investor are you?</h2>
-    <p class="learn-quiz-sub">Pick the one that sounds most like you</p>
-
-    <button class="learn-quiz-option" onclick="pickInvestorType('passive')">
-      <span class="q-emoji">🌊</span>
-      <span class="q-text">
-        <span class="q-label">Set it and forget it</span>
-        <span class="q-desc">I want my money to grow without thinking about it</span>
-      </span>
-    </button>
-
-    <button class="learn-quiz-option" onclick="pickInvestorType('stocks')">
-      <span class="q-emoji">🛒</span>
-      <span class="q-text">
-        <span class="q-label">Buy stocks myself</span>
-        <span class="q-desc">I want to pick companies I believe in</span>
-      </span>
-    </button>
-
-    <button class="learn-quiz-option" onclick="pickInvestorType('active')">
-      <span class="q-emoji">📈</span>
-      <span class="q-text">
-        <span class="q-label">Learn charts and trade actively</span>
-        <span class="q-desc">I want to learn technical analysis and trade often</span>
-      </span>
-    </button>
-
-    <button class="learn-quiz-option" onclick="pickInvestorType('retirement')">
-      <span class="q-emoji">🏖️</span>
-      <span class="q-text">
-        <span class="q-label">Invest for retirement</span>
-        <span class="q-desc">I want to build long-term wealth for the future</span>
-      </span>
-    </button>
+  <!-- PAGE 2: WHAT IS INVESTING? -->
+  <section class="page" id="page2">
+    <button class="btn-back" onclick="goTo(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">🌱</div>
+    <h2 class="page-headline">What is <span>investing</span>?</h2>
+    <p class="page-body">Investing means putting your money into something — like stocks, funds, or bonds — with the goal of growing it over time. When a company does well, your tiny piece of it becomes more valuable.</p>
+    <div class="page-analogy">Think of it like buying a small slice of a pizza shop. If the shop does great business, your slice becomes worth more than what you paid for it.</div>
+    <button class="btn-primary" onclick="goTo(3)">Next</button>
   </section>
 
-  <!-- STEP 3: Result -->
-  <section class="learn-step" id="learnStep3">
-    <div class="learn-dots">
-      <div class="learn-dot"></div>
-      <div class="learn-dot"></div>
-      <div class="learn-dot active"></div>
+  <!-- PAGE 3: HOW DOES THE STOCK MARKET WORK? -->
+  <section class="page" id="page3">
+    <button class="btn-back" onclick="goTo(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">🏛️</div>
+    <h2 class="page-headline">How does the <span>stock market</span> work?</h2>
+    <p class="page-body">The stock market is where people buy and sell shares of companies. Prices go up when more people want to buy, and down when more want to sell. It's open Monday through Friday.</p>
+    <div class="page-analogy">Imagine a farmers market, but instead of fruits and vegetables, people are buying and selling tiny pieces of companies like Apple, Google, and Tesla.</div>
+    <button class="btn-primary" onclick="goTo(4)">Next</button>
+  </section>
+
+  <!-- PAGE 4: WHAT IS A BROKER? -->
+  <section class="page" id="page4">
+    <button class="btn-back" onclick="goTo(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">📱</div>
+    <h2 class="page-headline">What is a <span>broker</span>?</h2>
+    <p class="page-body">A broker is the app or platform you use to buy and sell investments. You can't just walk into the stock market — you need a broker to place orders for you.</p>
+    <div class="page-analogy">A broker is like an app store, but for investments. You browse, pick what you want, and the app handles the transaction for you.</div>
+    <button class="btn-primary" onclick="goTo(5)">Next</button>
+  </section>
+
+  <!-- PAGE 5: TYPES OF INVESTORS -->
+  <section class="page" id="page5">
+    <button class="btn-back" onclick="goTo(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">🎯</div>
+    <h2 class="page-headline">What kind of <span>investor</span> will you be?</h2>
+    <p class="page-body">There's no wrong answer. Most investors fall into one of two styles — and the best broker depends on which one fits you.</p>
+    <div class="type-cards">
+      <div class="type-card">
+        <div class="type-card-icon">🌊</div>
+        <div class="type-card-title">Passive</div>
+        <div class="type-card-desc">Set it and forget it. Your money grows automatically with minimal effort. Great for beginners.</div>
+      </div>
+      <div class="type-card">
+        <div class="type-card-icon">⚡</div>
+        <div class="type-card-title">Active</div>
+        <div class="type-card-desc">Pick your own stocks and make your own trades. More hands-on but more control over your portfolio.</div>
+      </div>
     </div>
-    <div class="learn-result-badge">Our pick for you</div>
-    <div class="learn-app-card" id="learnAppCard"></div>
+    <button class="btn-primary" onclick="goTo(6)">Let's find out — start the quiz</button>
+  </section>
+
+  <!-- PAGE 6: Q1 -->
+  <section class="page" id="page6">
+    <button class="btn-back" onclick="goTo(5)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">How hands-on do you want to be?</p>
+    <button class="quiz-option" onclick="answer('hands','passive')">🌊  I want to set it and forget it</button>
+    <button class="quiz-option" onclick="answer('hands','active')">🛒  I want to pick my own stocks</button>
+    <button class="quiz-option" onclick="answer('hands','unsure')">🤔  I'm not sure yet</button>
+  </section>
+
+  <!-- PAGE 7: Q2 -->
+  <section class="page" id="page7">
+    <button class="btn-back" onclick="goTo(6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">How much do you want to start with?</p>
+    <button class="quiz-option" onclick="answer('amount','low')">🪙  Under $100</button>
+    <button class="quiz-option" onclick="answer('amount','mid')">💵  $100 – $1,000</button>
+    <button class="quiz-option" onclick="answer('amount','high')">💰  $1,000+</button>
+  </section>
+
+  <!-- PAGE 8: Q3 -->
+  <section class="page" id="page8">
+    <button class="btn-back" onclick="goTo(7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">What's your main goal?</p>
+    <button class="quiz-option" onclick="answer('goal','wealth')">🏦  Build long-term wealth</button>
+    <button class="quiz-option" onclick="answer('goal','trade')">📊  Make active trades</button>
+    <button class="quiz-option" onclick="answer('goal','spare')">🌱  Save spare change automatically</button>
+  </section>
+
+  <!-- PAGE 9: Q4 -->
+  <section class="page" id="page9">
+    <button class="btn-back" onclick="goTo(8)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">How do you feel about risk?</p>
+    <button class="quiz-option" onclick="answer('risk','low')">🛡️  Play it safe, slow and steady</button>
+    <button class="quiz-option" onclick="answer('risk','mid')">⚖️  Some risk is fine for better returns</button>
+    <button class="quiz-option" onclick="answer('risk','high')">🚀  I want to go big</button>
+  </section>
+
+  <!-- PAGE 10: Q5 -->
+  <section class="page" id="page10">
+    <button class="btn-back" onclick="goTo(9)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">Do you want investing to be automatic?</p>
+    <button class="quiz-option" onclick="answer('auto','yes')">✅  Yes, set it and forget it</button>
+    <button class="quiz-option" onclick="answer('auto','no')">🎮  No, I want full control</button>
+    <button class="quiz-option" onclick="answer('auto','mix')">🔀  A mix of both</button>
+  </section>
+
+  <!-- PAGE 11: Q6 -->
+  <section class="page" id="page11">
+    <button class="btn-back" onclick="goTo(10)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">How do you prefer to invest?</p>
+    <button class="quiz-option" onclick="answer('device','mobile')">📱  Mostly on my phone</button>
+    <button class="quiz-option" onclick="answer('device','desktop')">💻  Desktop or both</button>
+    <button class="quiz-option" onclick="answer('device','any')">🤷  I don't mind either way</button>
+  </section>
+
+  <!-- PAGE 12: RESULTS -->
+  <section class="page" id="page12">
+    <div id="resultContent"></div>
   </section>
 
 </main>
 
 <script>
-const APPS = {
-  // Affiliate links — replace these with real URLs when ready:
-  // Acorns:    #acorns-affiliate-link
-  // Robinhood: #robinhood-affiliate-link
-  // Webull:    #webull-affiliate-link
-  // Fidelity:  #fidelity-affiliate-link
-  passive: {
-    name: 'Acorns',
-    emoji: '🌱',
-    tagline: 'Best for hands-off investing',
-    desc: 'Acorns rounds up your everyday purchases to the nearest dollar and invests the spare change into a diversified portfolio. You can also set up recurring investments. It\'s the easiest way to start building wealth without ever having to pick a stock.',
-    pros: ['Automatic round-up investing', 'Set it and truly forget it', 'Starts with just $1', 'Built-in retirement accounts'],
-    cons: ['$3-5/month subscription fee', 'Limited control over investments', 'No individual stock picking'],
-    link: '#acorns-affiliate-link',
-  },
-  stocks: {
+const TOTAL_PAGES = 12;
+let currentPage = 1;
+const answers = {};
+
+const BROKERS = {
+  robinhood: {
     name: 'Robinhood',
-    emoji: '🪶',
     tagline: 'Best for buying individual stocks',
-    desc: 'Robinhood pioneered commission-free stock trading and makes it simple to buy and sell stocks, ETFs, and crypto. The clean interface is perfect for beginners who want to pick their own investments without getting overwhelmed by complex trading tools.',
-    pros: ['Zero commission trades', 'Clean, beginner-friendly interface', 'Fractional shares (buy $1 of any stock)', 'Instant deposits up to $1,000'],
-    cons: ['Limited research tools', 'No mutual funds', 'Can encourage frequent trading'],
-    link: '#robinhood-affiliate-link',
+    desc: 'Robinhood pioneered commission-free stock trading and makes it simple to buy and sell stocks, ETFs, and crypto.',
+    features: ['Zero commissions', 'Fractional shares', 'Crypto trading', 'Instant deposits', 'Cash card'],
+    how: { bestFor: 'Mobile-first beginners and active traders', beginner: 'Yes — clean, simple interface', advantage: 'Commission-free trading on stocks, ETFs, and crypto', minimum: '$1' },
+    link: '/', // <!-- AFFILIATE LINK: ROBINHOOD -->
   },
-  active: {
+  acorns: {
+    name: 'Acorns',
+    tagline: 'Best for hands-off spare change investing',
+    desc: 'Acorns rounds up your everyday purchases and invests the spare change automatically into a diversified portfolio.',
+    features: ['Round-up investing', 'Automatic portfolios', '$5/mo', 'Retirement accounts', 'Debit card'],
+    how: { bestFor: 'Passive investors who want automatic spare change investing', beginner: 'Yes — fully automated', advantage: 'Rounds up everyday purchases and invests the difference', minimum: '$5 per month' },
+    link: '/', // <!-- AFFILIATE LINK: ACORNS -->
+  },
+  webull: {
     name: 'Webull',
-    emoji: '📊',
-    tagline: 'Best for active trading & charting',
-    desc: 'Webull is built for people who want to learn technical analysis and trade actively. It offers advanced charting tools, extended trading hours, and paper trading to practice without risking real money. A great step up when you\'re ready to get serious.',
-    pros: ['Advanced charts & indicators', 'Paper trading to practice free', 'Extended hours trading (4am-8pm)', 'Zero commissions'],
-    cons: ['Steeper learning curve', 'Interface can feel overwhelming', 'No fractional shares on all stocks'],
-    link: '#webull-affiliate-link',
+    tagline: 'Best for active trading and charting',
+    desc: 'Webull offers advanced charts, technical indicators, extended-hours trading, and paper trading to practice risk-free.',
+    features: ['Advanced charting', 'Paper trading', 'Extended hours', 'Zero commissions', 'Options trading'],
+    how: { bestFor: 'Intermediate traders wanting advanced tools', beginner: 'Moderate — has a learning curve', advantage: 'Advanced charting, extended hours, and paper trading', minimum: '$1' },
+    link: '/', // <!-- AFFILIATE LINK: WEBULL -->
   },
-  retirement: {
+  fidelity: {
     name: 'Fidelity',
-    emoji: '🏦',
-    tagline: 'Best for retirement & long-term wealth',
-    desc: 'Fidelity is one of the most trusted names in investing, managing over $4 trillion in assets. They offer excellent retirement accounts (Traditional IRA, Roth IRA, 401k rollovers) with zero minimums, zero fees on index funds, and world-class research.',
-    pros: ['Zero-fee index funds (FZROX, FZILX)', 'No account minimums', 'Excellent retirement account options', 'Top-tier research & education'],
-    cons: ['Interface less modern than fintech apps', 'Can feel overwhelming at first', 'Crypto not available'],
-    link: '#fidelity-affiliate-link',
-  },
+    tagline: 'Best for long-term wealth and retirement',
+    desc: 'Fidelity manages over $4 trillion in assets and offers zero-fee index funds, retirement accounts, and world-class research.',
+    features: ['Zero-fee index funds', 'IRA & 401k', 'No minimums', 'Research tools', 'Fractional shares'],
+    how: { bestFor: 'Long-term investors and retirement planning', beginner: 'Yes — trusted and well-established', advantage: 'No minimums, great research and support', minimum: '$0' },
+    link: '/', // <!-- AFFILIATE LINK: FIDELITY -->
+  }
 };
 
-function showLearnStep(n) {
-  document.querySelectorAll('.learn-step').forEach(s => s.classList.remove('active'));
-  const step = document.getElementById('learnStep' + n);
-  if (step) step.classList.add('active');
+function goTo(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page' + n);
+  if (page) page.classList.add('active');
+  currentPage = n;
+  const pct = Math.round(((n - 1) / (TOTAL_PAGES - 1)) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function pickInvestorType(type) {
-  localStorage.setItem('gl_investor_type', type);
-  localStorage.setItem('gl_onboarded', '1');
-
-  const app = APPS[type];
-  const card = document.getElementById('learnAppCard');
-
-  const prosHTML = app.pros.map(p => `<li>${p}</li>`).join('');
-  const consHTML = app.cons.map(c => `<li>${c}</li>`).join('');
-
-  card.innerHTML = `
-    <div class="learn-app-icon">${app.emoji}</div>
-    <div class="learn-app-name">${app.name}</div>
-    <div class="learn-app-tagline">${app.tagline}</div>
-    <div class="learn-app-desc">${app.desc}</div>
-    <div class="learn-proscons">
-      <div class="learn-proscons-col pros">
-        <h4>Pros</h4>
-        <ul>${prosHTML}</ul>
-      </div>
-      <div class="learn-proscons-col cons">
-        <h4>Cons</h4>
-        <ul>${consHTML}</ul>
-      </div>
-    </div>
-    <a class="learn-app-cta" href="${app.link}" target="_blank" rel="noopener">Get Started Free</a>
-    <div style="margin-top:16px;">
-      <a class="learn-btn-ghost" href="/" style="display:block;">Go to Greenline News Feed</a>
-    </div>`;
-
-  showLearnStep(3);
+function answer(key, val) {
+  answers[key] = val;
+  const nextPage = currentPage + 1;
+  if (nextPage <= 11) {
+    goTo(nextPage);
+  } else {
+    showResults();
+  }
 }
+
+function scoreBrokers() {
+  const scores = { robinhood: 0, acorns: 0, webull: 0, fidelity: 0 };
+
+  // Q1: hands-on
+  if (answers.hands === 'passive') { scores.acorns += 3; scores.fidelity += 1; }
+  if (answers.hands === 'active')  { scores.robinhood += 2; scores.webull += 3; }
+  if (answers.hands === 'unsure')  { scores.robinhood += 2; scores.acorns += 1; }
+
+  // Q2: amount
+  if (answers.amount === 'low')  { scores.acorns += 3; scores.robinhood += 1; }
+  if (answers.amount === 'mid')  { scores.robinhood += 3; scores.webull += 1; }
+  if (answers.amount === 'high') { scores.webull += 2; scores.fidelity += 3; }
+
+  // Q3: goal
+  if (answers.goal === 'wealth') { scores.fidelity += 3; scores.acorns += 1; }
+  if (answers.goal === 'trade')  { scores.webull += 3; scores.robinhood += 2; }
+  if (answers.goal === 'spare')  { scores.acorns += 3; }
+
+  // Q4: risk
+  if (answers.risk === 'low')  { scores.acorns += 2; scores.fidelity += 3; }
+  if (answers.risk === 'mid')  { scores.robinhood += 3; scores.fidelity += 1; }
+  if (answers.risk === 'high') { scores.webull += 3; scores.robinhood += 1; }
+
+  // Q5: auto
+  if (answers.auto === 'yes') { scores.acorns += 3; scores.fidelity += 1; }
+  if (answers.auto === 'no')  { scores.webull += 2; scores.robinhood += 3; }
+  if (answers.auto === 'mix') { scores.robinhood += 2; scores.fidelity += 2; }
+
+  // Q6: device
+  if (answers.device === 'mobile')  { scores.robinhood += 2; scores.acorns += 2; }
+  if (answers.device === 'desktop') { scores.fidelity += 2; scores.webull += 2; }
+  if (answers.device === 'any')     { scores.robinhood += 1; scores.fidelity += 1; }
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  return sorted.map(([key]) => key);
+}
+
+function getReasons(key) {
+  const r = [];
+  if (key === 'robinhood') {
+    if (answers.hands === 'active') r.push('You want to pick your own stocks — Robinhood makes that simple');
+    if (answers.risk === 'mid') r.push('You\'re comfortable with some risk for better returns');
+    if (answers.device === 'mobile') r.push('You prefer investing on your phone — Robinhood\'s mobile app is best-in-class');
+    if (answers.amount === 'mid') r.push('Great for starting with $100–$1,000 with fractional shares');
+    if (r.length < 2) r.push('Commission-free trading with a clean, beginner-friendly interface');
+    if (r.length < 3) r.push('Instant deposits so you can start investing right away');
+  }
+  if (key === 'acorns') {
+    if (answers.hands === 'passive') r.push('You want a hands-off approach — Acorns automates everything');
+    if (answers.goal === 'spare') r.push('Spare change investing matches your savings style perfectly');
+    if (answers.auto === 'yes') r.push('You want it automatic — Acorns invests without you thinking about it');
+    if (answers.amount === 'low') r.push('Start with as little as $1, no large deposit needed');
+    if (r.length < 2) r.push('Round-up investing turns everyday purchases into investments');
+    if (r.length < 3) r.push('Diversified portfolios managed by experts, zero effort required');
+  }
+  if (key === 'webull') {
+    if (answers.goal === 'trade') r.push('You want to actively trade — Webull has the best charting tools');
+    if (answers.risk === 'high') r.push('You\'re ready to go big — Webull gives you the tools for it');
+    if (answers.device === 'desktop') r.push('Advanced desktop platform with professional-grade charts');
+    if (answers.amount === 'high') r.push('Built for serious investors with larger portfolios');
+    if (r.length < 2) r.push('Paper trading lets you practice with fake money before risking real cash');
+    if (r.length < 3) r.push('Extended hours trading from 4am to 8pm gives you more opportunities');
+  }
+  if (key === 'fidelity') {
+    if (answers.goal === 'wealth') r.push('You want to build long-term wealth — Fidelity is the gold standard');
+    if (answers.risk === 'low') r.push('You prefer playing it safe — Fidelity\'s index funds are ultra-low risk');
+    if (answers.amount === 'high') r.push('Best research and tools for investors with $1,000+');
+    if (answers.auto === 'yes') r.push('Target-date retirement funds do all the work for you');
+    if (r.length < 2) r.push('Zero-fee index funds (FZROX, FZILX) — literally $0 in fees');
+    if (r.length < 3) r.push('Trusted by millions with $4+ trillion in assets under management');
+  }
+  return r.slice(0, 3);
+}
+
+function howPanelHTML(broker, id) {
+  return `
+    <button class="how-toggle" onclick="toggleHow('${id}', this)">How ${broker.name} works <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="how-panel" id="${id}">
+      <div class="how-panel-inner">
+        <div class="how-row"><span class="how-label">Best for</span><span class="how-val">${broker.how.bestFor}</span></div>
+        <div class="how-row"><span class="how-label">Beginner friendly</span><span class="how-val">${broker.how.beginner}</span></div>
+        <div class="how-row"><span class="how-label">Top advantage</span><span class="how-val">${broker.how.advantage}</span></div>
+        <div class="how-row"><span class="how-label">Minimum to start</span><span class="how-val">${broker.how.minimum}</span></div>
+      </div>
+    </div>`;
+}
+
+function toggleHow(id, btn) {
+  const panel = document.getElementById(id);
+  panel.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function showResults() {
+  const ranked = scoreBrokers();
+  const top = BROKERS[ranked[0]];
+  const reasons = getReasons(ranked[0]);
+  const runner1 = BROKERS[ranked[1]];
+  const runner2 = BROKERS[ranked[2]];
+
+  localStorage.setItem('gl_onboarded', '1');
+  localStorage.setItem('gl_investor_type', ranked[0]);
+
+  const reasonsHTML = reasons.map(r => `<li>${r}</li>`).join('');
+  const featuresHTML = top.features.map(f => `<span class="result-feat">${f}</span>`).join('');
+
+  document.getElementById('resultContent').innerHTML = `
+    <div class="result-badge">Your perfect match</div>
+    <div class="result-card main">
+      <div class="result-name">${top.name}</div>
+      <div class="result-tagline">${top.tagline}</div>
+      <ul class="result-reasons">${reasonsHTML}</ul>
+      <div class="result-features">${featuresHTML}</div>
+      <!-- AFFILIATE LINK: ${top.name.toUpperCase()} -->
+      <a class="result-cta-soon" href="${top.link}">Get Started with ${top.name} — Coming Soon</a>
+      ${howPanelHTML(top, 'howTop')}
+    </div>
+
+    <div class="runners-title">Also great for you</div>
+
+    <div class="runner-card" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="runner-info">
+          <div class="runner-name">${runner1.name}</div>
+          <div class="runner-tag">${runner1.tagline}</div>
+        </div>
+        <!-- AFFILIATE LINK: ${runner1.name.toUpperCase()} -->
+        <a class="runner-btn-soon" href="${runner1.link}">Coming Soon</a>
+      </div>
+      ${howPanelHTML(runner1, 'howRunner1')}
+    </div>
+
+    <div class="runner-card" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="runner-info">
+          <div class="runner-name">${runner2.name}</div>
+          <div class="runner-tag">${runner2.tagline}</div>
+        </div>
+        <!-- AFFILIATE LINK: ${runner2.name.toUpperCase()} -->
+        <a class="runner-btn-soon" href="${runner2.link}">Coming Soon</a>
+      </div>
+      ${howPanelHTML(runner2, 'howRunner2')}
+    </div>
+
+    <a class="btn-ghost" href="/" style="margin-top:24px;">Go to Greenline News Feed</a>
+    <button class="retake" onclick="retakeQuiz()">Retake the quiz</button>`;
+
+  goTo(12);
+}
+
+function retakeQuiz() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  goTo(1);
+}
+
+// Init progress bar
+document.getElementById('progressBar').style.width = '0%';
 </script>
 </body>
 </html>
