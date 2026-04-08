@@ -1297,7 +1297,7 @@ function showToast(msg){
 async function explainArticle(btn) {
   const card = btn.closest('.card');
   const title = card.querySelector('.card-title').textContent.trim();
-  const summary = card.querySelector('.card-summary').textContent.trim();
+  const summary = card.querySelector('.card-summary')?.textContent?.trim() || '';
   const tickers = [...card.querySelectorAll('.chip-ticker')].map(el => el.textContent.trim());
   const prices = [...card.querySelectorAll('.stock-chip')].map(el => {
     const t = el.querySelector('.chip-ticker').textContent.trim();
