@@ -30,7 +30,27 @@
 # Redirect old brand asset paths
 [[redirects]]
   from = "/og-image.svg"
-  to = "/brand/og-image.svg"
+  to = "/brand/social/og-image.svg"
+  status = 301
+
+[[redirects]]
+  from = "/brand/og-image.svg"
+  to = "/brand/social/og-image.svg"
+  status = 301
+
+[[redirects]]
+  from = "/brand/logo-square.svg"
+  to = "/brand/logos/logo-square.svg"
+  status = 301
+
+[[redirects]]
+  from = "/icons/icon-192.png"
+  to = "/brand/favicon/favicon-192.png"
+  status = 301
+
+[[redirects]]
+  from = "/icons/icon-512.png"
+  to = "/brand/favicon/favicon-512.png"
   status = 301
 
 # SPA fallback — serves index.html for unknown paths

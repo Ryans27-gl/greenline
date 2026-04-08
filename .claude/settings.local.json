@@ -31,7 +31,8 @@
       "Bash(start:*)",
       "WebFetch(domain:greenlinenews.com)",
       "Bash(ls:*)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(npx sharp:*)"
     ]
   }
 }
