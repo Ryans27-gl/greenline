@@ -255,6 +255,44 @@ nav {
 }
 .runner-btn-soon:hover { background: rgba(138,184,106,0.2); }
 
+/* TRADINGVIEW PROMO */
+.tv-banner {
+  background: #2a3a26; border-radius: 12px; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 24px;
+}
+.tv-banner-text { font-size: 13px; color: var(--nav-text); font-weight: 500; }
+.tv-banner-link {
+  font-size: 12px; color: var(--matcha-lt); font-weight: 600;
+  text-decoration: none; white-space: nowrap; transition: opacity 0.15s;
+}
+.tv-banner-link:hover { opacity: 0.8; }
+.tv-card {
+  background: #1a2e1a; border: 1px solid rgba(138,184,106,0.12);
+  border-radius: 20px; padding: 32px 28px; margin: 24px 0;
+  text-align: center;
+}
+.tv-label {
+  font-size: 11px; font-weight: 600; color: var(--nav-text2);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px;
+}
+.tv-title { font-size: 20px; font-weight: 700; color: var(--nav-text); margin-bottom: 10px; }
+.tv-sub { font-size: 14px; color: #9a9480; line-height: 1.7; font-weight: 300; margin-bottom: 20px; }
+.tv-pills { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+.tv-pill {
+  padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 500;
+  background: #2a3a26; color: var(--nav-text2);
+}
+.tv-cta {
+  display: block; width: 100%; padding: 18px; border-radius: 14px;
+  background: #6a9e52; color: #fff; border: none;
+  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-decoration: none; text-align: center;
+}
+.tv-cta:hover { opacity: 0.88; }
+.tv-disclaimer { font-size: 11px; color: var(--nav-text2); margin-top: 12px; }
+.tv-extra { font-size: 13px; color: var(--matcha-lt); font-weight: 500; margin-bottom: 16px; font-style: italic; }
+
 @media (max-width: 760px) {
   .nav-inner { padding: 0 16px; }
   .logo svg { height: 30px; }
@@ -264,6 +302,8 @@ nav {
   .type-cards { grid-template-columns: 1fr; }
   .result-card { padding: 32px 20px; }
   .runner-card { flex-wrap: wrap; }
+  .tv-banner { flex-direction: column; text-align: center; gap: 8px; }
+  .tv-card { padding: 28px 20px; }
 }
 </style>
 </head>
@@ -560,7 +600,15 @@ function showResults() {
   const reasonsHTML = reasons.map(r => `<li>${r}</li>`).join('');
   const featuresHTML = top.features.map(f => `<span class="result-feat">${f}</span>`).join('');
 
+  const tvExtra = ranked[0] === 'webull' ? '<div class="tv-extra">Webull traders love TradingView for advanced charting and technical analysis.</div>' : '';
+
   document.getElementById('resultContent').innerHTML = `
+    <!-- AFFILIATE LINK: TRADINGVIEW -->
+    <div class="tv-banner">
+      <span class="tv-banner-text">📈 Track your picks live on TradingView</span>
+      <a class="tv-banner-link" href="https://www.tradingview.com/?aff_id=165441" target="_blank" rel="noopener">Try Free →</a>
+    </div>
+
     <div class="result-badge">Your perfect match</div>
     <div class="result-card main">
       <div class="result-name">${top.name}</div>
@@ -570,6 +618,21 @@ function showResults() {
       <!-- AFFILIATE LINK: ${top.name.toUpperCase()} -->
       <a class="result-cta-soon" href="${top.link}">Get Started with ${top.name} — Coming Soon</a>
       ${howPanelHTML(top, 'howTop')}
+    </div>
+
+    <!-- AFFILIATE LINK: TRADINGVIEW -->
+    <div class="tv-card">
+      <div class="tv-label">Recommended Tool</div>
+      <div class="tv-title">Track Your Investments with TradingView</div>
+      ${tvExtra}
+      <div class="tv-sub">The world's #1 charting platform. Follow live stock charts, discover trade ideas, and practice with paper trading — free forever.</div>
+      <div class="tv-pills">
+        <span class="tv-pill">Live Charts</span>
+        <span class="tv-pill">Paper Trading</span>
+        <span class="tv-pill">Free Plan</span>
+      </div>
+      <a class="tv-cta" href="https://www.tradingview.com/?aff_id=165441" target="_blank" rel="noopener">Try TradingView Free →</a>
+      <div class="tv-disclaimer">Your referral gets $15 off their first plan</div>
     </div>
 
     <div class="runners-title">Also great for you</div>
