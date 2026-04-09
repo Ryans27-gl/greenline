@@ -33,7 +33,8 @@
       "Bash(ls:*)",
       "Bash(git mv:*)",
       "Bash(npx sharp:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(cmd:*)"
     ]
   }
 }
