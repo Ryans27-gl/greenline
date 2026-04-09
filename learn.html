@@ -52,9 +52,10 @@ nav {
 
 /* CONTAINER */
 .learn-container {
-  max-width: 600px; margin: 0 auto;
+  max-width: 900px; margin: 0 auto;
   padding: 56px 24px 80px; min-height: calc(100vh - 72px);
 }
+.page:not(#page12) { max-width: 600px; margin: 0 auto; }
 
 /* PAGES */
 .page { display: none; animation: pageFadeIn 0.4s ease; }
@@ -309,6 +310,39 @@ nav {
 .tv-pairing { margin-top: 16px; }
 .tv-pairing-label { font-size: 12px; color: var(--nav-text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 
+/* RESULTS TWO-COL LAYOUT */
+.results-layout { display: flex; gap: 28px; align-items: flex-start; }
+.results-main { flex: 1; min-width: 0; }
+.results-sidebar { width: 280px; flex-shrink: 0; position: sticky; top: 88px; }
+
+/* NEXT STEP CARD */
+.next-step-card {
+  background: #faf6ee; border: 1px solid rgba(90,80,60,0.12);
+  border-radius: 16px; padding: 24px; color: #1e1a10;
+}
+.ns-label {
+  font-size: 11px; font-weight: 700; color: #7a9470;
+  text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px;
+}
+.ns-title { font-size: 17px; font-weight: 700; color: #1e1a10; margin-bottom: 10px; }
+.ns-sub { font-size: 13px; color: #5a5040; line-height: 1.7; font-weight: 300; margin-bottom: 16px; }
+.ns-checklist { list-style: none; padding: 0; margin-bottom: 20px; }
+.ns-checklist li {
+  font-size: 13px; color: #5a5040; line-height: 1.6; font-weight: 400;
+  padding: 4px 0 4px 22px; position: relative;
+}
+.ns-checklist li::before {
+  content: '\2713'; position: absolute; left: 0; color: #6a9e52; font-weight: 700;
+}
+.ns-bookmark {
+  display: block; width: 100%; padding: 14px; border-radius: 12px;
+  background: #6a9e52; color: #fff; border: none;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-align: center;
+}
+.ns-bookmark:hover { opacity: 0.88; }
+.ns-hint { font-size: 12px; color: #9a8e78; text-align: center; margin-top: 10px; }
+
 @media (max-width: 760px) {
   .nav-inner { padding: 0 16px; }
   .logo svg { height: 30px; }
@@ -321,6 +355,8 @@ nav {
   .tv-banner { flex-direction: column; text-align: center; gap: 8px; }
   .tv-card { padding: 32px 20px; }
   .tv-title { font-size: 20px; }
+  .results-layout { flex-direction: column; }
+  .results-sidebar { width: 100%; position: static; }
 }
 </style>
 </head>
@@ -460,7 +496,24 @@ nav {
 
   <!-- PAGE 12: RESULTS -->
   <section class="page" id="page12">
-    <div id="resultContent"></div>
+    <div class="results-layout">
+      <div class="results-main" id="resultContent"></div>
+      <div class="results-sidebar" id="resultSidebar" style="display:none;">
+        <div class="next-step-card">
+          <div class="ns-label">Next Step</div>
+          <div class="ns-title">Come Back After You Sign Up</div>
+          <div class="ns-sub">Once you've created your account, bookmark this page. We'll walk you through a crash course on how to use TradingView, read your first chart, and make your first investment with confidence.</div>
+          <ul class="ns-checklist">
+            <li>How to read a stock chart</li>
+            <li>What the numbers mean</li>
+            <li>How to place your first trade</li>
+            <li>How to track your portfolio</li>
+          </ul>
+          <button class="ns-bookmark" onclick="window.sidebar&&window.sidebar.addPanel?window.sidebar.addPanel(document.title,window.location.href,''):(window.external&&('AddFavorite' in window.external)?window.external.AddFavorite(window.location.href,document.title):alert('Press Ctrl+D or Cmd+D to bookmark this page and come back after signing up!'))">Bookmark This Page</button>
+          <div class="ns-hint">or just keep this tab open 😊</div>
+        </div>
+      </div>
+    </div>
   </section>
 
 </main>
@@ -717,6 +770,7 @@ function showResults() {
     <a class="btn-ghost" href="/" style="margin-top:24px;">Go to Greenline News Feed</a>
     <button class="retake" onclick="retakeQuiz()">Retake the quiz</button>`;
 
+  document.getElementById('resultSidebar').style.display = '';
   goTo(12);
 }
 
