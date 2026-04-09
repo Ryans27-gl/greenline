@@ -351,9 +351,22 @@ nav {
 .ns-bookmark:hover { color: #5a5040; border-color: rgba(90,80,60,0.3); }
 .ns-hint { font-size: 11px; color: #9a8e78; text-align: center; margin-top: 8px; }
 
-/* CRASH COURSE */
-.cc-section { padding: 56px 24px 80px; max-width: 600px; margin: 0 auto; display: none; }
-.cc-section.active { display: block; }
+/* CRASH COURSE OVERLAY */
+.cc-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 9999; background: #0d140b; overflow-y: auto;
+  display: none; animation: pageFadeIn 0.3s ease;
+}
+.cc-overlay.active { display: block; }
+.cc-overlay-inner { max-width: 600px; margin: 0 auto; padding: 56px 24px 80px; }
+.cc-close {
+  position: fixed; top: 20px; right: 24px; z-index: 10000;
+  background: transparent; border: none; color: #7a9470;
+  font-size: 24px; cursor: pointer; font-family: 'Sora', sans-serif;
+  width: 44px; height: 44px; display: flex; align-items: center;
+  justify-content: center; transition: color 0.15s;
+}
+.cc-close:hover { color: #f0ead0; }
 .cc-step { display: none; animation: pageFadeIn 0.4s ease; }
 .cc-step.active { display: block; }
 .cc-progress {
@@ -415,7 +428,7 @@ nav {
   .tv-title { font-size: 20px; }
   .results-layout { flex-direction: column; }
   .results-sidebar { width: 100%; position: static; }
-  .cc-section { padding: 40px 16px 64px; }
+  .cc-overlay-inner { padding: 40px 16px 64px; }
   .cc-select-grid { grid-template-columns: 1fr; }
   .cc-headline { font-size: 22px; }
 }
@@ -580,38 +593,40 @@ nav {
 
 </main>
 
-<!-- CRASH COURSE -->
-<div id="crash-course" class="cc-section">
-
-  <!-- App Selection -->
-  <div class="cc-step active" id="ccSelect">
-    <div class="page-icon">🎓</div>
-    <h2 class="cc-headline">Which app did you sign up for?</h2>
-    <p class="page-body">Pick the one you just created an account with and we'll walk you through getting started step by step.</p>
-    <div class="cc-select-grid">
-      <div class="cc-select-card" onclick="startGuide('robinhood')">
-        <div class="cc-select-name">Robinhood</div>
-        <div class="cc-select-desc">Commission-free stock trading made simple</div>
-      </div>
-      <div class="cc-select-card" onclick="startGuide('acorns')">
-        <div class="cc-select-name">Acorns</div>
-        <div class="cc-select-desc">Automatic spare change investing</div>
-      </div>
-      <div class="cc-select-card" onclick="startGuide('webull')">
-        <div class="cc-select-name">Webull</div>
-        <div class="cc-select-desc">Advanced charting and trading tools</div>
-      </div>
-      <div class="cc-select-card" onclick="startGuide('tradingview')">
-        <div class="cc-select-name">TradingView</div>
-        <div class="cc-select-desc">Professional charts and market analysis</div>
-      </div>
+<!-- CRASH COURSE APP SELECTION (inline on results page) -->
+<div id="crash-course" style="display:none;">
+  <div class="page-icon">🎓</div>
+  <h2 class="cc-headline" style="text-align:center;">Which app did you sign up for?</h2>
+  <p class="page-body">Pick the one you just created an account with and we'll walk you through getting started step by step.</p>
+  <div class="cc-select-grid">
+    <div class="cc-select-card" onclick="startGuide('robinhood')">
+      <div class="cc-select-name">Robinhood</div>
+      <div class="cc-select-desc">Commission-free stock trading made simple</div>
+    </div>
+    <div class="cc-select-card" onclick="startGuide('acorns')">
+      <div class="cc-select-name">Acorns</div>
+      <div class="cc-select-desc">Automatic spare change investing</div>
+    </div>
+    <div class="cc-select-card" onclick="startGuide('webull')">
+      <div class="cc-select-name">Webull</div>
+      <div class="cc-select-desc">Advanced charting and trading tools</div>
+    </div>
+    <div class="cc-select-card" onclick="startGuide('tradingview')">
+      <div class="cc-select-name">TradingView</div>
+      <div class="cc-select-desc">Professional charts and market analysis</div>
     </div>
   </div>
+</div>
+
+<!-- CRASH COURSE OVERLAY -->
+<div id="ccOverlay" class="cc-overlay">
+  <button class="cc-close" onclick="closeCrashCourse()">✕</button>
+  <div class="cc-overlay-inner">
 
   <!-- ROBINHOOD GUIDE -->
   <div class="cc-step" id="ccRobinhood1">
     <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <button class="btn-back" onclick="closeCrashCourse()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
     <h2 class="cc-headline">Welcome to Robinhood</h2>
     <div class="cc-body">Robinhood is one of the simplest ways to start buying stocks. When you open the app you'll see your portfolio at the top and a search bar to find any stock you want. The first thing to do is link your bank account so you can add money. Once that's done you're ready to make your first purchase.</div>
     <div class="cc-tip">Start small. Even buying one dollar of a stock is a real investment and a great way to learn how it feels.</div>
@@ -637,7 +652,7 @@ nav {
   <!-- ACORNS GUIDE -->
   <div class="cc-step" id="ccAcorns1">
     <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <button class="btn-back" onclick="closeCrashCourse()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
     <h2 class="cc-headline">Welcome to Acorns</h2>
     <div class="cc-body">Acorns is investing on autopilot. Once you link your bank account and debit card Acorns will round up every purchase you make to the nearest dollar and invest the difference for you. Buy a coffee for three dollars and fifty cents and Acorns invests fifty cents. Small amounts that add up to real money over time.</div>
     <div class="cc-tip">Set up a recurring investment on top of your round-ups. Even five dollars a week can grow into something meaningful over a few years.</div>
@@ -663,7 +678,7 @@ nav {
   <!-- WEBULL GUIDE -->
   <div class="cc-step" id="ccWebull1">
     <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <button class="btn-back" onclick="closeCrashCourse()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
     <h2 class="cc-headline">Welcome to Webull</h2>
     <div class="cc-body">Webull is built for investors who want more information before making a move. When you first open the app it can feel like a lot but don't worry. Start by exploring the Markets tab to see what's moving and the Screener to discover stocks based on filters like price and volume. Link your bank account and you're ready to start.</div>
     <div class="cc-tip">Use Webull's paper trading first. It lets you practice buying and selling with fake money so you can learn without any risk.</div>
@@ -689,7 +704,7 @@ nav {
   <!-- TRADINGVIEW GUIDE -->
   <div class="cc-step" id="ccTradingview1">
     <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <button class="btn-back" onclick="closeCrashCourse()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
     <h2 class="cc-headline">Welcome to TradingView</h2>
     <div class="cc-body">TradingView is where serious investors go to understand the market. When you first log in search for any stock you're interested in and open the chart. You'll see the price history displayed as candles. Each candle represents a period of time and tells you where the price opened, closed, and how high and low it went. Start by just exploring and getting comfortable with the layout.</div>
     <div class="cc-tip">Follow other traders on TradingView to see how they analyze stocks. Reading their ideas is one of the fastest ways to learn.</div>
@@ -712,6 +727,7 @@ nav {
     <a class="cc-final" href="/">Take Me to the News →</a>
   </div>
 
+  </div>
 </div>
 
 <script>
@@ -980,20 +996,31 @@ document.getElementById('progressBar').style.width = '0%';
 
 /* ── CRASH COURSE ── */
 function showCrashCourse() {
-  document.getElementById('crash-course').classList.add('active');
-  document.getElementById('crash-course').scrollIntoView({ behavior: 'smooth' });
+  const el = document.getElementById('crash-course');
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth' });
+}
+
+function startGuide(app) {
+  const map = { robinhood: 'ccRobinhood1', acorns: 'ccAcorns1', webull: 'ccWebull1', tradingview: 'ccTradingview1' };
+  const overlay = document.getElementById('ccOverlay');
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  showCCStep(map[app] || 'ccRobinhood1');
+}
+
+function closeCrashCourse() {
+  const overlay = document.getElementById('ccOverlay');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+  document.getElementById('page12').scrollIntoView({ behavior: 'smooth' });
 }
 
 function showCCStep(id) {
   document.querySelectorAll('.cc-step').forEach(s => s.classList.remove('active'));
   const step = document.getElementById(id);
   if (step) step.classList.add('active');
-  document.getElementById('crash-course').scrollIntoView({ behavior: 'smooth' });
-}
-
-function startGuide(app) {
-  const map = { robinhood: 'ccRobinhood1', acorns: 'ccAcorns1', webull: 'ccWebull1', tradingview: 'ccTradingview1' };
-  showCCStep(map[app] || 'ccSelect');
+  document.getElementById('ccOverlay').scrollTop = 0;
 }
 </script>
 </body>
