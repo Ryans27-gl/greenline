@@ -1514,35 +1514,6 @@ function dismissPromo() {
 
 setTimeout(showPromo, 3000);
 
-/* ── EMAIL SIGNUP (main page) ── */
-async function submitSignup() {
-  const input = document.getElementById('signupEmail');
-  const btn = document.getElementById('signupBtn');
-  const msg = document.getElementById('signupMsg');
-  const email = input?.value?.trim();
-  msg.textContent = ''; msg.className = 'signup-msg';
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    msg.textContent = 'Please enter a valid email address.';
-    msg.classList.add('error'); return;
-  }
-  btn.disabled = true; btn.textContent = 'Sending...';
-  try {
-    const res = await fetch('/.netlify/functions/waitlist', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, source: 'main-signup' })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      msg.textContent = data.message; msg.classList.add('success');
-      input.value = '';
-    } else {
-      msg.textContent = data.error || 'Something went wrong.'; msg.classList.add('error');
-    }
-  } catch {
-    msg.textContent = 'Network error. Please try again.'; msg.classList.add('error');
-  }
-  btn.disabled = false; btn.textContent = 'Subscribe';
-}
 
 /* ── SERVICE WORKER ── */
 if ('serviceWorker' in navigator) {
@@ -1576,11 +1547,11 @@ if ('serviceWorker' in navigator) {
   <div class="signup-inner">
     <div class="signup-title">Get <span>Greenline</span> updates</div>
     <div class="signup-sub">Join investors getting our weekly market recap every Sunday morning. No spam, unsubscribe anytime.</div>
-    <div class="signup-form">
-      <input class="signup-email" id="signupEmail" type="email" placeholder="your@email.com" />
-      <button class="signup-btn" id="signupBtn" onclick="submitSignup()">Get Weekly Recap</button>
-    </div>
-    <div class="signup-msg" id="signupMsg"></div>
+    <form class="signup-form" name="waitlist" method="POST" action="/success.html" netlify>
+      <input type="hidden" name="form-name" value="waitlist">
+      <input class="signup-email" name="email" type="email" placeholder="your@email.com" required />
+      <button class="signup-btn" type="submit">Get Weekly Recap</button>
+    </form>
   </div>
 </section>
 
