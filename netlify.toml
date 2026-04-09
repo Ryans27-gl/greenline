@@ -1,6 +1,17 @@
 [build]
   functions = "netlify/functions"
 
+# SECURITY HEADERS for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://api.anthropic.com https://finnhub.io https://api.rss2json.com https://www.google-analytics.com; frame-ancestors 'none';"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
 # Redirect old legal paths to new /legal/ folder
 [[redirects]]
   from = "/privacy-policy.html"

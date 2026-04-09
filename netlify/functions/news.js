@@ -1,5 +1,18 @@
+const { corsHeaders, checkRateLimit, rateLimitResponse, withTimeout } = require('./_shared');
+
+const VALID_CATS = ['all', 'business', 'technology', 'energy', 'health', 'economy', 'markets'];
+
 exports.handler = async (event) => {
-  const cat = event.queryStringParameters?.cat || 'all';
+  const headers = { ...corsHeaders(event), 'Content-Type': 'application/json', 'Cache-Control': 'public, s-maxage=900, max-age=300' };
+
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
+
+  if (!checkRateLimit(event)) return rateLimitResponse(event);
+
+  const rawCat = event.queryStringParameters?.cat || 'all';
+  const cat = VALID_CATS.includes(rawCat) ? rawCat : 'all';
 
   const FEEDS = {
     all: [
@@ -46,7 +59,7 @@ exports.handler = async (event) => {
   for (let i = 0; i < feeds.length; i += 2) {
     const batch = feeds.slice(i, i + 2);
     const results = await Promise.allSettled(batch.map(async (feedUrl) => {
-      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`);
+      const res = await withTimeout(fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`), 10000);
       if (!res.ok) throw new Error(`${feedUrl} returned ${res.status}`);
       const data = await res.json();
       if (data.status !== 'ok' || !data.items) throw new Error(`${feedUrl}: ${data.message || 'no items'}`);
@@ -87,7 +100,7 @@ exports.handler = async (event) => {
 
   return {
     statusCode: 200,
-    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, s-maxage=900, max-age=300' },
+    headers,
     body: JSON.stringify({
       articles: fresh.length >= 3 ? fresh : unique.slice(0, 10),
       feedErrors: errors.length > 0 ? errors : undefined,

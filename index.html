@@ -1547,9 +1547,10 @@ if ('serviceWorker' in navigator) {
   <div class="signup-inner">
     <div class="signup-title">Get <span>Greenline</span> updates</div>
     <div class="signup-sub">Join investors getting our weekly market recap every Sunday morning. No spam, unsubscribe anytime.</div>
-    <form class="signup-form" name="waitlist" method="POST" action="/success.html" netlify>
+    <form class="signup-form" name="waitlist" method="POST" action="/success.html" netlify netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="waitlist">
-      <input class="signup-email" name="email" type="email" placeholder="your@email.com" required />
+      <p style="display:none;"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <input class="signup-email" name="email" type="email" placeholder="your@email.com" maxlength="254" required />
       <button class="signup-btn" type="submit">Get Weekly Recap</button>
     </form>
   </div>
