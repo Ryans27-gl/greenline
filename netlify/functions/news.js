@@ -1,37 +1,26 @@
 // Simple in-memory cache: { key: { data, expires } }
 const cache = {};
 
-async function fetchOgImage(url, timeout = 3000) {
+async function fetchOgImage(url) {
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeout);
+    const timer = setTimeout(() => controller.abort(), 2000);
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Greenline/1.0 (news aggregator)' },
+      headers: { 'User-Agent': 'Greenline/1.0' },
       redirect: 'follow',
     });
     clearTimeout(timer);
     if (!res.ok) return null;
-    // Only read first 50KB to find meta tags quickly
-    const reader = res.body.getReader();
-    let html = '';
-    const decoder = new TextDecoder();
-    while (html.length < 50000) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      html += decoder.decode(value, { stream: true });
-      // Early exit if we've passed </head>
-      if (html.includes('</head>')) break;
-    }
-    reader.cancel();
+    const html = await res.text();
+    const head = html.slice(0, 50000);
 
-    // Extract og:image or twitter:image
-    const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
-      || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    const ogMatch = head.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+      || head.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
     if (ogMatch) return ogMatch[1];
 
-    const twMatch = html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)
-      || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
+    const twMatch = head.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)
+      || head.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
     if (twMatch) return twMatch[1];
 
     return null;
@@ -41,6 +30,8 @@ async function fetchOgImage(url, timeout = 3000) {
 }
 
 exports.handler = async (event) => {
+  console.log('news.js called, cat:', event.queryStringParameters?.cat || 'all');
+
   const cat = event.queryStringParameters?.cat || 'all';
 
   // Check cache (5 minute TTL)
@@ -140,13 +131,17 @@ exports.handler = async (event) => {
 
   const finalArticles = fresh.length >= 3 ? fresh : unique.slice(0, 10);
 
-  // Fetch OG images in parallel for articles that don't have a thumbnail
-  await Promise.allSettled(finalArticles.map(async (article) => {
-    if (article.thumbnail) return;
-    if (!article.url || article.url === '#') return;
-    const img = await fetchOgImage(article.url);
-    if (img) article.thumbnail = img;
-  }));
+  // Try to fetch OG images — completely optional, must not block articles
+  try {
+    await Promise.allSettled(finalArticles.map(async (article) => {
+      if (article.thumbnail) return;
+      if (!article.url || article.url === '#') return;
+      const img = await fetchOgImage(article.url);
+      if (img) article.thumbnail = img;
+    }));
+  } catch (e) {
+    console.log('OG scraping failed, continuing without thumbnails:', e.message);
+  }
 
   const body = JSON.stringify({
     articles: finalArticles,
