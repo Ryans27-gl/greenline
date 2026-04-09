@@ -1412,19 +1412,9 @@ function closeTooltip() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTooltip(); });
 
 /* ── ONBOARDING ── */
-function closeOnboard() {
-  document.getElementById('obOverlay')?.remove();
-  localStorage.setItem('gl_onboarded', '1');
-}
-
-function obSkipToFeed() {
-  closeOnboard();
-}
-
 function initOnboard() {
   if (localStorage.getItem('gl_onboarded')) {
-    // Overlay HTML is after the script block, so defer removal until DOM is ready
-    const remove = () => document.getElementById('obOverlay')?.remove();
+    const remove = () => { const el = document.getElementById('obOverlay'); if (el) el.style.display = 'none'; };
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', remove);
     } else {
@@ -1543,7 +1533,7 @@ if ('serviceWorker' in navigator) {
       <div class="ob-card-title">New to investing?</div>
       <div class="ob-card-sub">Take our 2-minute quiz and we'll find the perfect investing app for your goals.</div>
       <a class="ob-card-cta" href="/learn.html">Take the Quiz</a>
-      <button class="ob-card-skip" onclick="obSkipToFeed()">Skip to the news</button>
+      <button class="ob-card-skip" onclick="document.getElementById('obOverlay').style.display='none';localStorage.setItem('gl_onboarded','true');">Skip to the news</button>
     </div>
   </div>
 </div>
