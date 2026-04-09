@@ -317,7 +317,7 @@ nav {
 
 /* NEXT STEP CARD */
 .next-step-card {
-  background: #faf6ee; border: 1px solid rgba(90,80,60,0.12);
+  background: #f2ead8; border: 1px solid rgba(90,80,60,0.12);
   border-radius: 16px; padding: 24px; color: #1e1a10;
 }
 .ns-label {
@@ -334,14 +334,72 @@ nav {
 .ns-checklist li::before {
   content: '\2713'; position: absolute; left: 0; color: #6a9e52; font-weight: 700;
 }
-.ns-bookmark {
-  display: block; width: 100%; padding: 14px; border-radius: 12px;
-  background: #6a9e52; color: #fff; border: none;
+.ns-start {
+  display: block; width: 100%; padding: 14px; border-radius: 10px;
+  background: #1a2e1a; color: #f0ead0; border: none;
   font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
   cursor: pointer; transition: opacity 0.15s; text-align: center;
+  text-decoration: none; margin-bottom: 10px;
 }
-.ns-bookmark:hover { opacity: 0.88; }
-.ns-hint { font-size: 12px; color: #9a8e78; text-align: center; margin-top: 10px; }
+.ns-start:hover { opacity: 0.88; }
+.ns-bookmark {
+  display: block; width: 100%; padding: 10px; border-radius: 10px;
+  background: none; color: #9a8e78; border: 1px solid rgba(90,80,60,0.15);
+  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.ns-bookmark:hover { color: #5a5040; border-color: rgba(90,80,60,0.3); }
+.ns-hint { font-size: 11px; color: #9a8e78; text-align: center; margin-top: 8px; }
+
+/* CRASH COURSE */
+.cc-section { padding: 56px 24px 80px; max-width: 600px; margin: 0 auto; display: none; }
+.cc-section.active { display: block; }
+.cc-step { display: none; animation: pageFadeIn 0.4s ease; }
+.cc-step.active { display: block; }
+.cc-progress {
+  display: flex; gap: 4px; margin-bottom: 32px;
+}
+.cc-dot {
+  flex: 1; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.08); transition: background 0.3s;
+}
+.cc-dot.done { background: var(--matcha); }
+.cc-dot.active { background: var(--matcha-lt); }
+.cc-headline { font-size: 26px; font-weight: 700; color: var(--nav-text); margin-bottom: 16px; }
+.cc-body {
+  font-size: 15px; color: #9a9480; line-height: 1.8; font-weight: 300; margin-bottom: 24px;
+}
+.cc-tip {
+  background: #1a2e1a; border-left: 3px solid #6a9e52;
+  border-radius: 0 12px 12px 0; padding: 16px 20px;
+  font-size: 14px; color: #f0ead0; font-style: italic;
+  line-height: 1.7; margin-bottom: 28px; font-weight: 300;
+}
+.cc-tip::before { content: '💡 '; font-style: normal; }
+.cc-next {
+  display: block; width: 100%; padding: 18px; border-radius: 14px;
+  background: var(--matcha-lt); color: var(--nav-bg); border: none;
+  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-align: center; text-decoration: none;
+}
+.cc-next:hover { opacity: 0.88; }
+.cc-final {
+  display: block; width: 100%; padding: 20px; border-radius: 16px;
+  background: #6a9e52; color: #fff; border: none;
+  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-align: center; text-decoration: none;
+}
+.cc-final:hover { opacity: 0.88; }
+.cc-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+.cc-select-card {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px; padding: 24px 18px; text-align: center;
+  cursor: pointer; transition: all 0.2s; color: var(--nav-text);
+  font-family: 'Sora', sans-serif;
+}
+.cc-select-card:hover { background: rgba(138,184,106,0.1); border-color: var(--matcha-lt); transform: translateY(-2px); }
+.cc-select-name { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.cc-select-desc { font-size: 12px; color: var(--nav-text2); font-weight: 300; line-height: 1.5; }
 
 @media (max-width: 760px) {
   .nav-inner { padding: 0 16px; }
@@ -357,6 +415,9 @@ nav {
   .tv-title { font-size: 20px; }
   .results-layout { flex-direction: column; }
   .results-sidebar { width: 100%; position: static; }
+  .cc-section { padding: 40px 16px 64px; }
+  .cc-select-grid { grid-template-columns: 1fr; }
+  .cc-headline { font-size: 22px; }
 }
 </style>
 </head>
@@ -509,6 +570,7 @@ nav {
             <li>How to place your first trade</li>
             <li>How to track your portfolio</li>
           </ul>
+          <a class="ns-start" href="#crash-course" onclick="showCrashCourse();return false;">Start the Crash Course →</a>
           <button class="ns-bookmark" onclick="window.sidebar&&window.sidebar.addPanel?window.sidebar.addPanel(document.title,window.location.href,''):(window.external&&('AddFavorite' in window.external)?window.external.AddFavorite(window.location.href,document.title):alert('Press Ctrl+D or Cmd+D to bookmark this page and come back after signing up!'))">Bookmark This Page</button>
           <div class="ns-hint">or just keep this tab open 😊</div>
         </div>
@@ -517,6 +579,140 @@ nav {
   </section>
 
 </main>
+
+<!-- CRASH COURSE -->
+<div id="crash-course" class="cc-section">
+
+  <!-- App Selection -->
+  <div class="cc-step active" id="ccSelect">
+    <div class="page-icon">🎓</div>
+    <h2 class="cc-headline">Which app did you sign up for?</h2>
+    <p class="page-body">Pick the one you just created an account with and we'll walk you through getting started step by step.</p>
+    <div class="cc-select-grid">
+      <div class="cc-select-card" onclick="startGuide('robinhood')">
+        <div class="cc-select-name">Robinhood</div>
+        <div class="cc-select-desc">Commission-free stock trading made simple</div>
+      </div>
+      <div class="cc-select-card" onclick="startGuide('acorns')">
+        <div class="cc-select-name">Acorns</div>
+        <div class="cc-select-desc">Automatic spare change investing</div>
+      </div>
+      <div class="cc-select-card" onclick="startGuide('webull')">
+        <div class="cc-select-name">Webull</div>
+        <div class="cc-select-desc">Advanced charting and trading tools</div>
+      </div>
+      <div class="cc-select-card" onclick="startGuide('tradingview')">
+        <div class="cc-select-name">TradingView</div>
+        <div class="cc-select-desc">Professional charts and market analysis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROBINHOOD GUIDE -->
+  <div class="cc-step" id="ccRobinhood1">
+    <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Welcome to Robinhood</h2>
+    <div class="cc-body">Robinhood is one of the simplest ways to start buying stocks. When you open the app you'll see your portfolio at the top and a search bar to find any stock you want. The first thing to do is link your bank account so you can add money. Once that's done you're ready to make your first purchase.</div>
+    <div class="cc-tip">Start small. Even buying one dollar of a stock is a real investment and a great way to learn how it feels.</div>
+    <button class="cc-next" onclick="showCCStep('ccRobinhood2')">Next: Your First Trade →</button>
+  </div>
+  <div class="cc-step" id="ccRobinhood2">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccRobinhood1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Placing Your First Trade</h2>
+    <div class="cc-body">Search for a company you know and believe in. Type the name in the search bar and tap the stock. You'll see the current price and a Buy button. Tap Buy, enter the dollar amount you want to invest, and review the order. When you're ready tap Submit. That's it. You are now an investor.</div>
+    <div class="cc-tip">You don't need to buy a full share. Robinhood lets you buy fractional shares so you can own a piece of Apple or Tesla for just a few dollars.</div>
+    <button class="cc-next" onclick="showCCStep('ccRobinhood3')">Next: How News Affects Stocks →</button>
+  </div>
+  <div class="cc-step" id="ccRobinhood3">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccRobinhood2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Why the News Matters for Your Portfolio</h2>
+    <div class="cc-body">Every company you invest in is affected by what happens in the world. When a company reports strong earnings the stock usually goes up. When there's bad news like a lawsuit or a missed target the stock can drop. That's why staying informed is one of the most powerful things you can do as an investor. Reading market news daily helps you understand why your stocks are moving and spot opportunities before others do.</div>
+    <div class="cc-tip">You don't need to check every hour. A quick scan of the headlines each morning is enough to stay in the loop.</div>
+    <a class="cc-final" href="/">Take Me to the News →</a>
+  </div>
+
+  <!-- ACORNS GUIDE -->
+  <div class="cc-step" id="ccAcorns1">
+    <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Welcome to Acorns</h2>
+    <div class="cc-body">Acorns is investing on autopilot. Once you link your bank account and debit card Acorns will round up every purchase you make to the nearest dollar and invest the difference for you. Buy a coffee for three dollars and fifty cents and Acorns invests fifty cents. Small amounts that add up to real money over time.</div>
+    <div class="cc-tip">Set up a recurring investment on top of your round-ups. Even five dollars a week can grow into something meaningful over a few years.</div>
+    <button class="cc-next" onclick="showCCStep('ccAcorns2')">Next: Understanding Your Portfolio →</button>
+  </div>
+  <div class="cc-step" id="ccAcorns2">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccAcorns1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">What Acorns Does With Your Money</h2>
+    <div class="cc-body">Acorns invests your money into a diversified mix of stocks and bonds based on the risk level you chose when you signed up. You don't pick individual stocks. Instead your money is spread across hundreds of companies automatically. This is called passive investing and it's one of the safest ways to build wealth over time.</div>
+    <div class="cc-tip">The key with Acorns is patience. The longer you leave your money invested the more it can grow through compound interest.</div>
+    <button class="cc-next" onclick="showCCStep('ccAcorns3')">Next: How News Affects Your Money →</button>
+  </div>
+  <div class="cc-step" id="ccAcorns3">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccAcorns2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Why the News Still Matters</h2>
+    <div class="cc-body">Even though Acorns manages your portfolio automatically the stock market still goes up and down based on what's happening in the world. When there's positive economic news like strong jobs data or company earnings your portfolio grows. During uncertain times it may dip. The important thing is not to panic and pull your money out. Staying invested through the ups and downs is what builds real wealth over time.</div>
+    <div class="cc-tip">Watching market news helps you understand why your balance changes day to day. Knowledge makes the dips a lot less scary.</div>
+    <a class="cc-final" href="/">Take Me to the News →</a>
+  </div>
+
+  <!-- WEBULL GUIDE -->
+  <div class="cc-step" id="ccWebull1">
+    <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Welcome to Webull</h2>
+    <div class="cc-body">Webull is built for investors who want more information before making a move. When you first open the app it can feel like a lot but don't worry. Start by exploring the Markets tab to see what's moving and the Screener to discover stocks based on filters like price and volume. Link your bank account and you're ready to start.</div>
+    <div class="cc-tip">Use Webull's paper trading first. It lets you practice buying and selling with fake money so you can learn without any risk.</div>
+    <button class="cc-next" onclick="showCCStep('ccWebull2')">Next: Reading the Charts →</button>
+  </div>
+  <div class="cc-step" id="ccWebull2">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccWebull1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Understanding Stock Charts</h2>
+    <div class="cc-body">A stock chart shows you the price of a stock over time. The green candles mean the price went up that day and the red ones mean it went down. The lines at the bottom show trading volume which tells you how many people were buying and selling. When volume is high something big is happening. You can switch between different time frames like one day, one week, or one year to see the bigger picture.</div>
+    <div class="cc-tip">Pair Webull with TradingView for even more powerful charts and ideas from other traders around the world.</div>
+    <button class="cc-next" onclick="showCCStep('ccWebull3')">Next: How News Moves the Market →</button>
+  </div>
+  <div class="cc-step" id="ccWebull3">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccWebull2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">News is Your Edge as an Investor</h2>
+    <div class="cc-body">Active traders on Webull pay close attention to the news because news moves stocks fast. An earnings report, a Fed announcement, or a new product launch can send a stock soaring or dropping within minutes. Knowing what's happening before you trade helps you make smarter decisions and avoid getting caught off guard by big moves.</div>
+    <div class="cc-tip">Set up Webull watchlist alerts so you get notified when your stocks make big moves.</div>
+    <a class="cc-final" href="/">Take Me to the News →</a>
+  </div>
+
+  <!-- TRADINGVIEW GUIDE -->
+  <div class="cc-step" id="ccTradingview1">
+    <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Welcome to TradingView</h2>
+    <div class="cc-body">TradingView is where serious investors go to understand the market. When you first log in search for any stock you're interested in and open the chart. You'll see the price history displayed as candles. Each candle represents a period of time and tells you where the price opened, closed, and how high and low it went. Start by just exploring and getting comfortable with the layout.</div>
+    <div class="cc-tip">Follow other traders on TradingView to see how they analyze stocks. Reading their ideas is one of the fastest ways to learn.</div>
+    <button class="cc-next" onclick="showCCStep('ccTradingview2')">Next: Your First Chart Analysis →</button>
+  </div>
+  <div class="cc-step" id="ccTradingview2">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccTradingview1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">How to Read What the Chart is Telling You</h2>
+    <div class="cc-body">When a stock is making higher highs and higher lows over time that's called an uptrend and it generally means the stock is doing well. When it's making lower lows that's a downtrend. Look for where the price has bounced before. Those levels are called support and resistance and they're where a lot of traders make their decisions. You don't need to be an expert right away. Just start noticing patterns and they'll start making sense over time.</div>
+    <div class="cc-tip">Use the drawing tools in TradingView to mark levels you find interesting. Over time your charts tell your own story.</div>
+    <button class="cc-next" onclick="showCCStep('ccTradingview3')">Next: Connecting News to Charts →</button>
+  </div>
+  <div class="cc-step" id="ccTradingview3">
+    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
+    <button class="btn-back" onclick="showCCStep('ccTradingview2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">When News and Charts Come Together</h2>
+    <div class="cc-body">The most powerful skill you can build as an investor is connecting what you read in the news to what you see on the chart. A strong earnings report should show up as a spike in price and volume. A Fed rate decision can move the entire market in seconds. When you can look at a chart and understand why it moved the way it did you're thinking like a real investor. That's what Greenline News is here to help you with every single day.</div>
+    <div class="cc-tip">Bookmark Greenline News and check the headlines every morning before the market opens. Knowledge is your biggest edge.</div>
+    <a class="cc-final" href="/">Take Me to the News →</a>
+  </div>
+
+</div>
 
 <script>
 const TOTAL_PAGES = 12;
@@ -781,6 +977,24 @@ function retakeQuiz() {
 
 // Init progress bar
 document.getElementById('progressBar').style.width = '0%';
+
+/* ── CRASH COURSE ── */
+function showCrashCourse() {
+  document.getElementById('crash-course').classList.add('active');
+  document.getElementById('crash-course').scrollIntoView({ behavior: 'smooth' });
+}
+
+function showCCStep(id) {
+  document.querySelectorAll('.cc-step').forEach(s => s.classList.remove('active'));
+  const step = document.getElementById(id);
+  if (step) step.classList.add('active');
+  document.getElementById('crash-course').scrollIntoView({ behavior: 'smooth' });
+}
+
+function startGuide(app) {
+  const map = { robinhood: 'ccRobinhood1', acorns: 'ccAcorns1', webull: 'ccWebull1', tradingview: 'ccTradingview1' };
+  showCCStep(map[app] || 'ccSelect');
+}
 </script>
 </body>
 </html>
