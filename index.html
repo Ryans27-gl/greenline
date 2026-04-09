@@ -1423,8 +1423,13 @@ function obSkipToFeed() {
 
 function initOnboard() {
   if (localStorage.getItem('gl_onboarded')) {
-    document.getElementById('obOverlay')?.remove();
-    return;
+    // Overlay HTML is after </script>, so defer removal until DOM is ready
+    const remove = () => document.getElementById('obOverlay')?.remove();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', remove);
+    } else {
+      remove();
+    }
   }
 }
 
