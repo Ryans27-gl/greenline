@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Find Your Perfect Investing App — Greenline</title>
 <meta name="description" content="Not sure where to start investing? Take our free 2-minute quiz and find the perfect investing app for your goals.">
-<meta name="keywords" content="best investing app, beginner investing guide, Robinhood vs Acorns, best stock app for beginners, how to start investing, investing quiz, Webull, best brokerage app 2025">
+<meta name="keywords" content="best investing app, beginner investing guide, Robinhood vs Public, best stock app for beginners, how to start investing, investing quiz, Webull, Public.com, best brokerage app 2025">
 <meta name="author" content="Greenline News">
 <meta property="og:title" content="Find Your Perfect Investing App - Greenline News">
 <meta property="og:description" content="Take our free 2-minute quiz and get matched with the best investing app for your goals.">
@@ -609,9 +609,9 @@ nav {
         <div class="cc-select-name">Robinhood</div>
         <div class="cc-select-desc">Commission-free stock trading made simple</div>
       </div>
-      <div class="cc-select-card" onclick="startGuide('acorns')">
-        <div class="cc-select-name">Acorns</div>
-        <div class="cc-select-desc">Automatic spare change investing</div>
+      <div class="cc-select-card" onclick="startGuide('public')">
+        <div class="cc-select-name">Public</div>
+        <div class="cc-select-desc">Investing with a built-in social community</div>
       </div>
       <div class="cc-select-card" onclick="startGuide('webull')">
         <div class="cc-select-name">Webull</div>
@@ -650,29 +650,29 @@ nav {
     <a class="cc-final" href="/">Take Me to the News →</a>
   </div>
 
-  <!-- ACORNS GUIDE -->
-  <div class="cc-step" id="ccAcorns1">
+  <!-- PUBLIC GUIDE -->
+  <div class="cc-step" id="ccPublic1">
     <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
     <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="cc-headline">Welcome to Acorns</h2>
-    <div class="cc-body">Acorns is investing on autopilot. Once you link your bank account and debit card Acorns will round up every purchase you make to the nearest dollar and invest the difference for you. Buy a coffee for three dollars and fifty cents and Acorns invests fifty cents. Small amounts that add up to real money over time.</div>
-    <div class="cc-tip">Set up a recurring investment on top of your round-ups. Even five dollars a week can grow into something meaningful over a few years.</div>
-    <button class="cc-next" onclick="showCCStep('ccAcorns2')">Next: Understanding Your Portfolio →</button>
+    <h2 class="cc-headline">Welcome to Public</h2>
+    <div class="cc-body">Public is where investing meets community. When you first open the app you'll see a social feed of other investors sharing what they're buying and why. This is one of the best ways to learn as a beginner because you can see exactly how real people think about their investments. Start by linking your bank account and exploring the feed to find investors who match your style.</div>
+    <div class="cc-tip">Follow a few investors who share their reasoning before they buy. Reading their thinking is one of the fastest ways to build your own investing instincts.</div>
+    <button class="cc-next" onclick="showCCStep('ccPublic2')">Next: Making Your First Investment →</button>
   </div>
-  <div class="cc-step" id="ccAcorns2">
+  <div class="cc-step" id="ccPublic2">
     <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccAcorns1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="cc-headline">What Acorns Does With Your Money</h2>
-    <div class="cc-body">Acorns invests your money into a diversified mix of stocks and bonds based on the risk level you chose when you signed up. You don't pick individual stocks. Instead your money is spread across hundreds of companies automatically. This is called passive investing and it's one of the safest ways to build wealth over time.</div>
-    <div class="cc-tip">The key with Acorns is patience. The longer you leave your money invested the more it can grow through compound interest.</div>
-    <button class="cc-next" onclick="showCCStep('ccAcorns3')">Next: How News Affects Your Money →</button>
+    <button class="btn-back" onclick="showCCStep('ccPublic1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">Building Your First Portfolio</h2>
+    <div class="cc-body">Public lets you invest in more than just stocks. You can buy fractional shares of stocks and ETFs, crypto, treasury bonds, and even alternative assets like art and collectibles — all from the same app. Search for a company you believe in, tap Invest, and choose any dollar amount. You don't need to buy a whole share. Then check your feed to see what other investors think.</div>
+    <div class="cc-tip">Start by spreading a small amount across 3 or 4 different things. Diversifying early helps you learn how different assets behave without risking too much on any single one.</div>
+    <button class="cc-next" onclick="showCCStep('ccPublic3')">Next: How News Drives the Community →</button>
   </div>
-  <div class="cc-step" id="ccAcorns3">
+  <div class="cc-step" id="ccPublic3">
     <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccAcorns2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="cc-headline">Why the News Still Matters</h2>
-    <div class="cc-body">Even though Acorns manages your portfolio automatically the stock market still goes up and down based on what's happening in the world. When there's positive economic news like strong jobs data or company earnings your portfolio grows. During uncertain times it may dip. The important thing is not to panic and pull your money out. Staying invested through the ups and downs is what builds real wealth over time.</div>
-    <div class="cc-tip">Watching market news helps you understand why your balance changes day to day. Knowledge makes the dips a lot less scary.</div>
+    <button class="btn-back" onclick="showCCStep('ccPublic2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <h2 class="cc-headline">News Powers the Conversation</h2>
+    <div class="cc-body">The Public community lives and breathes the news. When a big story breaks, you'll see investors reacting in real time, sharing their takes, and explaining why they're buying or selling. Reading market news daily makes those conversations make sense and helps you spot trends before they show up in your feed. The investors who do best on Public are the ones who stay informed and ask questions.</div>
+    <div class="cc-tip">Bookmark Greenline News and check the headlines every morning. The more context you have the more value you'll get from the Public community.</div>
     <a class="cc-final" href="/">Take Me to the News →</a>
   </div>
 
@@ -745,13 +745,13 @@ const BROKERS = {
     how: { bestFor: 'Mobile-first beginners and active traders', beginner: 'Yes — clean, simple interface', advantage: 'Commission-free trading on stocks, ETFs, and crypto', minimum: '$1' },
     link: '/', // <!-- AFFILIATE LINK: ROBINHOOD -->
   },
-  acorns: {
-    name: 'Acorns',
-    tagline: 'Best for hands-off spare change investing',
-    desc: 'Acorns rounds up your everyday purchases and invests the spare change automatically into a diversified portfolio.',
-    features: ['Round-up investing', 'Automatic portfolios', '$5/mo', 'Retirement accounts', 'Debit card'],
-    how: { bestFor: 'Passive investors who want automatic spare change investing', beginner: 'Yes — fully automated', advantage: 'Rounds up everyday purchases and invests the difference', minimum: '$5 per month' },
-    link: '/', // <!-- AFFILIATE LINK: ACORNS -->
+  public: {
+    name: 'Public',
+    tagline: 'Best for serious investors who want a community',
+    desc: 'Public lets you invest in stocks, ETFs, crypto, bonds, and alternative assets all in one place — with a built-in social feed of real investors sharing what they buy and why.',
+    features: ['Stocks & ETFs', 'Crypto & bonds', 'Alternative assets', 'Social feed', 'Fractional shares'],
+    how: { bestFor: 'Investors who want to take investing seriously with a social community and real data', beginner: 'Yes — clean modern interface with a social feed of other investors', advantage: 'Invest in stocks, ETFs, crypto, bonds, and alternative assets all in one place with a community of real investors to learn from', minimum: '$1' },
+    link: '/', // <!-- AFFILIATE LINK: PUBLIC -->
   },
   webull: {
     name: 'Webull',
@@ -784,37 +784,37 @@ function answer(key, val) {
 }
 
 function scoreBrokers() {
-  const scores = { robinhood: 0, acorns: 0, webull: 0 };
+  const scores = { robinhood: 0, public: 0, webull: 0 };
 
   // Q1: hands-on
-  if (answers.hands === 'passive') { scores.acorns += 3; }
-  if (answers.hands === 'active')  { scores.robinhood += 2; scores.webull += 3; }
-  if (answers.hands === 'unsure')  { scores.robinhood += 2; scores.acorns += 1; }
+  if (answers.hands === 'passive') { scores.robinhood += 3; }
+  if (answers.hands === 'active')  { scores.public += 3; scores.webull += 3; scores.robinhood += 1; }
+  if (answers.hands === 'unsure')  { scores.robinhood += 3; scores.public += 1; }
 
   // Q2: amount
-  if (answers.amount === 'low')  { scores.acorns += 3; scores.robinhood += 1; }
-  if (answers.amount === 'mid')  { scores.robinhood += 3; scores.webull += 1; }
-  if (answers.amount === 'high') { scores.webull += 3; scores.robinhood += 1; }
+  if (answers.amount === 'low')  { scores.robinhood += 3; }
+  if (answers.amount === 'mid')  { scores.public += 3; scores.robinhood += 2; }
+  if (answers.amount === 'high') { scores.webull += 3; scores.public += 2; }
 
   // Q3: goal
-  if (answers.goal === 'wealth') { scores.webull += 2; scores.acorns += 1; }
-  if (answers.goal === 'trade')  { scores.webull += 3; scores.robinhood += 2; }
-  if (answers.goal === 'spare')  { scores.acorns += 3; }
+  if (answers.goal === 'wealth') { scores.public += 3; scores.webull += 1; }
+  if (answers.goal === 'trade')  { scores.webull += 3; scores.public += 2; }
+  if (answers.goal === 'spare')  { scores.robinhood += 3; }
 
   // Q4: risk
-  if (answers.risk === 'low')  { scores.acorns += 3; scores.robinhood += 1; }
-  if (answers.risk === 'mid')  { scores.robinhood += 3; scores.webull += 1; }
-  if (answers.risk === 'high') { scores.webull += 3; scores.robinhood += 1; }
+  if (answers.risk === 'low')  { scores.robinhood += 3; }
+  if (answers.risk === 'mid')  { scores.public += 3; scores.robinhood += 1; }
+  if (answers.risk === 'high') { scores.webull += 3; scores.public += 1; }
 
   // Q5: auto
-  if (answers.auto === 'yes') { scores.acorns += 3; }
-  if (answers.auto === 'no')  { scores.webull += 3; scores.robinhood += 2; }
-  if (answers.auto === 'mix') { scores.robinhood += 2; scores.webull += 1; }
+  if (answers.auto === 'yes') { scores.robinhood += 3; }
+  if (answers.auto === 'no')  { scores.webull += 3; scores.public += 2; }
+  if (answers.auto === 'mix') { scores.public += 2; scores.robinhood += 1; }
 
   // Q6: device
-  if (answers.device === 'mobile')  { scores.robinhood += 2; scores.acorns += 2; }
-  if (answers.device === 'desktop') { scores.webull += 3; scores.robinhood += 1; }
-  if (answers.device === 'any')     { scores.robinhood += 1; scores.webull += 1; }
+  if (answers.device === 'mobile')  { scores.public += 3; scores.robinhood += 2; }
+  if (answers.device === 'desktop') { scores.webull += 3; }
+  if (answers.device === 'any')     { scores.public += 1; scores.robinhood += 1; }
 
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   return sorted.map(([key]) => key);
@@ -824,8 +824,8 @@ function shouldShowTVPrimary() {
   let tvScore = 0;
   if (answers.hands === 'active') tvScore += 2;
   if (answers.auto === 'no') tvScore += 2;
-  if (answers.amount === 'high') tvScore += 1;
-  if (answers.risk === 'mid' || answers.risk === 'high') tvScore += 1;
+  if (answers.amount === 'mid' || answers.amount === 'high') tvScore += 1;
+  if (answers.risk && answers.risk !== 'low') tvScore += 1;
   return tvScore >= 3;
 }
 
@@ -839,13 +839,13 @@ function getReasons(key) {
     if (r.length < 2) r.push('Commission-free trading with a clean, beginner-friendly interface');
     if (r.length < 3) r.push('Instant deposits so you can start investing right away');
   }
-  if (key === 'acorns') {
-    if (answers.hands === 'passive') r.push('You want a hands-off approach — Acorns automates everything');
-    if (answers.goal === 'spare') r.push('Spare change investing matches your savings style perfectly');
-    if (answers.auto === 'yes') r.push('You want it automatic — Acorns invests without you thinking about it');
-    if (answers.amount === 'low') r.push('Start with as little as $1, no large deposit needed');
-    if (r.length < 2) r.push('Round-up investing turns everyday purchases into investments');
-    if (r.length < 3) r.push('Diversified portfolios managed by experts, zero effort required');
+  if (key === 'public') {
+    if (answers.hands === 'active') r.push('You want to pick your own stocks — Public makes it social and educational');
+    if (answers.goal === 'wealth') r.push('You want to take investing seriously and build real wealth over time');
+    if (answers.device === 'mobile') r.push('You prefer investing on your phone — Public has one of the cleanest mobile apps');
+    if (answers.amount === 'mid' || answers.amount === 'high') r.push('Perfect for starting with $100+ across stocks, ETFs, crypto, and bonds');
+    if (r.length < 2) r.push('Built-in social feed lets you learn from real investors as you go');
+    if (r.length < 3) r.push('Invest in stocks, ETFs, crypto, bonds, and alternatives all in one app');
   }
   if (key === 'webull') {
     if (answers.hands === 'active') r.push('You want to pick your own stocks — Webull gives you advanced tools to do it right');
@@ -894,7 +894,7 @@ function showResults() {
 
   const tvPrimary = shouldShowTVPrimary();
   const tvExtra = ranked[0] === 'webull' ? '<div class="tv-extra">Webull traders love TradingView for advanced charting and technical analysis.</div>' : '';
-  const pairingBroker = ranked[0] === 'acorns' ? BROKERS.robinhood : BROKERS[ranked[0]];
+  const pairingBroker = BROKERS[ranked[0]] || BROKERS.public;
 
   document.getElementById('resultContent').innerHTML = `
     <!-- AFFILIATE LINK: TRADINGVIEW -->
@@ -1004,7 +1004,7 @@ function showCrashCourse() {
 }
 
 function startGuide(app) {
-  const map = { robinhood: 'ccRobinhood1', acorns: 'ccAcorns1', webull: 'ccWebull1', tradingview: 'ccTradingview1' };
+  const map = { robinhood: 'ccRobinhood1', public: 'ccPublic1', webull: 'ccWebull1', tradingview: 'ccTradingview1' };
   showCCStep(map[app] || 'ccRobinhood1');
 }
 
