@@ -1,49 +1,5 @@
-// Simple in-memory cache: { key: { data, expires } }
-const cache = {};
-
-async function fetchOgImage(url) {
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 2000);
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { 'User-Agent': 'Greenline/1.0' },
-      redirect: 'follow',
-    });
-    clearTimeout(timer);
-    if (!res.ok) return null;
-    const html = await res.text();
-    const head = html.slice(0, 50000);
-
-    const ogMatch = head.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
-      || head.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
-    if (ogMatch) return ogMatch[1];
-
-    const twMatch = head.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)
-      || head.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
-    if (twMatch) return twMatch[1];
-
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 exports.handler = async (event) => {
-  console.log('news.js called, cat:', event.queryStringParameters?.cat || 'all');
-
   const cat = event.queryStringParameters?.cat || 'all';
-
-  // Check cache (5 minute TTL)
-  const cacheKey = `feed_${cat}`;
-  const cached = cache[cacheKey];
-  if (cached && cached.expires > Date.now()) {
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, s-maxage=900, max-age=300' },
-      body: cached.data,
-    };
-  }
 
   const FEEDS = {
     all: [
@@ -86,6 +42,7 @@ exports.handler = async (event) => {
   const articles = [];
   const errors = [];
 
+  // Fetch feeds sequentially in pairs to avoid rss2json rate limits
   for (let i = 0; i < feeds.length; i += 2) {
     const batch = feeds.slice(i, i + 2);
     const results = await Promise.allSettled(batch.map(async (feedUrl) => {
@@ -100,7 +57,6 @@ exports.handler = async (event) => {
         url: item.link,
         publishedAt: item.pubDate || new Date().toISOString(),
         source: { name: sourceName },
-        thumbnail: item.thumbnail || null,
       }));
     }));
 
@@ -129,31 +85,12 @@ exports.handler = async (event) => {
     .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
     .slice(0, 10);
 
-  const finalArticles = fresh.length >= 3 ? fresh : unique.slice(0, 10);
-
-  // Try to fetch OG images — completely optional, must not block articles
-  try {
-    await Promise.allSettled(finalArticles.map(async (article) => {
-      if (article.thumbnail) return;
-      if (!article.url || article.url === '#') return;
-      const img = await fetchOgImage(article.url);
-      if (img) article.thumbnail = img;
-    }));
-  } catch (e) {
-    console.log('OG scraping failed, continuing without thumbnails:', e.message);
-  }
-
-  const body = JSON.stringify({
-    articles: finalArticles,
-    feedErrors: errors.length > 0 ? errors : undefined,
-  });
-
-  // Cache for 5 minutes
-  cache[cacheKey] = { data: body, expires: Date.now() + 5 * 60 * 1000 };
-
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, s-maxage=900, max-age=300' },
-    body,
+    body: JSON.stringify({
+      articles: fresh.length >= 3 ? fresh : unique.slice(0, 10),
+      feedErrors: errors.length > 0 ? errors : undefined,
+    })
   };
 };
