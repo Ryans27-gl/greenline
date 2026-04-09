@@ -674,15 +674,43 @@ const CAT_STOCKS = {
   markets:['SPY','QQQ','DIA','AAPL','NVDA'],
 };
 const KEYWORD_STOCKS = {
-  'AAPL':['apple','iphone','ipad','macos','tim cook'],'MSFT':['microsoft','azure','windows','openai'],
-  'NVDA':['nvidia','gpu','jensen huang','ai chip'],'GOOGL':['google','alphabet','youtube','gemini'],
-  'AMZN':['amazon','aws','bezos'],'META':['meta','facebook','instagram','zuckerberg'],
-  'TSLA':['tesla','musk','electric vehicle','ev'],'XOM':['exxon','opec','crude','oil price'],
-  'CVX':['chevron'],'JPM':['jpmorgan','dimon','chase bank'],'GS':['goldman sachs'],
-  'LLY':['eli lilly','ozempic','wegovy','glp-1','obesity drug'],'PFE':['pfizer'],
-  'JNJ':['johnson & johnson'],'SPY':['s&p 500','stock market rally'],'GLD':['gold price'],
-  'TLT':['treasury','bond yield'],'NEE':['nextera','renewable energy','solar','wind energy'],
+  'AAPL':['apple','iphone','ipad','macos','tim cook','app store'],
+  'MSFT':['microsoft','azure','windows','satya nadella','xbox','copilot'],
+  'NVDA':['nvidia','gpu','jensen huang','ai chip','geforce','cuda'],
+  'GOOGL':['google','alphabet','youtube','gemini','waymo','sundar pichai'],
+  'AMZN':['amazon','aws','bezos','prime','alexa'],
+  'META':['meta platforms','facebook','instagram','zuckerberg','whatsapp','threads'],
+  'TSLA':['tesla','elon musk','electric vehicle',' ev ','cybertruck','spacex'],
+  'NFLX':['netflix'],
+  'AMD':['amd',' amd ','advanced micro','lisa su'],
+  'INTC':['intel','pat gelsinger'],
+  'JPM':['jpmorgan','jp morgan','jamie dimon','chase bank'],
+  'GS':['goldman sachs','goldman'],
+  'BAC':['bank of america','bofa'],
+  'XOM':['exxon','exxonmobil'],
+  'CVX':['chevron'],
+  'DIS':['disney','disney+'],
+  'WMT':['walmart'],
+  'BRK-A':['berkshire','warren buffett','buffett'],
+  'V':['visa'],
+  'MA':['mastercard'],
+  'PYPL':['paypal'],
+  'UBER':['uber'],
+  'ABNB':['airbnb'],
+  'SPOT':['spotify'],
+  'LLY':['eli lilly','ozempic','wegovy','glp-1','obesity drug'],
+  'PFE':['pfizer'],
+  'JNJ':['johnson & johnson','j&j'],
+  'NEE':['nextera','renewable energy','solar energy','wind energy'],
+  'SPY':['s&p 500','s&p500','sp500'],
+  'QQQ':['nasdaq','nasdaq 100'],
+  'DIA':['dow jones','dow industrials'],
+  'GLD':['gold price','gold futures','gold surges','gold drops'],
+  'TLT':['treasury','bond yield','10-year','30-year'],
 };
+const MARKET_GENERAL_KEYWORDS = ['fed ','federal reserve','interest rate','inflation','recession','bull market','bear market','market crash','market rally','rate hike','rate cut','economic','gdp ','jobs report','unemployment','tariff','trade war','debt ceiling'];
+const ENERGY_KEYWORDS = ['oil','crude','opec','energy sector','oil price','brent','wti'];
+const CRYPTO_KEYWORDS = ['bitcoin','crypto','ethereum','btc','blockchain'];
 const TICKER_SYMS = ['AAPL','MSFT','NVDA','GOOGL','AMZN','META','TSLA','XOM','JPM','LLY','V','JNJ','WMT','GS','BRK-A'];
 
 let stockCache = {};
@@ -1055,10 +1083,10 @@ async function makeCard(article, cat, idx) {
       ${(article.description && !/^click to read/i.test(article.description.trim()) && article.description.trim().length > 20) ? `<div class="card-summary">${article.description}</div>` : ''}
       <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
     </div>
-    <div class="stock-widget">
+    ${symbols.length?`<div class="stock-widget">
       <div class="sw-label">Stocks that may be affected</div>
       <div class="stocks-row">${chipsHtml}</div>
-    </div>
+    </div>`:''}
     <div class="card-actions">
       <button class="act-btn ${saved?'saved':''}" data-saveid="${id}">
         <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
@@ -1101,10 +1129,15 @@ function copyLink(url){navigator.clipboard.writeText(url).catch(()=>{});showToas
 /* ── LOAD FEED ── */
 /* ── HELPERS ── */
 function pickStocks(article, cat) {
-  const text = ((article.title||'')+(article.description||'')).toLowerCase();
+  const text = (' '+(article.title||'')+' '+(article.description||'')+' ').toLowerCase();
   const matched = [];
   Object.entries(KEYWORD_STOCKS).forEach(([sym,words]) => { if (words.some(w=>text.includes(w))) matched.push(sym); });
-  return [...new Set([...matched,...(CAT_STOCKS[cat]||CAT_STOCKS.all)])].slice(0,4);
+  // General market news → show ETFs
+  if (matched.length === 0 && MARKET_GENERAL_KEYWORDS.some(k=>text.includes(k))) { matched.push('SPY','QQQ'); }
+  // Energy news → show energy stocks
+  if (matched.length === 0 && ENERGY_KEYWORDS.some(k=>text.includes(k))) { matched.push('XOM','CVX'); }
+  // If still nothing relevant, show nothing
+  return [...new Set(matched)].slice(0,5);
 }
 
 function pickIcon(article, cat) {
@@ -1201,10 +1234,10 @@ function makeCardFast(article, cat, idx) {
       ${(article.description && !/^click to read/i.test(article.description.trim()) && article.description.trim().length > 20) ? `<div class="card-summary">${article.description}</div>` : ''}
       <a class="read-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="openArticle(this,'${url}');return false;">Read full article →</a>
     </div>
-    <div class="stock-widget">
+    ${symbols.length?`<div class="stock-widget">
       <div class="sw-label">Stocks that may be affected</div>
       <div class="stocks-row">${chipsHtml}</div>
-    </div>
+    </div>`:''}
     <div class="card-actions">
       <button class="act-btn ${saved?'saved':''}" data-saveid="${id}">
         <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>

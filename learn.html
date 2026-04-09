@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Find Your Perfect Investing App — Greenline</title>
-<meta name="description" content="New to investing? Take our 2-minute quiz to find the best broker for your goals. Greenline matches you with Robinhood, Acorns, Webull, or Fidelity.">
+<meta name="description" content="New to investing? Take our 2-minute quiz to find the best broker for your goals. Greenline matches you with Robinhood, Acorns, or Webull.">
 <meta name="theme-color" content="#111a0f">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -426,19 +426,11 @@ const BROKERS = {
   },
   webull: {
     name: 'Webull',
-    tagline: 'Best for active trading and charting',
-    desc: 'Webull offers advanced charts, technical indicators, extended-hours trading, and paper trading to practice risk-free.',
-    features: ['Advanced charting', 'Paper trading', 'Extended hours', 'Zero commissions', 'Options trading'],
-    how: { bestFor: 'Intermediate traders wanting advanced tools', beginner: 'Moderate — has a learning curve', advantage: 'Advanced charting, extended hours, and paper trading', minimum: '$1' },
+    tagline: 'Best for active traders who want advanced tools',
+    desc: 'Webull offers advanced charting, extended-hours trading, paper trading to practice with no real money, and commission-free trades. Great free education resources are built right into the app.',
+    features: ['Advanced charting', 'Paper trading', 'Extended hours', 'Zero commissions', 'Free education'],
+    how: { bestFor: 'Active traders who want advanced tools and detailed market data', beginner: 'Moderate — has a learning curve but great free education resources built in', advantage: 'Advanced charting, extended hours trading, paper trading to practice with no real money, and commission free', minimum: '$1' },
     link: '/', // <!-- AFFILIATE LINK: WEBULL -->
-  },
-  fidelity: {
-    name: 'Fidelity',
-    tagline: 'Best for long-term wealth and retirement',
-    desc: 'Fidelity manages over $4 trillion in assets and offers zero-fee index funds, retirement accounts, and world-class research.',
-    features: ['Zero-fee index funds', 'IRA & 401k', 'No minimums', 'Research tools', 'Fractional shares'],
-    how: { bestFor: 'Long-term investors and retirement planning', beginner: 'Yes — trusted and well-established', advantage: 'No minimums, great research and support', minimum: '$0' },
-    link: '/', // <!-- AFFILIATE LINK: FIDELITY -->
   }
 };
 
@@ -463,37 +455,37 @@ function answer(key, val) {
 }
 
 function scoreBrokers() {
-  const scores = { robinhood: 0, acorns: 0, webull: 0, fidelity: 0 };
+  const scores = { robinhood: 0, acorns: 0, webull: 0 };
 
   // Q1: hands-on
-  if (answers.hands === 'passive') { scores.acorns += 3; scores.fidelity += 1; }
+  if (answers.hands === 'passive') { scores.acorns += 3; }
   if (answers.hands === 'active')  { scores.robinhood += 2; scores.webull += 3; }
   if (answers.hands === 'unsure')  { scores.robinhood += 2; scores.acorns += 1; }
 
   // Q2: amount
   if (answers.amount === 'low')  { scores.acorns += 3; scores.robinhood += 1; }
   if (answers.amount === 'mid')  { scores.robinhood += 3; scores.webull += 1; }
-  if (answers.amount === 'high') { scores.webull += 2; scores.fidelity += 3; }
+  if (answers.amount === 'high') { scores.webull += 3; scores.robinhood += 1; }
 
   // Q3: goal
-  if (answers.goal === 'wealth') { scores.fidelity += 3; scores.acorns += 1; }
+  if (answers.goal === 'wealth') { scores.webull += 2; scores.acorns += 1; }
   if (answers.goal === 'trade')  { scores.webull += 3; scores.robinhood += 2; }
   if (answers.goal === 'spare')  { scores.acorns += 3; }
 
   // Q4: risk
-  if (answers.risk === 'low')  { scores.acorns += 2; scores.fidelity += 3; }
-  if (answers.risk === 'mid')  { scores.robinhood += 3; scores.fidelity += 1; }
+  if (answers.risk === 'low')  { scores.acorns += 3; scores.robinhood += 1; }
+  if (answers.risk === 'mid')  { scores.robinhood += 3; scores.webull += 1; }
   if (answers.risk === 'high') { scores.webull += 3; scores.robinhood += 1; }
 
   // Q5: auto
-  if (answers.auto === 'yes') { scores.acorns += 3; scores.fidelity += 1; }
-  if (answers.auto === 'no')  { scores.webull += 2; scores.robinhood += 3; }
-  if (answers.auto === 'mix') { scores.robinhood += 2; scores.fidelity += 2; }
+  if (answers.auto === 'yes') { scores.acorns += 3; }
+  if (answers.auto === 'no')  { scores.webull += 3; scores.robinhood += 2; }
+  if (answers.auto === 'mix') { scores.robinhood += 2; scores.webull += 1; }
 
   // Q6: device
   if (answers.device === 'mobile')  { scores.robinhood += 2; scores.acorns += 2; }
-  if (answers.device === 'desktop') { scores.fidelity += 2; scores.webull += 2; }
-  if (answers.device === 'any')     { scores.robinhood += 1; scores.fidelity += 1; }
+  if (answers.device === 'desktop') { scores.webull += 3; scores.robinhood += 1; }
+  if (answers.device === 'any')     { scores.robinhood += 1; scores.webull += 1; }
 
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   return sorted.map(([key]) => key);
@@ -518,20 +510,14 @@ function getReasons(key) {
     if (r.length < 3) r.push('Diversified portfolios managed by experts, zero effort required');
   }
   if (key === 'webull') {
+    if (answers.hands === 'active') r.push('You want to pick your own stocks — Webull gives you advanced tools to do it right');
     if (answers.goal === 'trade') r.push('You want to actively trade — Webull has the best charting tools');
     if (answers.risk === 'high') r.push('You\'re ready to go big — Webull gives you the tools for it');
     if (answers.device === 'desktop') r.push('Advanced desktop platform with professional-grade charts');
-    if (answers.amount === 'high') r.push('Built for serious investors with larger portfolios');
+    if (answers.amount === 'high') r.push('Built for serious investors with $1,000+ to start');
+    if (answers.auto === 'no') r.push('Full control over every trade — no auto-investing, just you and the market');
     if (r.length < 2) r.push('Paper trading lets you practice with fake money before risking real cash');
     if (r.length < 3) r.push('Extended hours trading from 4am to 8pm gives you more opportunities');
-  }
-  if (key === 'fidelity') {
-    if (answers.goal === 'wealth') r.push('You want to build long-term wealth — Fidelity is the gold standard');
-    if (answers.risk === 'low') r.push('You prefer playing it safe — Fidelity\'s index funds are ultra-low risk');
-    if (answers.amount === 'high') r.push('Best research and tools for investors with $1,000+');
-    if (answers.auto === 'yes') r.push('Target-date retirement funds do all the work for you');
-    if (r.length < 2) r.push('Zero-fee index funds (FZROX, FZILX) — literally $0 in fees');
-    if (r.length < 3) r.push('Trusted by millions with $4+ trillion in assets under management');
   }
   return r.slice(0, 3);
 }
