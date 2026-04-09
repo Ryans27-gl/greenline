@@ -12,7 +12,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Greenline | Live Market News & Stock Tracker</title>
-<meta name="description" content="Stay ahead of the market with Greenline. Live financial news, real-time stock prices, AI-powered explanations, and a personal watchlist — all in one clean, fast dashboard.">
+<meta name="description" content="Greenline News delivers real-time stock market news, live prices and AI-powered article explanations for everyday investors.">
+<meta name="keywords" content="stock market news, investing news, real-time stocks, market updates, beginner investing, stock prices, financial news, AI investing, Robinhood, Acorns, stock market today">
+<meta name="author" content="Greenline News">
 <meta name="theme-color" content="#111a0f">
 <meta name='impact-site-verification' value='6aafa0bd-1343-46c8-9767-0237729e60a3'>
 <link rel="manifest" href="/manifest.json">
@@ -20,14 +22,14 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://greenlinenews.com">
-<meta property="og:title" content="Greenline | Live Market News & Stock Tracker">
-<meta property="og:description" content="Live financial news, real-time stock prices, AI-powered explanations, and a personal watchlist — all in one clean, fast dashboard.">
+<meta property="og:title" content="Greenline News - Real-Time Stock Market News">
+<meta property="og:description" content="Live market news and AI-powered explanations for everyday investors.">
 <meta property="og:image" content="https://greenlinenews.com/brand/social/og-image.svg">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Greenline | Live Market News & Stock Tracker">
-<meta name="twitter:description" content="Live financial news, real-time stock prices, AI-powered explanations, and a personal watchlist.">
+<meta name="twitter:title" content="Greenline News">
+<meta name="twitter:description" content="Real-time stock market news explained simply.">
 <meta name="twitter:image" content="https://greenlinenews.com/brand/social/og-image.svg">
 
 <link rel="apple-touch-icon" href="/brand/favicon/favicon-192.png">
@@ -544,6 +546,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
     <div class="nav-links">
       <button class="nav-link active" id="navFeed" onclick="showPage('feed')">Feed</button>
       <button class="nav-link" id="navWatchlist" onclick="showPage('watchlist')">Watchlist</button>
+      <a class="nav-link" href="/learn.html">Guide</a>
     </div>
 
     <select class="cat-select" id="filters" onchange="activeFilter=this.value;loadFeed(this.value)">
@@ -1096,13 +1099,13 @@ async function makeCard(article, cat, idx) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share
       </button>
+      <a class="act-btn" href="https://reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(article.title)}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="14" r="7"/><line x1="12" y1="7" x2="16" y2="3"/><circle cx="17" cy="3" r="2"/><circle cx="9" cy="13" r="1.2" fill="currentColor"/><circle cx="15" cy="13" r="1.2" fill="currentColor"/><path d="M9 17c1.5 1.2 4.5 1.2 6 0"/></svg>
+        Reddit
+      </a>
       <button class="act-btn" onclick="explainArticle(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         Explain
-      </button>
-      <button class="act-btn" onclick="showToast('Discussions coming soon!')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Discuss
       </button>
     </div>`;
   div.querySelector('[data-saveid]').onclick=()=>toggleSave(id,div);
@@ -1247,6 +1250,10 @@ function makeCardFast(article, cat, idx) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share
       </button>
+      <a class="act-btn" href="https://reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(article.title)}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="14" r="7"/><line x1="12" y1="7" x2="16" y2="3"/><circle cx="17" cy="3" r="2"/><circle cx="9" cy="13" r="1.2" fill="currentColor"/><circle cx="15" cy="13" r="1.2" fill="currentColor"/><path d="M9 17c1.5 1.2 4.5 1.2 6 0"/></svg>
+        Reddit
+      </a>
       <button class="act-btn" onclick="explainArticle(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         Explain
@@ -1568,10 +1575,10 @@ if ('serviceWorker' in navigator) {
 <section class="signup-banner">
   <div class="signup-inner">
     <div class="signup-title">Get <span>Greenline</span> updates</div>
-    <div class="signup-sub">Early access to new features, market insights, and app launch news. No spam, unsubscribe anytime.</div>
+    <div class="signup-sub">Join investors getting our weekly market recap every Sunday morning. No spam, unsubscribe anytime.</div>
     <div class="signup-form">
       <input class="signup-email" id="signupEmail" type="email" placeholder="your@email.com" />
-      <button class="signup-btn" id="signupBtn" onclick="submitSignup()">Subscribe</button>
+      <button class="signup-btn" id="signupBtn" onclick="submitSignup()">Get Weekly Recap</button>
     </div>
     <div class="signup-msg" id="signupMsg"></div>
   </div>
@@ -1580,6 +1587,7 @@ if ('serviceWorker' in navigator) {
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-links">
+      <a href="/learn.html">Beginner Guide</a>
       <a href="/legal/privacy-policy.html">Privacy Policy</a>
       <a href="/legal/terms-of-service.html">Terms of Service</a>
       <a href="/legal/disclaimer.html">Disclaimer</a>
