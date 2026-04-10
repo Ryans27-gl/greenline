@@ -7,7 +7,7 @@ Target audience: Women 45-65 who are newly divorced, widowed, or managing their 
 - Never use the word "empowering" (it's overused to the point of being patronizing)
 - Acknowledge real feelings (overwhelm, shame for "not knowing")
 - Offer genuine help, not a sales pitch
-- Link to the gentle landing page: `/starting-over.html` (not the main feed)
+- Link to the main site (greenlinenews.com) — the beginner guide is at /learn.html
 
 **Where this audience hangs out (in order of value):**
 1. Facebook Groups (biggest — this demo is heavy on Facebook, lighter on Reddit)
@@ -33,7 +33,7 @@ Target audience: Women 45-65 who are newly divorced, widowed, or managing their 
 
 ---
 
-### Post #1 — Soft Intro (Day 1)
+### Post #1 — Soft Intro (Day 1, no link)
 
 ```
 Has anyone else felt completely lost trying to figure out investing 
@@ -50,22 +50,29 @@ I'd love to chat. We've got this.
 ```
 
 *(Don't link anywhere on this one. Just be a real human. People 
-will ask for your resources in the comments.)*
+will ask for your resources in the comments — that's when you 
+drop the link.)*
 
 ---
 
-### Post #2 — Resource Share (Day 3-5, only after post 1 got engagement)
+### Post #2 — Resource Share (Day 3-5, only after Post #1 got engagement)
 
 ```
-A few of you asked me to share what I've been reading. I put 
-together a free guide with the steps I wish someone had walked 
-me through. No fancy finance terms, no trying to sell anything — 
-just the basics in plain English.
+A few of you asked me to share what I've been reading. Honestly 
+the thing that clicked for me was finding a news site that 
+explains headlines in plain English instead of jargon.
 
-It's at greenlinenews.com/starting-over
+I've been using greenlinenews.com — it has a button on every 
+article that breaks down what the news actually means and which 
+stocks it affects, without treating you like you need a finance 
+degree. Free, no signup.
 
-If it helps even one of you feel less overwhelmed, it was worth 
-writing. Please share with anyone else who's going through this. 💚
+There's also a quick quiz at greenlinenews.com/learn that matches 
+you with the right beginner-friendly investing app for your goals. 
+It recommended Public for me which has a built-in community and 
+lots of learning tools.
+
+Hope that helps someone else who's in the same boat. 💚
 ```
 
 ---
@@ -86,14 +93,15 @@ that I should already know this stuff. That I was decades behind
 everyone else.
 
 Here's what I wish someone had told me: you're not behind. The 
-finance industry talks in jargon on purpose so that regular people 
+finance industry talks in jargon on purpose so regular people 
 feel stupid. It's not you. The basics are actually simple — an 
 index fund, a savings account, and patience. That's most of it.
 
-I'm not a financial advisor. I'm just a woman who got tired of 
-feeling lost and started writing things down. If you're in the 
-same boat and want to start somewhere gentle, I put everything I 
-learned at greenlinenews.com/starting-over. Totally free. 
+One thing that helped was finding a news site called Greenline 
+(greenlinenews.com) that has an AI button on every article 
+explaining what the news means for beginners. It's free and there's 
+no pressure. If you're in the same boat, it's a gentle place to 
+start reading.
 
 You've already survived harder things than this. You've got this.
 ```
@@ -130,9 +138,10 @@ Here's what I wish someone had told me in month one:
 4. The finance industry uses jargon to make you feel dumb. You 
    are not dumb. You just weren't taught.
 
-I put together a plain-English guide that walks through this 
-stuff gently at greenlinenews.com/starting-over if anyone wants 
-to look. It's free, no signup, no selling.
+One resource that helped me a lot is greenlinenews.com — it's a 
+free market news site that has an AI button explaining every 
+headline in plain English. No signup, no condescension. Reading 
+it daily made finance start clicking for me after about a month.
 
 Happy to answer questions in the comments. We've all been there.
 ```
@@ -141,7 +150,7 @@ Happy to answer questions in the comments. We've all been there.
 
 ### r/TwoXChromosomes (13M members — stricter rules, read before posting)
 
-**Title:** I built a free plain-English finance resource for women who were never taught this stuff
+**Title:** Free plain-English finance news site for anyone who was never taught this stuff
 
 **Body:**
 ```
@@ -153,17 +162,14 @@ similar situations, I got frustrated that every finance resource
 online either assumed you already knew everything or talked to 
 you like you were 12.
 
-So I wrote one that doesn't do either. It's a gentle walkthrough 
-of what to actually do — know what you have, set up an emergency 
-fund, buy an index fund, learn as you go. No jargon, no shaming 
-for "not knowing."
+I've been using a site called Greenline News (greenlinenews.com) 
+that breaks financial headlines down in plain English with an AI 
+button on each article. It's free, no signup, no sales pitch. 
+There's also a quick quiz at greenlinenews.com/learn that matches 
+you with beginner-friendly investing apps based on your goals.
 
-It's at greenlinenews.com/starting-over. Free, no signup, no sales 
-pitch at the end. If it helps even one of you feel less alone, 
-great.
-
-If you've got tips to add from your own experience, drop them 
-below — I'd love to make the guide better.
+If you've got other resources you'd recommend, drop them below — 
+I'm always looking for more.
 ```
 
 ---
@@ -216,11 +222,11 @@ Pinterest is HUGE for women 45-65. This is probably your best channel.
    - "A Beginner's Guide to Investing (No Jargon)"
    - "How to Start Investing After 50"
    - "The Only 4 Investing Terms You Need to Know"
-3. Each pin links to `/starting-over.html` or the blog post
+3. Each pin links to greenlinenews.com or greenlinenews.com/learn.html
 4. Pin 5-10 per week consistently
 
 **Pin text examples** (put these ON the image as the main text):
-- "You're not behind. You're just starting now." (taken from our landing page)
+- "You're not behind. You're just starting now."
 - "5 Steps to Manage Your Money After Divorce"
 - "The Finance Guide I Wish I Had at 50"
 - "Index Funds Explained in 2 Minutes"
@@ -244,21 +250,19 @@ audiences that would genuinely appreciate the content:
 ```
 Hi [Name],
 
-I'm a [developer/writer/etc] who built a free plain-English finance 
-resource aimed at women managing their own money for the first time, 
-often after divorce. No signup, no sales pitch — just a gentle 
-walkthrough of the basics.
+I've been using a free market news site called Greenline News 
+(greenlinenews.com) that I think would genuinely help your readers. 
+It explains financial headlines in plain English with a built-in 
+AI button, and it has a free beginner-friendly quiz at 
+greenlinenews.com/learn that matches people with the right 
+investing app for their goals.
 
-I thought it might be useful to your readers who are going through 
-similar transitions. The landing page is at:
+It's aimed at everyday beginners — including a lot of women 
+managing their own finances for the first time. No signup, no 
+paywall, no sales pitch.
 
-https://greenlinenews.com/starting-over
-
-And a related blog post:
-https://greenlinenews.com/blog/finance-after-divorce.html
-
-Happy to chat, answer questions, or write something custom for your 
-audience if you're interested.
+Thought it might be worth a mention in your newsletter. Happy to 
+chat if you want more info.
 
 Thanks,
 [Your name]
