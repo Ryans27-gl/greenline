@@ -111,6 +111,10 @@ nav { background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255
 
 /* TICKER */
 .ticker-strip { background: var(--ticker-bg); border-bottom: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #f0ead0; padding: 7px 0; overflow: hidden; white-space: nowrap; }
+
+/* CRYPTO NAV LINK */
+.nav-link.crypto { display: inline-flex; align-items: center; gap: 5px; }
+.nav-link.crypto::before { content: '₿'; font-size: 14px; color: #f7931a; }
 .ticker-track { display: inline-block; animation: ticker 55s linear infinite; }
 @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 .t-item { display: inline-block; margin-right: 48px; }
@@ -556,7 +560,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
       <button class="nav-link active" id="navFeed" onclick="showPage('feed')">Feed</button>
       <button class="nav-link" id="navWatchlist" onclick="showPage('watchlist')">Watchlist</button>
       <a class="nav-link" href="/learn.html">Guide</a>
-      <a class="nav-link" href="/crypto-learn.html">Crypto</a>
+      <a class="nav-link crypto" href="/crypto-learn.html">New to Crypto?</a>
     </div>
 
     <select class="cat-select" id="filters" onchange="activeFilter=this.value;loadFeed(this.value)">
