@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,1.5 L10,5 L0,8.5 Z" fill="#f0ead0"/>
+    </marker>
+  </defs>
+  <rect width="1080" height="1350" fill="#111a0f"/>
+  <text x="540" y="540" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="100" font-weight="700" fill="#f0ead0" letter-spacing="-3">Learn how</text>
+  <text x="540" y="660" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="100" font-weight="700" fill="#f0ead0" letter-spacing="-3">to invest.</text>
+  <text x="540" y="760" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="36" font-weight="300" fill="#7a9470">Simple, beginner-friendly market news.</text>
+  <g transform="translate(280, 980)">
+    <rect width="520" height="86" rx="43" fill="#0d150b" stroke="rgba(138,184,106,0.2)" stroke-width="1"/>
+    <rect x="11" y="11" width="64" height="64" rx="14" fill="#6a9e52"/>
+    <polyline points="21,60 33,44 40,50 62,22" fill="none" stroke="#f0ead0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+    <text x="92" y="56" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="34" font-weight="700"><tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan></text>
+  </g>
+</svg>

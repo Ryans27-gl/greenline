@@ -1,3 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /legal/nda.html
+Disallow: /legal/contractor-agreement.html
+
 Sitemap: https://greenlinenews.com/sitemap.xml
