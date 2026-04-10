@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGQPJZRXEQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NGQPJZRXEQ');
+</script>
+
+<!-- Google Ads (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18077038385"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18077038385');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn Crypto — Greenline News</title>
+<meta name="description" content="New to crypto? Learn the basics and take our free 2-minute quiz to find the perfect crypto platform for your goals.">
+<meta name="keywords" content="how to buy bitcoin, crypto for beginners, best crypto exchange, Coinbase vs Robinhood, ChangeNOW, crypto wallet, Bitcoin basics, altcoins, crypto quiz, beginner crypto guide">
+<meta name="author" content="Greenline News">
+<meta property="og:title" content="Learn Crypto — Greenline News">
+<meta property="og:description" content="Take our free 2-minute quiz and get matched with the best crypto platform for your goals.">
+<meta property="og:url" content="https://greenlinenews.com/crypto-learn">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#111a0f">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --nav-bg: #111a0f; --bg: #f2ead8; --card: #faf6ee;
+  --nav-text: #f0ead0; --nav-text2: #7a9470; --nav-text3: #3a5434;
+  --matcha: #6a9e52; --matcha-lt: #8ab86a;
+  --text: #1e1a10; --text2: #5a5040; --text3: #9a8e78;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: #0d140b; color: var(--nav-text);
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px);
+}
+.nav-inner {
+  max-width: 1080px; margin: 0 auto; padding: 0 32px;
+  height: 68px; display: flex; align-items: center; gap: 24px;
+}
+.logo { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; cursor: pointer; }
+.logo svg { height: 38px; width: auto; display: block; }
+
+/* PROGRESS BAR */
+.progress-wrap {
+  position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
+  background: rgba(17,26,15,0.95); padding: 0; height: 4px;
+}
+.progress-bar {
+  height: 100%; background: var(--matcha-lt); border-radius: 0 2px 2px 0;
+  transition: width 0.4s ease; width: 0%;
+}
+
+/* CONTAINER */
+.learn-container {
+  max-width: 900px; margin: 0 auto;
+  padding: 56px 24px 80px; min-height: calc(100vh - 72px);
+}
+.page:not(#page10) { max-width: 600px; margin: 0 auto; }
+
+/* PAGES */
+.page { display: none; animation: pageFadeIn 0.4s ease; }
+.page.active { display: block; }
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* TYPOGRAPHY */
+.page-icon { font-size: 56px; text-align: center; margin-bottom: 20px; }
+.page-headline {
+  font-size: 32px; font-weight: 700; text-align: center;
+  line-height: 1.25; margin-bottom: 16px;
+}
+.page-headline span { color: var(--matcha-lt); }
+.page-sub {
+  font-size: 16px; color: var(--nav-text2); text-align: center;
+  line-height: 1.7; font-weight: 300; margin-bottom: 40px;
+  max-width: 480px; margin-left: auto; margin-right: auto;
+}
+.page-body {
+  font-size: 15px; color: #9a9480; line-height: 1.8; font-weight: 300;
+  margin-bottom: 32px; text-align: center;
+  max-width: 480px; margin-left: auto; margin-right: auto;
+}
+.page-analogy {
+  background: rgba(138,184,106,0.08); border: 1px solid rgba(138,184,106,0.12);
+  border-radius: 16px; padding: 20px 24px; margin-bottom: 36px;
+  font-size: 14px; color: var(--matcha-lt); line-height: 1.7; font-weight: 400;
+  text-align: center;
+}
+.page-analogy::before {
+  content: '💡'; display: block; font-size: 24px; margin-bottom: 8px;
+}
+
+/* QUIZ OPTIONS */
+.quiz-q { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 28px; }
+.quiz-option {
+  display: block; width: 100%; padding: 20px 24px; border-radius: 16px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  color: var(--nav-text); font-family: 'Sora', sans-serif; font-size: 15px;
+  font-weight: 500; cursor: pointer; transition: all 0.2s;
+  margin-bottom: 12px; text-align: left;
+}
+.quiz-option:hover {
+  background: rgba(138,184,106,0.1); border-color: var(--matcha-lt);
+  transform: translateY(-1px);
+}
+
+/* BUTTONS */
+.btn-primary {
+  display: block; width: 100%; padding: 20px; border-radius: 16px;
+  background: var(--matcha-lt); color: var(--nav-bg); border: none;
+  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-align: center;
+  text-decoration: none;
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; color: var(--nav-text3);
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; padding: 8px 0; margin-bottom: 32px; transition: color 0.15s;
+}
+.btn-back:hover { color: var(--nav-text2); }
+.btn-back svg { width: 16px; height: 16px; }
+.btn-ghost {
+  display: block; width: 100%; padding: 16px; border-radius: 14px;
+  background: none; color: var(--nav-text2); border: 1px solid rgba(255,255,255,0.08);
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; text-decoration: none; text-align: center;
+  margin-top: 12px;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.04); color: var(--nav-text); }
+
+/* RESULT */
+.result-badge {
+  text-align: center; font-size: 12px; font-weight: 700;
+  color: var(--matcha-lt); text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 24px;
+}
+.result-card {
+  background: var(--nav-bg); border: 2px solid rgba(138,184,106,0.2);
+  border-radius: 24px; padding: 40px 32px; text-align: center;
+  margin-bottom: 24px;
+}
+.result-name { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.result-tagline { font-size: 14px; color: var(--matcha-lt); font-weight: 500; margin-bottom: 20px; }
+.result-reasons { text-align: left; margin-bottom: 24px; list-style: none; padding: 0; }
+.result-reasons li {
+  font-size: 14px; color: #9a9480; line-height: 1.7; font-weight: 300;
+  padding: 6px 0 6px 24px; position: relative;
+}
+.result-reasons li::before {
+  content: '✓'; position: absolute; left: 0; color: var(--matcha-lt); font-weight: 700;
+}
+.result-features {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 28px;
+}
+.result-feat {
+  padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 500;
+  background: rgba(138,184,106,0.08); color: var(--matcha-lt);
+  border: 1px solid rgba(138,184,106,0.12);
+}
+.result-cta {
+  display: block; width: 100%; padding: 20px; border-radius: 16px;
+  background: #6a9e52; color: #fff; border: none;
+  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s; text-decoration: none; text-align: center;
+}
+.result-cta:hover { opacity: 0.88; }
+.result-cta-soon {
+  display: block; width: 100%; padding: 20px; border-radius: 16px;
+  background: rgba(138,184,106,0.15); color: var(--matcha-lt); border: 1px solid rgba(138,184,106,0.2);
+  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; text-decoration: none; text-align: center;
+}
+.result-cta-soon:hover { background: rgba(138,184,106,0.22); }
+
+/* RUNNER UP CARDS */
+.runners-title {
+  font-size: 14px; font-weight: 600; color: var(--nav-text3);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+  text-align: center;
+}
+.runner-card {
+  background: var(--nav-bg); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px; padding: 24px; display: flex; align-items: center;
+  gap: 16px; margin-bottom: 12px;
+}
+.runner-info { flex: 1; }
+.runner-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.runner-tag { font-size: 12px; color: var(--nav-text2); font-weight: 300; }
+.runner-btn {
+  padding: 10px 20px; border-radius: 100px; background: rgba(138,184,106,0.1);
+  color: var(--matcha-lt); border: 1px solid rgba(138,184,106,0.15);
+  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.15s;
+}
+.runner-btn:hover { background: rgba(138,184,106,0.2); }
+
+/* HOW IT WORKS DROPDOWN */
+.how-toggle {
+  display: block; width: 100%; padding: 12px 0; margin-top: 12px;
+  background: none; border: none; color: var(--nav-text2);
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: color 0.15s;
+}
+.how-toggle:hover { color: var(--nav-text); }
+.how-toggle svg {
+  width: 14px; height: 14px; vertical-align: -2px; margin-left: 4px;
+  transition: transform 0.25s ease;
+}
+.how-toggle.open svg { transform: rotate(180deg); }
+.how-panel { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.how-panel.open { max-height: 300px; }
+.how-panel-inner {
+  padding: 16px 20px; margin-top: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+}
+.how-row {
+  display: flex; justify-content: space-between; padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px;
+}
+.how-row:last-child { border-bottom: none; }
+.how-label { color: var(--nav-text2); font-weight: 500; }
+.how-val { color: var(--nav-text); font-weight: 400; text-align: right; flex: 1; margin-left: 16px; }
+
+.retake {
+  display: block; text-align: center; margin-top: 32px;
+  color: var(--nav-text3); font-size: 13px; text-decoration: none;
+  cursor: pointer; background: none; border: none;
+  font-family: 'Sora', sans-serif; transition: color 0.15s;
+}
+.retake:hover { color: var(--nav-text2); }
+
+@media (max-width: 760px) {
+  .nav-inner { padding: 0 16px; }
+  .logo svg { height: 30px; }
+  .learn-container { padding: 40px 16px 64px; }
+  .page-headline { font-size: 26px; }
+  .page-sub { font-size: 15px; }
+  .result-card { padding: 32px 20px; }
+  .runner-card { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <svg viewBox="0 0 440 74" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="lArr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#f0ead0"/></marker></defs>
+        <rect width="440" height="74" rx="45" fill="#111a0f"/>
+        <rect x="8" y="8" width="58" height="58" rx="13" fill="#6a9e52"/>
+        <polyline points="16,56 28,38 38,48 58,18" fill="none" stroke="#f0ead0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#lArr)"/>
+        <text x="82" y="46" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="30" font-weight="700"><tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan></text>
+      </svg>
+    </a>
+  </div>
+</nav>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<main class="learn-container">
+
+  <!-- PAGE 1: HERO -->
+  <section class="page active" id="page1">
+    <div class="page-icon">₿</div>
+    <h1 class="page-headline">Learn <span>Crypto</span> from Scratch</h1>
+    <p class="page-sub">Understand the basics, then take our 2-minute quiz to find the best crypto platform for your goals.</p>
+    <button class="btn-primary" onclick="goTo(2)">Get Started</button>
+    <a class="btn-ghost" href="/">Skip — take me to the news</a>
+  </section>
+
+  <!-- PAGE 2: WHAT IS CRYPTO? -->
+  <section class="page" id="page2">
+    <button class="btn-back" onclick="goTo(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">🪙</div>
+    <h2 class="page-headline">What is <span>crypto</span>?</h2>
+    <p class="page-body">Cryptocurrency is digital money that exists on the internet. Unlike dollars in your bank, crypto isn't controlled by any government or bank — it's powered by a global network of computers running software that nobody owns.</p>
+    <div class="page-analogy">Think of crypto like cash for the internet. You can send it anywhere in the world in minutes, and no one needs permission to use it.</div>
+    <button class="btn-primary" onclick="goTo(3)">Next</button>
+  </section>
+
+  <!-- PAGE 3: HOW DOES CRYPTO WORK? -->
+  <section class="page" id="page3">
+    <button class="btn-back" onclick="goTo(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">⛓️</div>
+    <h2 class="page-headline">How does <span>crypto</span> work?</h2>
+    <p class="page-body">Every transaction is recorded on a shared public ledger called a blockchain. Instead of one bank keeping the records, thousands of computers around the world all hold the same copy — which is why it's nearly impossible to cheat or fake.</p>
+    <div class="page-analogy">Imagine a notebook that everyone on Earth has a copy of. If you try to change yours, the other copies catch you instantly.</div>
+    <button class="btn-primary" onclick="goTo(4)">Next</button>
+  </section>
+
+  <!-- PAGE 4: WALLETS -->
+  <section class="page" id="page4">
+    <button class="btn-back" onclick="goTo(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">👛</div>
+    <h2 class="page-headline">What's a <span>crypto wallet</span>?</h2>
+    <p class="page-body">A crypto wallet is where you store your coins. It holds a secret key that proves you own your crypto. Wallets can live on your phone, in a browser extension, or on a physical device.</p>
+    <div class="page-analogy">Your wallet isn't the crypto itself — it's more like the key to your safety deposit box. Lose the key and you lose access, so keep it safe.</div>
+    <button class="btn-primary" onclick="goTo(5)">Next</button>
+  </section>
+
+  <!-- PAGE 5: EXCHANGES -->
+  <section class="page" id="page5">
+    <button class="btn-back" onclick="goTo(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">🏛️</div>
+    <h2 class="page-headline">What's an <span>exchange</span>?</h2>
+    <p class="page-body">An exchange is an app or website where you can buy, sell, and trade crypto. You connect your bank account, deposit money, and use it to buy Bitcoin or other coins. Some exchanges also give you a built-in wallet so you don't have to manage your own.</p>
+    <div class="page-analogy">An exchange is like an app store for crypto. You browse what's available, pay, and it's yours.</div>
+    <button class="btn-primary" onclick="goTo(6)">Next</button>
+  </section>
+
+  <!-- PAGE 6: BITCOIN vs ALTCOINS -->
+  <section class="page" id="page6">
+    <button class="btn-back" onclick="goTo(5)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <div class="page-icon">🌐</div>
+    <h2 class="page-headline">Bitcoin vs <span>altcoins</span></h2>
+    <p class="page-body">Bitcoin was the first cryptocurrency and is still the biggest. Every other coin — Ethereum, Solana, Dogecoin, and thousands more — is called an "altcoin" (alternative coin). Bitcoin is seen as digital gold, while altcoins often try to do new things like run apps, process payments, or power games.</p>
+    <div class="page-analogy">Bitcoin is like gold — slow, solid, trusted. Altcoins are like startups — riskier, but some become the next big thing.</div>
+    <button class="btn-primary" onclick="goTo(7)">Next — take the quiz</button>
+  </section>
+
+  <!-- PAGE 7: Q1 -->
+  <section class="page" id="page7">
+    <button class="btn-back" onclick="goTo(6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">How experienced are you with crypto?</p>
+    <button class="quiz-option" onclick="answer('exp','beginner')">🌱  Total beginner, never bought any</button>
+    <button class="quiz-option" onclick="answer('exp','some')">🤔  I've bought a little before</button>
+    <button class="quiz-option" onclick="answer('exp','advanced')">⚡  I'm comfortable trading and swapping</button>
+  </section>
+
+  <!-- PAGE 8: Q2 -->
+  <section class="page" id="page8">
+    <button class="btn-back" onclick="goTo(7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">What's your main goal?</p>
+    <button class="quiz-option" onclick="answer('goal','hold')">💎  Buy and hold for the long term</button>
+    <button class="quiz-option" onclick="answer('goal','trade')">📈  Trade actively to grow my stack</button>
+    <button class="quiz-option" onclick="answer('goal','swap')">🔄  Swap between different coins</button>
+  </section>
+
+  <!-- PAGE 9: Q3 -->
+  <section class="page" id="page9">
+    <button class="btn-back" onclick="goTo(8)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+    <p class="quiz-q">What matters most to you?</p>
+    <button class="quiz-option" onclick="answer('priority','simple')">✨  Simple and easy to use</button>
+    <button class="quiz-option" onclick="answer('priority','selection')">🌐  Access to lots of different coins</button>
+    <button class="quiz-option" onclick="answer('priority','privacy')">🔒  Privacy and no signup required</button>
+  </section>
+
+  <!-- PAGE 10: RESULTS -->
+  <section class="page" id="page10">
+    <div id="resultContent"></div>
+  </section>
+
+</main>
+
+<script>
+const TOTAL_PAGES = 10;
+let currentPage = 1;
+const answers = {};
+
+const PLATFORMS = {
+  coinbase: {
+    name: 'Coinbase',
+    tagline: 'Best for first-time crypto buyers',
+    desc: 'Coinbase is the most trusted name in crypto for beginners. It walks you through everything, has a built-in wallet, and lets you buy Bitcoin and hundreds of other coins with your bank account.',
+    features: ['Easy setup', 'Built-in wallet', '200+ coins', 'US regulated', 'Earn rewards'],
+    how: { bestFor: 'Beginners who want a trusted, simple way to buy their first crypto', beginner: 'Yes — the most beginner-friendly exchange in the US', advantage: 'Clean interface, strong reputation, and an easy onboarding that walks you through everything', minimum: '$2' },
+    link: '#', // <!-- AFFILIATE LINK: COINBASE -->
+    soon: true,
+  },
+  robinhood: {
+    name: 'Robinhood Crypto',
+    tagline: 'Best if you already trade stocks on Robinhood',
+    desc: 'Robinhood lets you buy crypto in the same app you use for stocks. It\'s not a full exchange — you can\'t always move your coins off the platform — but it\'s the simplest way to get started if you already have an account.',
+    features: ['Same app as stocks', 'No commissions', 'Fractional buys', 'Instant deposits', 'Major coins'],
+    how: { bestFor: 'Casual crypto buyers who already use Robinhood for stocks', beginner: 'Yes — familiar interface if you already trade stocks', advantage: 'Buy crypto in the same app you already use for investing, with zero commissions', minimum: '$1' },
+    link: '#', // <!-- AFFILIATE LINK: ROBINHOOD -->
+    soon: true,
+  },
+  changenow: {
+    name: 'ChangeNOW',
+    tagline: 'Best for swapping coins with no signup',
+    desc: 'ChangeNOW lets you swap one crypto for another in seconds, without ever creating an account. No email, no KYC, no waiting — just paste a wallet address and trade. Perfect if you already own crypto and want to move between coins.',
+    features: ['No signup needed', '900+ coins', 'Fast swaps', 'Privacy-friendly', 'Flat fees'],
+    how: { bestFor: 'Crypto users who want to swap between coins quickly without creating an account', beginner: 'Moderate — assumes you already have a crypto wallet', advantage: 'Swap between 900+ coins with no signup, no KYC, and no account needed', minimum: 'Varies by coin' },
+    link: 'https://changenow.app.link/referral?link_id=d9d732d3c9a1c6', // <!-- AFFILIATE LINK: CHANGENOW -->
+    soon: false,
+  },
+};
+
+function goTo(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page' + n);
+  if (page) page.classList.add('active');
+  currentPage = n;
+  const pct = Math.round(((n - 1) / (TOTAL_PAGES - 1)) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function answer(key, val) {
+  answers[key] = val;
+  const nextPage = currentPage + 1;
+  if (nextPage <= 9) {
+    goTo(nextPage);
+  } else {
+    showResults();
+  }
+}
+
+function scorePlatforms() {
+  const scores = { coinbase: 0, robinhood: 0, changenow: 0 };
+
+  // Q1: experience
+  if (answers.exp === 'beginner') { scores.coinbase += 3; scores.robinhood += 2; }
+  if (answers.exp === 'some')     { scores.coinbase += 2; scores.robinhood += 2; scores.changenow += 1; }
+  if (answers.exp === 'advanced') { scores.changenow += 3; scores.coinbase += 1; }
+
+  // Q2: goal
+  if (answers.goal === 'hold')  { scores.coinbase += 3; scores.robinhood += 2; }
+  if (answers.goal === 'trade') { scores.coinbase += 2; scores.robinhood += 3; }
+  if (answers.goal === 'swap')  { scores.changenow += 3; }
+
+  // Q3: priority
+  if (answers.priority === 'simple')    { scores.robinhood += 3; scores.coinbase += 2; }
+  if (answers.priority === 'selection') { scores.coinbase += 2; scores.changenow += 3; }
+  if (answers.priority === 'privacy')   { scores.changenow += 3; }
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  return sorted.map(([key]) => key);
+}
+
+function getReasons(key) {
+  const r = [];
+  if (key === 'coinbase') {
+    if (answers.exp === 'beginner') r.push('You\'re new to crypto — Coinbase is the easiest place to start');
+    if (answers.goal === 'hold') r.push('Perfect for buying Bitcoin and holding it long-term');
+    if (answers.priority === 'simple') r.push('One of the simplest, cleanest apps in crypto');
+    if (r.length < 2) r.push('Trusted, regulated, and used by millions of beginners');
+    if (r.length < 3) r.push('Buy with just $2 and own real crypto in minutes');
+  }
+  if (key === 'robinhood') {
+    if (answers.exp === 'beginner' || answers.exp === 'some') r.push('Familiar interface if you already use Robinhood for stocks');
+    if (answers.goal === 'trade') r.push('Trade crypto with zero commissions in the same app as your stocks');
+    if (answers.priority === 'simple') r.push('Simple, no-frills interface built for casual buyers');
+    if (r.length < 2) r.push('Start with as little as $1 and no crypto knowledge required');
+    if (r.length < 3) r.push('Same app as your stocks so you only have one place to check');
+  }
+  if (key === 'changenow') {
+    if (answers.goal === 'swap') r.push('Swapping between coins is exactly what ChangeNOW does best');
+    if (answers.priority === 'privacy') r.push('No signup, no KYC, no account needed — just trade');
+    if (answers.priority === 'selection') r.push('900+ coins available to swap between instantly');
+    if (answers.exp === 'advanced') r.push('Built for people who already have a wallet and want speed');
+    if (r.length < 2) r.push('Fast, private swaps with a flat fee and no hidden costs');
+    if (r.length < 3) r.push('No email or account — just paste a wallet address and go');
+  }
+  return r.slice(0, 3);
+}
+
+function howPanelHTML(platform, id) {
+  return `
+    <button class="how-toggle" onclick="toggleHow('${id}', this)">How ${platform.name} works <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="how-panel" id="${id}">
+      <div class="how-panel-inner">
+        <div class="how-row"><span class="how-label">Best for</span><span class="how-val">${platform.how.bestFor}</span></div>
+        <div class="how-row"><span class="how-label">Beginner friendly</span><span class="how-val">${platform.how.beginner}</span></div>
+        <div class="how-row"><span class="how-label">Top advantage</span><span class="how-val">${platform.how.advantage}</span></div>
+        <div class="how-row"><span class="how-label">Minimum to start</span><span class="how-val">${platform.how.minimum}</span></div>
+      </div>
+    </div>`;
+}
+
+function toggleHow(id, btn) {
+  const panel = document.getElementById(id);
+  panel.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function ctaButton(platform) {
+  if (platform.soon) {
+    return `<a class="result-cta-soon" href="/">Get Started with ${platform.name} — Coming Soon</a>`;
+  }
+  return `<a class="result-cta" href="${platform.link}" target="_blank" rel="noopener">Get Started with ${platform.name} →</a>`;
+}
+
+function runnerBtn(platform) {
+  if (platform.soon) {
+    return `<a class="runner-btn" href="/">Coming Soon</a>`;
+  }
+  return `<a class="runner-btn" href="${platform.link}" target="_blank" rel="noopener">Try Now →</a>`;
+}
+
+function showResults() {
+  const ranked = scorePlatforms();
+  const top = PLATFORMS[ranked[0]];
+  const reasons = getReasons(ranked[0]);
+  const runner1 = PLATFORMS[ranked[1]];
+  const runner2 = PLATFORMS[ranked[2]];
+
+  const reasonsHTML = reasons.map(r => `<li>${r}</li>`).join('');
+  const featuresHTML = top.features.map(f => `<span class="result-feat">${f}</span>`).join('');
+
+  document.getElementById('resultContent').innerHTML = `
+    <div class="result-badge">Your perfect match</div>
+    <div class="result-card">
+      <div class="result-name">${top.name}</div>
+      <div class="result-tagline">${top.tagline}</div>
+      <ul class="result-reasons">${reasonsHTML}</ul>
+      <div class="result-features">${featuresHTML}</div>
+      <!-- AFFILIATE LINK: ${top.name.toUpperCase()} -->
+      ${ctaButton(top)}
+      ${howPanelHTML(top, 'howTop')}
+    </div>
+
+    <div class="runners-title">Also great for you</div>
+
+    <div class="runner-card" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="runner-info">
+          <div class="runner-name">${runner1.name}</div>
+          <div class="runner-tag">${runner1.tagline}</div>
+        </div>
+        <!-- AFFILIATE LINK: ${runner1.name.toUpperCase()} -->
+        ${runnerBtn(runner1)}
+      </div>
+      ${howPanelHTML(runner1, 'howRunner1')}
+    </div>
+
+    <div class="runner-card" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="runner-info">
+          <div class="runner-name">${runner2.name}</div>
+          <div class="runner-tag">${runner2.tagline}</div>
+        </div>
+        <!-- AFFILIATE LINK: ${runner2.name.toUpperCase()} -->
+        ${runnerBtn(runner2)}
+      </div>
+      ${howPanelHTML(runner2, 'howRunner2')}
+    </div>
+
+    <a class="btn-ghost" href="/" style="margin-top:24px;">Go to Greenline News Feed</a>
+    <button class="retake" onclick="retakeQuiz()">Retake the quiz</button>`;
+
+  goTo(10);
+}
+
+function retakeQuiz() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  goTo(1);
+}
+
+document.getElementById('progressBar').style.width = '0%';
+</script>
+</body>
+</html>
