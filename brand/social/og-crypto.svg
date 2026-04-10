@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,1.5 L10,5 L0,8.5 Z" fill="#f0ead0"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="630" fill="#111a0f"/>
+  <text x="600" y="260" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="72" font-weight="700" fill="#f0ead0" letter-spacing="-2">New to</text>
+  <text x="600" y="340" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="72" font-weight="700" letter-spacing="-2">
+    <tspan fill="#8ab86a">crypto?</tspan>
+  </text>
+  <text x="600" y="400" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="26" font-weight="300" fill="#7a9470">A simple walkthrough + a 2-minute platform quiz</text>
+  <g transform="translate(380, 470)">
+    <rect width="440" height="74" rx="37" fill="#0d150b" stroke="rgba(138,184,106,0.2)" stroke-width="1"/>
+    <rect x="8" y="8" width="58" height="58" rx="13" fill="#6a9e52"/>
+    <polyline points="18,53 30,37 38,43 58,17" fill="none" stroke="#f0ead0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arr)"/>
+    <text x="82" y="48" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="30" font-weight="700"><tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan></text>
+  </g>
+</svg>
