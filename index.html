@@ -23,6 +23,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9429225763137878" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://greenlinenews.com/">
 <title>Greenline | Live Market News & Stock Tracker</title>
 <meta name="description" content="Greenline News delivers real-time stock market news, live prices and AI-powered article explanations for everyday investors.">
 <meta name="keywords" content="stock market news, investing news, real-time stocks, market updates, beginner investing, stock prices, financial news, AI investing, Robinhood, Acorns, stock market today">
@@ -44,6 +45,10 @@
 <meta name="twitter:description" content="Real-time stock market news explained simply.">
 <meta name="twitter:image" content="https://greenlinenews.com/brand/social/og-image.svg">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://finnhub.io">
+<link rel="preconnect" href="https://api.rss2json.com">
 <link rel="apple-touch-icon" href="/brand/favicon/favicon-192.png">
 <link rel="icon" href="/brand/favicon/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="/brand/favicon/favicon.svg">
@@ -636,7 +641,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
     </div>
 
     <input class="nav-search" id="feedSearch" type="text" placeholder="Search articles..." oninput="searchFeed(this.value)">
-    <select class="cat-select" id="filters" onchange="activeFilter=this.value;loadFeed(this.value)">
+    <select class="cat-select" id="filters" onchange="activeFilter=this.value;location.hash=this.value;loadFeed(this.value)">
       <option value="all">All</option>
       <option value="business">Business</option>
       <option value="technology">Technology</option>
@@ -1563,7 +1568,14 @@ function initOnboard() {
 (async()=>{
   initOnboard();
   buildTicker();
-  await loadFeed('all');
+  const hashCat = location.hash.replace('#','');
+  const validCats = ['all','business','technology','energy','health','economy','markets'];
+  const startCat = validCats.includes(hashCat) ? hashCat : 'all';
+  if (startCat !== 'all') {
+    document.getElementById('filters').value = startCat;
+    activeFilter = startCat;
+  }
+  await loadFeed(startCat);
   setInterval(buildTicker,120000);
   setInterval(()=>loadFeed(activeFilter),300000);
 })();
