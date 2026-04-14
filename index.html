@@ -126,6 +126,15 @@ nav { background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255
 .nav-link:hover { color: var(--nav-text); background: rgba(255,255,255,0.06); }
 .nav-link.active { color: #111a0f; background: var(--matcha-lt); font-weight: 600; }
 
+.nav-search {
+  padding: 9px 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06); color: var(--nav-text); font-family: 'Sora', sans-serif;
+  font-size: 13px; font-weight: 500; outline: none; transition: border-color 0.15s;
+  flex-shrink: 1; min-width: 0; max-width: 180px;
+}
+.nav-search:focus { border-color: var(--matcha-lt); }
+.nav-search::placeholder { color: var(--nav-text3); }
+
 .cat-select {
   padding: 9px 36px 9px 16px;
   border-radius: 100px;
@@ -491,6 +500,25 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
   .ob-box { max-width: 100%; }
   .ob-header { padding: 24px 20px 20px; }
   .ob-body { padding: 20px; }
+
+  /* Crypto nav link - shorten on mobile */
+  .nav-link.crypto { font-size: 12px; }
+  .nav-link.crypto::before { font-size: 12px; }
+
+  /* Feed grid - ensure single column no overflow */
+  .grid { gap: 16px; }
+
+  /* Cards - prevent horizontal overflow */
+  .card { max-width: 100%; overflow: hidden; }
+  .stocks-row { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 4px; }
+  .stocks-row::-webkit-scrollbar { display: none; }
+  .card-actions { flex-wrap: wrap; }
+
+  /* Signup form stack on narrow */
+  .signup-form { flex-direction: column; }
+  .signup-btn { width: 100%; }
+
+  .nav-search { max-width: 100%; min-height: 44px; font-size: 14px; order: 10; flex: 1; }
 }
 
 /* APP PROMO POPUP (mobile only) */
@@ -607,6 +635,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
       <a class="nav-link crypto" href="/crypto-learn.html">New to Crypto?</a>
     </div>
 
+    <input class="nav-search" id="feedSearch" type="text" placeholder="Search articles..." oninput="searchFeed(this.value)">
     <select class="cat-select" id="filters" onchange="activeFilter=this.value;loadFeed(this.value)">
       <option value="all">All</option>
       <option value="business">Business</option>
@@ -934,6 +963,7 @@ function quickAdd(sym) {
 }
 
 function removeStock(sym) {
+  if(!confirm('Remove '+sym+' from watchlist?')) return;
   watchlist = watchlist.filter(s => s !== sym);
   saveWatchlist();
   showToast(`${sym} removed`);
@@ -1127,6 +1157,7 @@ async function makeCard(article, cat, idx) {
   const id=`a${idx}`, saved=savedArticleIds.has(id), source=article.source?.name||'News', url=article.url||'#';
   const div=document.createElement('div');
   div.className='card'; div.dataset.id=id; div.style.animationDelay=(idx*0.07)+'s';
+  try { if ((JSON.parse(localStorage.getItem('gl_read')||'[]')).includes(url)) div.style.opacity='0.7'; } catch {}
   div.innerHTML=`
     <div class="card-thumb" style="background:${color};">
       <span>${icon}</span>
@@ -1179,6 +1210,7 @@ function toggleSave(id,card){
 }
 
 function openArticle(el,url){
+  try { const h = JSON.parse(localStorage.getItem('gl_read')||'[]'); h.push(url); localStorage.setItem('gl_read', JSON.stringify(h.slice(-100))); } catch {}
   const homepages=['reuters.com','bloomberg.com','wsj.com','cnbc.com','statnews.com','ft.com','marketwatch.com','techcrunch.com','theverge.com','electrek.co'];
   const isHomepage=homepages.some(h=>url==='https://'+h||url==='http://'+h);
   if(isHomepage){const card=el.closest('.card');const title=card?card.querySelector('.card-title').textContent:'';window.open('https://www.google.com/search?q='+encodeURIComponent(title+' news'),'_blank');}
@@ -1258,6 +1290,7 @@ function toggleSave(id,card){
 }
 
 function openArticle(el,url){
+  try { const h = JSON.parse(localStorage.getItem('gl_read')||'[]'); h.push(url); localStorage.setItem('gl_read', JSON.stringify(h.slice(-100))); } catch {}
   const homepages=['reuters.com','bloomberg.com','wsj.com','cnbc.com','statnews.com','ft.com','marketwatch.com','techcrunch.com','theverge.com','electrek.co'];
   const isHomepage=homepages.some(h=>url==='https://'+h||url==='http://'+h);
   if(isHomepage){const card=el.closest('.card');const title=card?card.querySelector('.card-title').textContent:'';window.open('https://www.google.com/search?q='+encodeURIComponent(title+' news'),'_blank');}
@@ -1278,6 +1311,7 @@ function makeCardFast(article, cat, idx) {
   const source=article.source?.name||'News', url=article.url||'#';
   const div=document.createElement('div');
   div.className='card'; div.dataset.id=id; div.style.animationDelay=(idx*0.05)+'s';
+  try { if ((JSON.parse(localStorage.getItem('gl_read')||'[]')).includes(url)) div.style.opacity='0.7'; } catch {}
   div.innerHTML=`
     <div class="card-thumb" style="background:${color};">
       <span>${icon}</span>
@@ -1357,7 +1391,15 @@ async function loadFeed(cat){
   // Try live news quietly in background — swap in if successful
   fetchNews(cat).then(live => {
     if (!live || live.length < 3) return;
-    const filtered = filterByRelevance(live, cat);
+    // Fuzzy deduplicate - remove articles with very similar titles
+    const seen = new Set();
+    const deduped = live.filter(a => {
+      const key = a.title.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,40);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    const filtered = filterByRelevance(deduped, cat);
     grid.innerHTML = '';
     filtered.slice(0,6).map((a,i) => makeCardFast(a,cat,i)).forEach(c => grid.appendChild(c));
     setStatus('live', `${filtered.length} live articles · real-time prices`);
@@ -1382,7 +1424,9 @@ async function loadFeed(cat){
         });
       });
     });
-  }).catch(() => {});
+  }).catch(() => {
+    setStatus('live', 'Using cached articles');
+  });
 }
 
 async function doRefresh(){
@@ -1572,6 +1616,16 @@ function dismissPromo() {
 
 setTimeout(showPromo, 3000);
 
+
+function searchFeed(query) {
+  const q = query.toLowerCase().trim();
+  const cards = document.querySelectorAll('#grid .card');
+  cards.forEach(card => {
+    const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+    const summary = card.querySelector('.card-summary')?.textContent?.toLowerCase() || '';
+    card.style.display = (q.length < 2 || title.includes(q) || summary.includes(q)) ? '' : 'none';
+  });
+}
 
 /* ── SERVICE WORKER ── */
 if ('serviceWorker' in navigator) {

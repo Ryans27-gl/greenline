@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Greenline News Blog</title>
+    <link>https://greenlinenews.com/blog/</link>
+    <description>Plain-English articles on investing and crypto for beginners.</description>
+    <language>en-us</language>
+    <atom:link href="https://greenlinenews.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>What Is a Stock Split and Why Do Companies Do Them?</title>
+      <link>https://greenlinenews.com/blog/what-is-a-stock-split.html</link>
+      <description>Everything you need to know about stock splits — why companies do them, whether they make a stock cheaper, and what it means for your portfolio.</description>
+      <pubDate>Thu, 10 Apr 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>How to Read a Candlestick Chart (Without Getting Overwhelmed)</title>
+      <link>https://greenlinenews.com/blog/how-to-read-a-candlestick-chart.html</link>
+      <description>Candlestick charts look complicated but they're actually simple once you know what each part means.</description>
+      <pubDate>Thu, 10 Apr 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Robinhood vs Public: Which Is Better for Beginners in 2026?</title>
+      <link>https://greenlinenews.com/blog/robinhood-vs-public-2026.html</link>
+      <description>A side-by-side look at two of the most popular beginner investing apps.</description>
+      <pubDate>Thu, 10 Apr 2026 00:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
