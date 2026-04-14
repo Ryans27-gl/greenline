@@ -25,14 +25,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://greenlinenews.com/crypto-learn.html">
-<title>Learn Crypto — Greenline News</title>
-<meta name="description" content="New to crypto? Learn the basics and take our free 2-minute quiz to find the perfect crypto platform for your goals.">
-<meta name="keywords" content="how to buy bitcoin, crypto for beginners, best crypto exchange, Coinbase vs Robinhood, ChangeNOW, crypto wallet, Bitcoin basics, altcoins, crypto quiz, beginner crypto guide">
+<title>Learn Crypto — A Beginner's Guide to Cryptocurrency — Greenline News</title>
+<meta name="description" content="A complete beginner's guide to cryptocurrency. Learn what crypto is, how the blockchain works, how to buy your first Bitcoin, and how to stay safe.">
+<meta name="keywords" content="learn crypto, cryptocurrency for beginners, what is Bitcoin, how to buy crypto, blockchain explained, crypto wallet, crypto exchange, beginner crypto guide">
 <meta name="author" content="Greenline News">
-<meta property="og:title" content="Learn Crypto — Greenline News">
-<meta property="og:description" content="Take our free 2-minute quiz and get matched with the best crypto platform for your goals.">
-<meta property="og:url" content="https://greenlinenews.com/crypto-learn">
-<meta property="og:type" content="website">
+<meta property="og:title" content="Learn Crypto — A Beginner's Guide">
+<meta property="og:description" content="Everything you need to understand cryptocurrency, from scratch.">
+<meta property="og:url" content="https://greenlinenews.com/crypto-learn.html">
+<meta property="og:type" content="article">
 <meta property="og:image" content="https://greenlinenews.com/brand/social/og-crypto.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://greenlinenews.com/brand/social/og-crypto.png">
@@ -44,8 +44,8 @@
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Learn Crypto from Scratch — Greenline News",
-  "description": "A beginner-friendly walkthrough of how cryptocurrency works, plus a 2-minute quiz to find the right crypto platform for you.",
+  "headline": "Learn Crypto — A Beginner's Guide to Cryptocurrency",
+  "description": "A complete beginner's guide to cryptocurrency. Learn what crypto is, how the blockchain works, how to buy your first Bitcoin, and how to stay safe.",
   "author": { "@type": "Organization", "name": "Greenline News" },
   "publisher": {
     "@type": "Organization",
@@ -53,7 +53,7 @@
     "logo": { "@type": "ImageObject", "url": "https://greenlinenews.com/brand/logos/logo-square.png" }
   },
   "mainEntityOfPage": "https://greenlinenews.com/crypto-learn.html",
-  "image": "https://greenlinenews.com/brand/social/og-image.png"
+  "image": "https://greenlinenews.com/brand/social/og-crypto.png"
 }
 </script>
 <script type="application/ld+json">
@@ -63,18 +63,18 @@
   "mainEntity": [
     { "@type": "Question", "name": "What is cryptocurrency?", "acceptedAnswer": { "@type": "Answer", "text": "Cryptocurrency is digital money that lives on the internet. It is not controlled by any bank or government and runs on a global network of computers." } },
     { "@type": "Question", "name": "What is a crypto wallet?", "acceptedAnswer": { "@type": "Answer", "text": "A crypto wallet is where your crypto lives. It holds a private key that proves you own your coins. Most beginners start with a wallet built into their exchange." } },
-    { "@type": "Question", "name": "What is a crypto exchange?", "acceptedAnswer": { "@type": "Answer", "text": "An exchange is the app you use to buy and sell crypto. Popular exchanges include Coinbase and Robinhood Crypto." } },
-    { "@type": "Question", "name": "What is the difference between Bitcoin and altcoins?", "acceptedAnswer": { "@type": "Answer", "text": "Bitcoin was the first cryptocurrency and is still the biggest and safest bet. Every other coin like Ethereum and Solana is called an altcoin." } }
+    { "@type": "Question", "name": "What is a crypto exchange?", "acceptedAnswer": { "@type": "Answer", "text": "An exchange is the app you use to buy and sell crypto. Popular exchanges include Coinbase and Robinhood." } },
+    { "@type": "Question", "name": "What is the difference between Bitcoin and altcoins?", "acceptedAnswer": { "@type": "Answer", "text": "Bitcoin was the first cryptocurrency and is still the biggest. Every other coin like Ethereum and Solana is called an altcoin." } },
+    { "@type": "Question", "name": "How much money do I need to start with crypto?", "acceptedAnswer": { "@type": "Answer", "text": "Most exchanges let you start with as little as $1 to $10. You do not need to buy a whole Bitcoin." } },
+    { "@type": "Question", "name": "Is crypto safe?", "acceptedAnswer": { "@type": "Answer", "text": "The technology is secure, but crypto is volatile and scams are common. Use trusted exchanges, enable two-factor authentication, and never share your seed phrase." } }
   ]
 }
 </script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --nav-bg: #111a0f; --bg: #f2ead8; --card: #faf6ee;
-  --nav-text: #f0ead0; --nav-text2: #7a9470; --nav-text3: #3a5434;
+  --nav-bg: #111a0f; --nav-text: #f0ead0; --nav-text2: #7a9470; --nav-text3: #3a5434;
   --matcha: #6a9e52; --matcha-lt: #8ab86a;
-  --text: #1e1a10; --text2: #5a5040; --text3: #9a8e78;
 }
 
 body {
@@ -83,7 +83,6 @@ body {
   min-height: 100vh; -webkit-font-smoothing: antialiased;
 }
 
-/* NAV */
 nav {
   background: rgba(17,26,15,0.97); border-bottom: 1px solid rgba(255,255,255,0.06);
   position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px);
@@ -92,317 +91,96 @@ nav {
   max-width: 1080px; margin: 0 auto; padding: 0 32px;
   height: 68px; display: flex; align-items: center; gap: 24px;
 }
-.logo { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; cursor: pointer; }
+.logo { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; }
 .logo svg { height: 38px; width: auto; display: block; }
+.nav-links { display: flex; gap: 4px; margin-left: auto; }
+.nav-link { padding: 7px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--nav-text2); text-decoration: none; transition: all 0.15s; }
+.nav-link:hover { color: var(--nav-text); background: rgba(255,255,255,0.06); }
 
-/* PROGRESS BAR */
-.progress-wrap {
-  position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
-  background: rgba(17,26,15,0.95); padding: 0; height: 4px;
+/* HERO */
+.hero {
+  max-width: 720px; margin: 0 auto; padding: 72px 24px 40px; text-align: center;
 }
-.progress-bar {
-  height: 100%; background: var(--matcha-lt); border-radius: 0 2px 2px 0;
-  transition: width 0.4s ease; width: 0%;
+.hero h1 {
+  font-size: 48px; font-weight: 700; line-height: 1.15; letter-spacing: -1.5px;
+  margin-bottom: 18px;
 }
-
-/* CONTAINER */
-.learn-container {
-  max-width: 900px; margin: 0 auto;
-  padding: 56px 24px 80px; min-height: calc(100vh - 72px);
-}
-.page:not(#page10) { max-width: 600px; margin: 0 auto; }
-
-/* PAGES */
-.page { display: none; animation: pageFadeIn 0.4s ease; }
-.page.active { display: block; }
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+.hero h1 span { color: var(--matcha-lt); }
+.hero p {
+  font-size: 18px; color: #9a9480; line-height: 1.7; font-weight: 300;
+  max-width: 560px; margin: 0 auto;
 }
 
-/* TYPOGRAPHY */
-.page-icon { font-size: 56px; text-align: center; margin-bottom: 20px; }
-.page-headline {
-  font-size: 32px; font-weight: 700; text-align: center;
-  line-height: 1.25; margin-bottom: 16px;
+/* TOC */
+.toc {
+  max-width: 720px; margin: 0 auto 48px; padding: 0 24px;
 }
-.page-headline span { color: var(--matcha-lt); }
-.page-sub {
-  font-size: 16px; color: var(--nav-text2); text-align: center;
-  line-height: 1.7; font-weight: 300; margin-bottom: 40px;
-  max-width: 480px; margin-left: auto; margin-right: auto;
-}
-.page-body {
-  font-size: 15px; color: #9a9480; line-height: 1.8; font-weight: 300;
-  margin-bottom: 32px; text-align: center;
-  max-width: 480px; margin-left: auto; margin-right: auto;
-}
-.page-analogy {
-  background: rgba(138,184,106,0.08); border: 1px solid rgba(138,184,106,0.12);
-  border-radius: 16px; padding: 20px 24px; margin-bottom: 36px;
-  font-size: 14px; color: var(--matcha-lt); line-height: 1.7; font-weight: 400;
-  text-align: center;
-}
-.page-analogy::before {
-  content: '💡'; display: block; font-size: 24px; margin-bottom: 8px;
-}
-
-/* QUIZ OPTIONS */
-.quiz-q { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 28px; }
-.quiz-option {
-  display: block; width: 100%; padding: 20px 24px; border-radius: 16px;
+.toc-inner {
   background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-  color: var(--nav-text); font-family: 'Sora', sans-serif; font-size: 15px;
-  font-weight: 500; cursor: pointer; transition: all 0.2s;
-  margin-bottom: 12px; text-align: left;
+  border-radius: 16px; padding: 24px 28px;
 }
-.quiz-option:hover {
-  background: rgba(138,184,106,0.1); border-color: var(--matcha-lt);
-  transform: translateY(-1px);
+.toc-title { font-size: 13px; font-weight: 700; color: var(--matcha-lt); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+.toc a {
+  display: block; font-size: 14px; color: #c8c0a8; text-decoration: none;
+  padding: 6px 0; font-weight: 400; transition: color 0.15s;
 }
+.toc a:hover { color: var(--matcha-lt); }
 
-/* BUTTONS */
-.btn-primary {
-  display: block; width: 100%; padding: 20px; border-radius: 16px;
-  background: var(--matcha-lt); color: var(--nav-bg); border: none;
-  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s; text-align: center;
-  text-decoration: none;
+/* ARTICLE */
+.article { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
+h2 {
+  font-size: 28px; font-weight: 700; color: var(--nav-text);
+  margin: 56px 0 18px; letter-spacing: -0.5px;
+  padding-top: 24px;
 }
-.btn-primary:hover { opacity: 0.88; }
-.btn-back {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: none; border: none; color: var(--nav-text3);
-  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
-  cursor: pointer; padding: 8px 0; margin-bottom: 32px; transition: color 0.15s;
+h3 { font-size: 19px; font-weight: 700; color: var(--matcha-lt); margin: 32px 0 10px; }
+p { font-size: 17px; color: #c8c0a8; line-height: 1.85; font-weight: 300; margin-bottom: 18px; }
+p strong { color: var(--nav-text); font-weight: 600; }
+ul { margin: 0 0 18px 22px; color: #c8c0a8; font-size: 17px; font-weight: 300; line-height: 1.85; }
+ul li { margin-bottom: 10px; }
+.callout {
+  background: rgba(138,184,106,0.08); border-left: 3px solid var(--matcha);
+  border-radius: 0 14px 14px 0; padding: 22px 26px; margin: 28px 0;
+  font-size: 16px; color: var(--nav-text); line-height: 1.75; font-weight: 400;
 }
-.btn-back:hover { color: var(--nav-text2); }
-.btn-back svg { width: 16px; height: 16px; }
-.btn-ghost {
-  display: block; width: 100%; padding: 16px; border-radius: 14px;
-  background: none; color: var(--nav-text2); border: 1px solid rgba(255,255,255,0.08);
-  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500;
-  cursor: pointer; transition: all 0.15s; text-decoration: none; text-align: center;
-  margin-top: 12px;
+.warning {
+  background: rgba(192,64,64,0.08); border-left: 3px solid #c04040;
+  border-radius: 0 14px 14px 0; padding: 22px 26px; margin: 28px 0;
+  font-size: 16px; color: var(--nav-text); line-height: 1.75; font-weight: 400;
 }
-.btn-ghost:hover { background: rgba(255,255,255,0.04); color: var(--nav-text); }
+.divider { height: 1px; background: rgba(255,255,255,0.06); margin: 56px 0; }
 
-/* RESULT */
-.result-badge {
-  text-align: center; font-size: 12px; font-weight: 700;
-  color: var(--matcha-lt); text-transform: uppercase; letter-spacing: 2px;
-  margin-bottom: 24px;
-}
-.result-card {
+.cta-box {
   background: var(--nav-bg); border: 2px solid rgba(138,184,106,0.2);
-  border-radius: 24px; padding: 40px 32px; text-align: center;
-  margin-bottom: 24px;
+  border-radius: 20px; padding: 36px; margin: 48px 0; text-align: center;
 }
-.result-name { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-.result-tagline { font-size: 14px; color: var(--matcha-lt); font-weight: 500; margin-bottom: 20px; }
-.result-reasons { text-align: left; margin-bottom: 24px; list-style: none; padding: 0; }
-.result-reasons li {
-  font-size: 14px; color: #9a9480; line-height: 1.7; font-weight: 300;
-  padding: 6px 0 6px 24px; position: relative;
+.cta-box h3 { font-size: 22px; font-weight: 700; color: var(--nav-text); margin-bottom: 10px; color: var(--nav-text); }
+.cta-box p { font-size: 15px; color: #9a9480; margin-bottom: 22px; }
+.cta-btn {
+  display: inline-block; padding: 16px 32px; border-radius: 100px;
+  background: var(--matcha); color: #fff; font-weight: 700;
+  text-decoration: none; font-size: 15px; transition: opacity 0.15s;
 }
-.result-reasons li::before {
-  content: '✓'; position: absolute; left: 0; color: var(--matcha-lt); font-weight: 700;
-}
-.result-features {
-  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 28px;
-}
-.result-feat {
-  padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 500;
-  background: rgba(138,184,106,0.08); color: var(--matcha-lt);
-  border: 1px solid rgba(138,184,106,0.12);
-}
-.result-cta {
-  display: block; width: 100%; padding: 20px; border-radius: 16px;
-  background: #6a9e52; color: #fff; border: none;
-  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s; text-decoration: none; text-align: center;
-}
-.result-cta:hover { opacity: 0.88; }
-.result-cta-soon {
-  display: block; width: 100%; padding: 20px; border-radius: 16px;
-  background: rgba(138,184,106,0.15); color: var(--matcha-lt); border: 1px solid rgba(138,184,106,0.2);
-  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
-  cursor: pointer; transition: all 0.15s; text-decoration: none; text-align: center;
-}
-.result-cta-soon:hover { background: rgba(138,184,106,0.22); }
+.cta-btn:hover { opacity: 0.88; }
 
-/* RUNNER UP CARDS */
-.runners-title {
-  font-size: 14px; font-weight: 600; color: var(--nav-text3);
-  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
-  text-align: center;
+.footer-note {
+  text-align: center; color: var(--nav-text3); font-size: 13px; font-style: italic;
+  margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06);
+  line-height: 1.7;
 }
-.runner-card {
-  background: var(--nav-bg); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 18px; padding: 24px; display: flex; align-items: center;
-  gap: 16px; margin-bottom: 12px;
-}
-.runner-info { flex: 1; }
-.runner-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
-.runner-tag { font-size: 12px; color: var(--nav-text2); font-weight: 300; }
-.runner-btn {
-  padding: 10px 20px; border-radius: 100px; background: rgba(138,184,106,0.1);
-  color: var(--matcha-lt); border: 1px solid rgba(138,184,106,0.15);
-  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 600;
-  cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.15s;
-}
-.runner-btn:hover { background: rgba(138,184,106,0.2); }
-
-/* HOW IT WORKS DROPDOWN */
-.how-toggle {
-  display: block; width: 100%; padding: 12px 0; margin-top: 12px;
-  background: none; border: none; color: var(--nav-text2);
-  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500;
-  cursor: pointer; transition: color 0.15s;
-}
-.how-toggle:hover { color: var(--nav-text); }
-.how-toggle svg {
-  width: 14px; height: 14px; vertical-align: -2px; margin-left: 4px;
-  transition: transform 0.25s ease;
-}
-.how-toggle.open svg { transform: rotate(180deg); }
-.how-panel { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-.how-panel.open { max-height: 300px; }
-.how-panel-inner {
-  padding: 16px 20px; margin-top: 8px;
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px;
-}
-.how-row {
-  display: flex; justify-content: space-between; padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px;
-}
-.how-row:last-child { border-bottom: none; }
-.how-label { color: var(--nav-text2); font-weight: 500; }
-.how-val { color: var(--nav-text); font-weight: 400; text-align: right; flex: 1; margin-left: 16px; }
-
-.retake {
-  display: block; text-align: center; margin-top: 32px;
-  color: var(--nav-text3); font-size: 13px; text-decoration: none;
-  cursor: pointer; background: none; border: none;
-  font-family: 'Sora', sans-serif; transition: color 0.15s;
-}
-.retake:hover { color: var(--nav-text2); }
-
-/* RESULTS TWO-COL LAYOUT */
-.results-layout { display: flex; gap: 28px; align-items: flex-start; }
-.results-main { flex: 1; min-width: 0; }
-.results-sidebar { width: 280px; flex-shrink: 0; position: sticky; top: 88px; }
-
-/* NEXT STEP CARD */
-.next-step-card {
-  background: #f2ead8; border: 1px solid rgba(90,80,60,0.12);
-  border-radius: 16px; padding: 24px; color: #1e1a10;
-}
-.ns-label {
-  font-size: 11px; font-weight: 700; color: #7a9470;
-  text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px;
-}
-.ns-title { font-size: 17px; font-weight: 700; color: #1e1a10; margin-bottom: 10px; }
-.ns-sub { font-size: 13px; color: #5a5040; line-height: 1.7; font-weight: 300; margin-bottom: 16px; }
-.ns-checklist { list-style: none; padding: 0; margin-bottom: 20px; }
-.ns-checklist li {
-  font-size: 13px; color: #5a5040; line-height: 1.6; font-weight: 400;
-  padding: 4px 0 4px 22px; position: relative;
-}
-.ns-checklist li::before {
-  content: '\2713'; position: absolute; left: 0; color: #6a9e52; font-weight: 700;
-}
-.ns-start {
-  display: block; width: 100%; padding: 14px; border-radius: 10px;
-  background: #1a2e1a; color: #f0ead0; border: none;
-  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s; text-align: center;
-  text-decoration: none; margin-bottom: 10px;
-}
-.ns-start:hover { opacity: 0.88; }
-.ns-bookmark {
-  display: block; width: 100%; padding: 10px; border-radius: 10px;
-  background: none; color: #9a8e78; border: 1px solid rgba(90,80,60,0.15);
-  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 500;
-  cursor: pointer; transition: all 0.15s; text-align: center;
-}
-.ns-bookmark:hover { color: #5a5040; border-color: rgba(90,80,60,0.3); }
-.ns-hint { font-size: 11px; color: #9a8e78; text-align: center; margin-top: 8px; }
-
-/* CRASH COURSE OVERLAY */
-.cc-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 9999; background: #0d140b; overflow-y: auto;
-  display: none; animation: pageFadeIn 0.3s ease;
-}
-.cc-overlay.active { display: block; }
-.cc-overlay-inner { max-width: 600px; margin: 0 auto; padding: 56px 24px 80px; }
-.cc-close {
-  position: fixed; top: 20px; right: 24px; z-index: 10000;
-  background: transparent; border: none; color: #7a9470;
-  font-size: 24px; cursor: pointer; font-family: 'Sora', sans-serif;
-  width: 44px; height: 44px; display: flex; align-items: center;
-  justify-content: center; transition: color 0.15s;
-}
-.cc-close:hover { color: #f0ead0; }
-.cc-step { display: none; animation: pageFadeIn 0.4s ease; }
-.cc-step.active { display: block; }
-.cc-progress { display: flex; gap: 4px; margin-bottom: 32px; }
-.cc-dot {
-  flex: 1; height: 4px; border-radius: 2px;
-  background: rgba(255,255,255,0.08); transition: background 0.3s;
-}
-.cc-dot.done { background: var(--matcha); }
-.cc-dot.active { background: var(--matcha-lt); }
-.cc-headline { font-size: 26px; font-weight: 700; color: var(--nav-text); margin-bottom: 16px; }
-.cc-body {
-  font-size: 15px; color: #9a9480; line-height: 1.8; font-weight: 300; margin-bottom: 24px;
-}
-.cc-tip {
-  background: #1a2e1a; border-left: 3px solid #6a9e52;
-  border-radius: 0 12px 12px 0; padding: 16px 20px;
-  font-size: 14px; color: #f0ead0; font-style: italic;
-  line-height: 1.7; margin-bottom: 28px; font-weight: 300;
-}
-.cc-next {
-  display: block; width: 100%; padding: 18px; border-radius: 14px;
-  background: var(--matcha-lt); color: var(--nav-bg); border: none;
-  font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s; text-align: center; text-decoration: none;
-}
-.cc-next:hover { opacity: 0.88; }
-.cc-final {
-  display: block; width: 100%; padding: 20px; border-radius: 16px;
-  background: #6a9e52; color: #fff; border: none;
-  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s; text-align: center; text-decoration: none;
-}
-.cc-final:hover { opacity: 0.88; }
-.cc-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
-.cc-select-card {
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px; padding: 24px 18px; text-align: center;
-  cursor: pointer; transition: all 0.2s; color: var(--nav-text);
-  font-family: 'Sora', sans-serif;
-}
-.cc-select-card:hover { background: rgba(138,184,106,0.1); border-color: var(--matcha-lt); transform: translateY(-2px); }
-.cc-select-name { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-.cc-select-desc { font-size: 12px; color: var(--nav-text2); font-weight: 300; line-height: 1.5; }
 
 @media (max-width: 760px) {
-  .nav-inner { padding: 0 16px; }
+  .nav-inner { padding: 0 16px; gap: 12px; }
   .logo svg { height: 30px; }
-  .learn-container { padding: 40px 16px 64px; }
-  .page-headline { font-size: 26px; }
-  .page-sub { font-size: 15px; }
-  .result-card { padding: 32px 20px; }
-  .runner-card { flex-wrap: wrap; }
-  .results-layout { flex-direction: column; }
-  .results-sidebar { width: 100%; position: static; }
-  .cc-overlay-inner { padding: 40px 16px 64px; }
-  .cc-select-grid { grid-template-columns: 1fr; }
-  .cc-headline { font-size: 22px; }
+  .hero { padding: 48px 16px 32px; }
+  .hero h1 { font-size: 32px; }
+  .hero p { font-size: 16px; }
+  .toc { padding: 0 16px; }
+  .article { padding: 0 16px 64px; }
+  h2 { font-size: 22px; }
+  p, ul { font-size: 16px; }
+  .nav-link { padding: 6px 12px; font-size: 12px; }
+  .cta-box { padding: 28px 20px; }
 }
 </style>
 </head>
@@ -419,473 +197,184 @@ nav {
         <text x="82" y="46" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="30" font-weight="700"><tspan fill="#7a9470">green</tspan><tspan fill="#f0ead0">linenews.com</tspan></text>
       </svg>
     </a>
+    <div class="nav-links">
+      <a class="nav-link" href="/">Feed</a>
+      <a class="nav-link" href="/learn.html">Investing Guide</a>
+      <a class="nav-link" href="/blog/">Blog</a>
+    </div>
   </div>
 </nav>
 
-<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<section class="hero">
+  <h1>The Complete Beginner's Guide to <span>Cryptocurrency</span></h1>
+  <p>Everything you need to understand crypto — what it is, how it works, how to buy it, and how to stay safe. No jargon, no hype, just clear answers.</p>
+</section>
 
-<main class="learn-container">
-
-  <!-- PAGE 1: HERO -->
-  <section class="page active" id="page1">
-    <h1 class="page-headline">New to <span>crypto</span>?</h1>
-    <p class="page-sub">A quick walkthrough of how it works, then a 2-minute quiz to find the right platform for you.</p>
-    <button class="btn-primary" onclick="goTo(2)">Get Started</button>
-    <a class="btn-ghost" href="/">Skip — take me to the news</a>
-  </section>
-
-  <!-- PAGE 2: WHAT IS CRYPTO? -->
-  <section class="page" id="page2">
-    <button class="btn-back" onclick="goTo(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="page-headline">What is <span>crypto</span>?</h2>
-    <p class="page-body">Crypto is digital money that lives on the internet. No bank or government runs it — it's kept alive by a network of computers around the world.</p>
-    <button class="btn-primary" onclick="goTo(3)">Next</button>
-  </section>
-
-  <!-- PAGE 3: HOW DOES CRYPTO WORK? -->
-  <section class="page" id="page3">
-    <button class="btn-back" onclick="goTo(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="page-headline">How does it <span>work</span>?</h2>
-    <p class="page-body">Every transaction is written into a shared public list called a blockchain. Thousands of computers all keep the same copy, so nothing can be faked or changed after the fact.</p>
-    <button class="btn-primary" onclick="goTo(4)">Next</button>
-  </section>
-
-  <!-- PAGE 4: WALLETS -->
-  <section class="page" id="page4">
-    <button class="btn-back" onclick="goTo(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="page-headline">What's a <span>wallet</span>?</h2>
-    <p class="page-body">A wallet is where your crypto lives. It holds a private key that proves you own your coins. Lose the key, lose the crypto — so most beginners start with a wallet built into their exchange.</p>
-    <button class="btn-primary" onclick="goTo(5)">Next</button>
-  </section>
-
-  <!-- PAGE 5: EXCHANGES -->
-  <section class="page" id="page5">
-    <button class="btn-back" onclick="goTo(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="page-headline">What's an <span>exchange</span>?</h2>
-    <p class="page-body">An exchange is the app you use to buy and sell crypto. Connect your bank, deposit a few dollars, and you're ready to own your first Bitcoin. Most exchanges come with a wallet built in.</p>
-    <button class="btn-primary" onclick="goTo(6)">Next</button>
-  </section>
-
-  <!-- PAGE 6: BITCOIN vs ALTCOINS -->
-  <section class="page" id="page6">
-    <button class="btn-back" onclick="goTo(5)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="page-headline">Bitcoin vs <span>altcoins</span></h2>
-    <p class="page-body">Bitcoin was the first and is still the biggest. Everything else — Ethereum, Solana, Dogecoin, and thousands more — is called an altcoin. Think of Bitcoin as the safe bet and altcoins as the newer, riskier ones.</p>
-    <button class="btn-primary" onclick="goTo(7)">Next — take the quiz</button>
-  </section>
-
-  <!-- PAGE 7: Q1 -->
-  <section class="page" id="page7">
-    <button class="btn-back" onclick="goTo(6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <p class="quiz-q">How experienced are you with crypto?</p>
-    <button class="quiz-option" onclick="answer('exp','beginner')">Total beginner, never bought any</button>
-    <button class="quiz-option" onclick="answer('exp','some')">I've bought a little before</button>
-    <button class="quiz-option" onclick="answer('exp','advanced')">I'm comfortable trading and swapping</button>
-  </section>
-
-  <!-- PAGE 8: Q2 -->
-  <section class="page" id="page8">
-    <button class="btn-back" onclick="goTo(7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <p class="quiz-q">What's your main goal?</p>
-    <button class="quiz-option" onclick="answer('goal','hold')">Buy and hold for the long term</button>
-    <button class="quiz-option" onclick="answer('goal','trade')">Trade actively to grow my stack</button>
-    <button class="quiz-option" onclick="answer('goal','swap')">Swap between different coins</button>
-  </section>
-
-  <!-- PAGE 9: Q3 -->
-  <section class="page" id="page9">
-    <button class="btn-back" onclick="goTo(8)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <p class="quiz-q">What matters most to you?</p>
-    <button class="quiz-option" onclick="answer('priority','simple')">Simple and easy to use</button>
-    <button class="quiz-option" onclick="answer('priority','selection')">Access to lots of different coins</button>
-    <button class="quiz-option" onclick="answer('priority','privacy')">Privacy and no signup required</button>
-  </section>
-
-  <!-- PAGE 10: RESULTS -->
-  <section class="page" id="page10">
-    <div class="results-layout">
-      <div class="results-main" id="resultContent"></div>
-      <div class="results-sidebar" id="resultSidebar" style="display:none;">
-        <div class="next-step-card">
-          <div class="ns-label">Next Step</div>
-          <div class="ns-title">Come Back After You Sign Up</div>
-          <div class="ns-sub">Once you've created your account, bookmark this page. We'll walk you through buying your first crypto, keeping it safe, and understanding what you own.</div>
-          <ul class="ns-checklist">
-            <li>How to buy your first coin</li>
-            <li>Keeping your crypto safe</li>
-            <li>Understanding the basics</li>
-            <li>What to do next</li>
-          </ul>
-          <a class="ns-start" href="#crash-course" onclick="showCrashCourse();return false;">Start the Crash Course →</a>
-          <button class="ns-bookmark" onclick="window.sidebar&&window.sidebar.addPanel?window.sidebar.addPanel(document.title,window.location.href,''):(window.external&&('AddFavorite' in window.external)?window.external.AddFavorite(window.location.href,document.title):alert('Press Ctrl+D or Cmd+D to bookmark this page and come back after signing up!'))">Bookmark This Page</button>
-          <div class="ns-hint">or just keep this tab open</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- CRASH COURSE OVERLAY -->
-<div id="ccOverlay" class="cc-overlay">
-  <button class="cc-close" onclick="closeCrashCourse()">✕</button>
-  <div class="cc-overlay-inner">
-
-    <!-- SLIDE 1: PLATFORM SELECTION -->
-    <div class="cc-step active" id="ccSelect">
-      <div class="cc-progress"><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-      <h2 class="cc-headline" style="text-align:center;">Which platform did you sign up for?</h2>
-      <p class="page-body">Pick the one you're using and we'll walk you through the basics step by step.</p>
-      <div class="cc-select-grid">
-        <div class="cc-select-card" onclick="startGuide('coinbase')">
-          <div class="cc-select-name">Coinbase</div>
-          <div class="cc-select-desc">Trusted US exchange for first-time buyers</div>
-        </div>
-        <div class="cc-select-card" onclick="startGuide('robinhood')">
-          <div class="cc-select-name">Robinhood</div>
-          <div class="cc-select-desc">Crypto inside your stock app</div>
-        </div>
-        <div class="cc-select-card" onclick="startGuide('changenow')">
-          <div class="cc-select-name">ChangeNOW</div>
-          <div class="cc-select-desc">Swap coins without signing up</div>
-        </div>
-        <div class="cc-select-card" onclick="startGuide('general')">
-          <div class="cc-select-name">Other / Not Sure</div>
-          <div class="cc-select-desc">General crypto basics for any platform</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- COINBASE GUIDE -->
-    <div class="cc-step" id="ccCoinbase1">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Getting Started on Coinbase</h2>
-      <div class="cc-body">After you verify your identity, link a bank account or debit card. That's your gateway to buying crypto. Start by exploring the home screen — you'll see top coins, price charts, and a simple Buy button at the top.</div>
-      <div class="cc-tip">Don't stress about picking the "right" coin on day one. Buying $5 of Bitcoin is enough to learn how everything works before you commit more.</div>
-      <button class="cc-next" onclick="showCCStep('ccCoinbase2')">Next: Buying Your First Coin →</button>
-    </div>
-    <div class="cc-step" id="ccCoinbase2">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccCoinbase1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Buying Your First Coin</h2>
-      <div class="cc-body">Tap Buy, choose Bitcoin (or any coin you're curious about), and enter a dollar amount. You don't need to buy a whole coin — you can own $5 worth. Review the order, tap Buy now, and it's yours. Coinbase stores it in your account automatically.</div>
-      <div class="cc-tip">Start small and add more over time. Buying a little every week is called dollar-cost averaging and it's one of the safest ways to grow your crypto.</div>
-      <button class="cc-next" onclick="showCCStep('ccCoinbase3')">Next: Keeping It Safe →</button>
-    </div>
-    <div class="cc-step" id="ccCoinbase3">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccCoinbase2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Keeping Your Crypto Safe</h2>
-      <div class="cc-body">Turn on two-factor authentication in your Coinbase settings — this is the single biggest thing you can do to protect your account. Once you own more than you'd be upset losing, look into moving it to your own wallet where only you hold the keys.</div>
-      <div class="cc-tip">Never share your password, seed phrase, or login codes with anyone. If someone DMs you asking for help, it's a scam 100% of the time.</div>
-      <a class="cc-final" href="/">Take Me to the News →</a>
-    </div>
-
-    <!-- ROBINHOOD CRYPTO GUIDE -->
-    <div class="cc-step" id="ccRobinhood1">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Getting Started with Robinhood Crypto</h2>
-      <div class="cc-body">Robinhood puts crypto right next to your stocks. Open the search bar, type Bitcoin, and you'll see a price chart just like a stock. The Buy button works exactly the same way you'd buy a share of Apple or Tesla.</div>
-      <div class="cc-tip">Robinhood only supports a handful of coins. If you want to branch out into smaller altcoins later, you'll need a dedicated exchange like Coinbase.</div>
-      <button class="cc-next" onclick="showCCStep('ccRobinhood2')">Next: Placing Your First Trade →</button>
-    </div>
-    <div class="cc-step" id="ccRobinhood2">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccRobinhood1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Placing Your First Trade</h2>
-      <div class="cc-body">Tap the coin, tap Trade, and choose Buy. Enter a dollar amount — any amount — and tap Review. Robinhood will show you exactly how much crypto that buys. Submit the order and it's in your account within seconds.</div>
-      <div class="cc-tip">Robinhood doesn't charge commissions but it does build the fee into the price. Keep that in mind if you plan to trade in and out often.</div>
-      <button class="cc-next" onclick="showCCStep('ccRobinhood3')">Next: What to Watch For →</button>
-    </div>
-    <div class="cc-step" id="ccRobinhood3">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccRobinhood2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">What to Watch For</h2>
-      <div class="cc-body">Crypto moves fast. A coin can swing 10% in a single day, so don't panic when prices drop. Read the news, stick to coins you understand, and only invest what you're comfortable leaving alone for a while. That's how most successful holders do it.</div>
-      <div class="cc-tip">Turn on price alerts in Robinhood for any coin you own. A quick notification is better than refreshing the app every 5 minutes.</div>
-      <a class="cc-final" href="/">Take Me to the News →</a>
-    </div>
-
-    <!-- CHANGENOW GUIDE -->
-    <div class="cc-step" id="ccChangenow1">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">How ChangeNOW Works</h2>
-      <div class="cc-body">ChangeNOW doesn't ask for an account. You pick the coin you have, pick the coin you want, and paste your wallet address. In a few minutes the new coin lands in your wallet. It's fast, anonymous, and works for 900+ cryptocurrencies.</div>
-      <div class="cc-tip">Double-check your wallet address before sending anything. Crypto transactions are final — if you send to the wrong address, there's no undo button.</div>
-      <button class="cc-next" onclick="showCCStep('ccChangenow2')">Next: Making Your First Swap →</button>
-    </div>
-    <div class="cc-step" id="ccChangenow2">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccChangenow1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Making Your First Swap</h2>
-      <div class="cc-body">Choose how much you want to swap and ChangeNOW shows you the estimated amount you'll receive. Paste in the wallet address where you want the new coin sent, then send your original coin to the address ChangeNOW gives you. Within minutes the swap is done.</div>
-      <div class="cc-tip">Use the fixed-rate option if you want to know exactly how much you'll get before you send. It's slightly more expensive but removes all the guesswork.</div>
-      <button class="cc-next" onclick="showCCStep('ccChangenow3')">Next: Staying Safe →</button>
-    </div>
-    <div class="cc-step" id="ccChangenow3">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccChangenow2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Staying Safe</h2>
-      <div class="cc-body">Since ChangeNOW doesn't hold your crypto, the responsibility is on you to keep your wallet secure. Back up your seed phrase, store it somewhere offline, and never type it into a website. If you lose the seed phrase, the crypto is gone for good.</div>
-      <div class="cc-tip">Write your seed phrase on paper and store it in two separate safe places. Phones and cloud storage can be hacked — paper cannot.</div>
-      <a class="cc-final" href="/">Take Me to the News →</a>
-    </div>
-
-    <!-- GENERAL / NOT SURE -->
-    <div class="cc-step" id="ccGeneral1">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Crypto Basics for Any Platform</h2>
-      <div class="cc-body">No matter which app you use, the first step is the same: link a payment method and buy a small amount of Bitcoin or Ethereum. These are the two biggest and safest coins to start with. Once you own some, the rest starts making sense quickly.</div>
-      <div class="cc-tip">Only invest what you'd be okay losing. Crypto can go up fast, but it can also drop just as fast. Start small and grow as you get more comfortable.</div>
-      <button class="cc-next" onclick="showCCStep('ccGeneral2')">Next: What to Buy First →</button>
-    </div>
-    <div class="cc-step" id="ccGeneral2">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccGeneral1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">What to Buy First</h2>
-      <div class="cc-body">Most people start with Bitcoin because it's the most established and least volatile of the major coins. Ethereum is the second most popular and powers thousands of apps and projects. Stick to these two for your first few weeks and you'll avoid most of the common beginner mistakes.</div>
-      <div class="cc-tip">Ignore any coin that promises guaranteed returns or 100x gains. Those are almost always scams. The real gains come from patience and learning.</div>
-      <button class="cc-next" onclick="showCCStep('ccGeneral3')">Next: Keeping It Safe →</button>
-    </div>
-    <div class="cc-step" id="ccGeneral3">
-      <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
-      <button class="btn-back" onclick="showCCStep('ccGeneral2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <h2 class="cc-headline">Keeping Your Crypto Safe</h2>
-      <div class="cc-body">Turn on two-factor authentication on every platform you use. Never share your seed phrase or password with anyone. And ignore anyone who DMs you offering help or free crypto — those are always scams. Follow those three rules and you'll avoid 95% of the problems new crypto users run into.</div>
-      <div class="cc-tip">Bookmark Greenline News and check it daily. Staying informed about what's moving the market is the best protection against making bad decisions.</div>
-      <a class="cc-final" href="/">Take Me to the News →</a>
-    </div>
-
+<div class="toc">
+  <div class="toc-inner">
+    <div class="toc-title">What you'll learn</div>
+    <a href="#what-is-crypto">1. What is cryptocurrency?</a>
+    <a href="#blockchain">2. How the blockchain works</a>
+    <a href="#bitcoin-vs-altcoins">3. Bitcoin vs altcoins</a>
+    <a href="#wallets">4. Wallets — where your crypto lives</a>
+    <a href="#exchanges">5. Exchanges — where you buy crypto</a>
+    <a href="#buying">6. How to buy your first crypto</a>
+    <a href="#security">7. Keeping your crypto safe</a>
+    <a href="#mistakes">8. Common beginner mistakes</a>
+    <a href="#news">9. Why the news matters</a>
   </div>
 </div>
 
-<script>
-const TOTAL_PAGES = 10;
-let currentPage = 1;
-const answers = {};
+<article class="article">
 
-const PLATFORMS = {
-  coinbase: {
-    name: 'Coinbase',
-    tagline: 'Best for first-time crypto buyers',
-    desc: 'Coinbase is the most trusted name in crypto for beginners. It walks you through everything, has a built-in wallet, and lets you buy Bitcoin and hundreds of other coins with your bank account.',
-    features: ['Easy setup', 'Built-in wallet', '200+ coins', 'US regulated', 'Earn rewards'],
-    how: { bestFor: 'Beginners who want a trusted, simple way to buy their first crypto', beginner: 'Yes — the most beginner-friendly exchange in the US', advantage: 'Clean interface, strong reputation, and an easy onboarding that walks you through everything', minimum: '$2' },
-    link: '#', // <!-- AFFILIATE LINK: COINBASE -->
-    soon: true,
-  },
-  robinhood: {
-    name: 'Robinhood Crypto',
-    tagline: 'Best if you already trade stocks on Robinhood',
-    desc: 'Robinhood lets you buy crypto in the same app you use for stocks. It\'s not a full exchange — you can\'t always move your coins off the platform — but it\'s the simplest way to get started if you already have an account.',
-    features: ['Same app as stocks', 'No commissions', 'Fractional buys', 'Instant deposits', 'Major coins'],
-    how: { bestFor: 'Casual crypto buyers who already use Robinhood for stocks', beginner: 'Yes — familiar interface if you already trade stocks', advantage: 'Buy crypto in the same app you already use for investing, with zero commissions', minimum: '$1' },
-    link: '#', // <!-- AFFILIATE LINK: ROBINHOOD -->
-    soon: true,
-  },
-  changenow: {
-    name: 'ChangeNOW',
-    tagline: 'Best for swapping coins with no signup',
-    desc: 'ChangeNOW lets you swap one crypto for another in seconds, without ever creating an account. No email, no KYC, no waiting — just paste a wallet address and trade. Perfect if you already own crypto and want to move between coins.',
-    features: ['No signup needed', '900+ coins', 'Fast swaps', 'Privacy-friendly', 'Flat fees'],
-    how: { bestFor: 'Crypto users who want to swap between coins quickly without creating an account', beginner: 'Moderate — assumes you already have a crypto wallet', advantage: 'Swap between 900+ coins with no signup, no KYC, and no account needed', minimum: 'Varies by coin' },
-    link: 'https://changenow.app.link/referral?link_id=d9d732d3c9a1c6', // <!-- AFFILIATE LINK: CHANGENOW -->
-    soon: false,
-  },
-};
+  <h2 id="what-is-crypto">1. What is cryptocurrency?</h2>
 
-function goTo(n) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const page = document.getElementById('page' + n);
-  if (page) page.classList.add('active');
-  currentPage = n;
-  const pct = Math.round(((n - 1) / (TOTAL_PAGES - 1)) * 100);
-  document.getElementById('progressBar').style.width = pct + '%';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+  <p>Cryptocurrency is digital money. Unlike the dollars in your bank account, crypto is not controlled by any government, bank, or company. Instead, it runs on a global network of computers that work together to verify every transaction.</p>
 
-function answer(key, val) {
-  answers[key] = val;
-  const nextPage = currentPage + 1;
-  if (nextPage <= 9) {
-    goTo(nextPage);
-  } else {
-    showResults();
-  }
-}
+  <p>The idea behind crypto is simple: what if money could move around the world as easily as sending an email? No bank approval, no wire transfer fees, no waiting three to five business days. Just one person sending value to another, directly, in minutes.</p>
 
-function scorePlatforms() {
-  const scores = { coinbase: 0, robinhood: 0, changenow: 0 };
+  <p>The first cryptocurrency was <strong>Bitcoin</strong>, created in 2009 by someone using the name Satoshi Nakamoto. Nobody knows who they really are. Since then, thousands of other cryptocurrencies have been created, each trying to do something slightly different.</p>
 
-  // Q1: experience
-  if (answers.exp === 'beginner') { scores.coinbase += 3; scores.robinhood += 2; }
-  if (answers.exp === 'some')     { scores.coinbase += 2; scores.robinhood += 2; scores.changenow += 1; }
-  if (answers.exp === 'advanced') { scores.changenow += 3; scores.coinbase += 1; }
+  <div class="callout">The important thing to understand is that crypto is real money with real value. People buy houses with it, companies hold it on their balance sheets, and entire industries are built on top of it. It is not a game or a gimmick — though it can be risky if you do not understand what you are doing.</div>
 
-  // Q2: goal
-  if (answers.goal === 'hold')  { scores.coinbase += 3; scores.robinhood += 2; }
-  if (answers.goal === 'trade') { scores.coinbase += 2; scores.robinhood += 3; }
-  if (answers.goal === 'swap')  { scores.changenow += 3; }
+  <div class="divider"></div>
 
-  // Q3: priority
-  if (answers.priority === 'simple')    { scores.robinhood += 3; scores.coinbase += 2; }
-  if (answers.priority === 'selection') { scores.coinbase += 2; scores.changenow += 3; }
-  if (answers.priority === 'privacy')   { scores.changenow += 3; }
+  <h2 id="blockchain">2. How the blockchain works</h2>
 
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  return sorted.map(([key]) => key);
-}
+  <p>Every cryptocurrency runs on something called a <strong>blockchain</strong>. A blockchain is a shared record of every transaction that has ever happened on that network. Think of it as a giant spreadsheet that is copied across thousands of computers around the world.</p>
 
-function getReasons(key) {
-  const r = [];
-  if (key === 'coinbase') {
-    if (answers.exp === 'beginner') r.push('You\'re new to crypto — Coinbase is the easiest place to start');
-    if (answers.goal === 'hold') r.push('Perfect for buying Bitcoin and holding it long-term');
-    if (answers.priority === 'simple') r.push('One of the simplest, cleanest apps in crypto');
-    if (r.length < 2) r.push('Trusted, regulated, and used by millions of beginners');
-    if (r.length < 3) r.push('Buy with just $2 and own real crypto in minutes');
-  }
-  if (key === 'robinhood') {
-    if (answers.exp === 'beginner' || answers.exp === 'some') r.push('Familiar interface if you already use Robinhood for stocks');
-    if (answers.goal === 'trade') r.push('Trade crypto with zero commissions in the same app as your stocks');
-    if (answers.priority === 'simple') r.push('Simple, no-frills interface built for casual buyers');
-    if (r.length < 2) r.push('Start with as little as $1 and no crypto knowledge required');
-    if (r.length < 3) r.push('Same app as your stocks so you only have one place to check');
-  }
-  if (key === 'changenow') {
-    if (answers.goal === 'swap') r.push('Swapping between coins is exactly what ChangeNOW does best');
-    if (answers.priority === 'privacy') r.push('No signup, no KYC, no account needed — just trade');
-    if (answers.priority === 'selection') r.push('900+ coins available to swap between instantly');
-    if (answers.exp === 'advanced') r.push('Built for people who already have a wallet and want speed');
-    if (r.length < 2) r.push('Fast, private swaps with a flat fee and no hidden costs');
-    if (r.length < 3) r.push('No email or account — just paste a wallet address and go');
-  }
-  return r.slice(0, 3);
-}
+  <p>When you send Bitcoin to someone, that transaction gets broadcast to the network. Thousands of computers check that you actually have the Bitcoin you claim to have, that you are not trying to spend the same coin twice, and that everything adds up. Once they agree, the transaction gets permanently added to the blockchain.</p>
 
-function howPanelHTML(platform, id) {
-  return `
-    <button class="how-toggle" onclick="toggleHow('${id}', this)">How ${platform.name} works <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
-    <div class="how-panel" id="${id}">
-      <div class="how-panel-inner">
-        <div class="how-row"><span class="how-label">Best for</span><span class="how-val">${platform.how.bestFor}</span></div>
-        <div class="how-row"><span class="how-label">Beginner friendly</span><span class="how-val">${platform.how.beginner}</span></div>
-        <div class="how-row"><span class="how-label">Top advantage</span><span class="how-val">${platform.how.advantage}</span></div>
-        <div class="how-row"><span class="how-label">Minimum to start</span><span class="how-val">${platform.how.minimum}</span></div>
-      </div>
-    </div>`;
-}
+  <p>This is what makes crypto different from regular money. With a bank, the bank keeps the records and you trust them not to make mistakes or lie. With a blockchain, nobody needs to trust anyone — the math does the work. Every transaction is public, permanent, and verifiable by anyone.</p>
 
-function toggleHow(id, btn) {
-  const panel = document.getElementById(id);
-  panel.classList.toggle('open');
-  btn.classList.toggle('open');
-}
+  <h3>Why does this matter for you?</h3>
 
-function ctaButton(platform) {
-  if (platform.soon) {
-    return `<a class="result-cta-soon" href="/">Get Started with ${platform.name} — Coming Soon</a>`;
-  }
-  return `<a class="result-cta" href="${platform.link}" target="_blank" rel="noopener">Get Started with ${platform.name} →</a>`;
-}
+  <p>As a beginner, you do not need to understand the technical details of how mining or consensus works. What matters is this: the blockchain is what makes it possible to send money without a middleman, and that is why crypto exists. Everything else — the coins, the wallets, the exchanges — is built on top of that one idea.</p>
 
-function runnerBtn(platform) {
-  if (platform.soon) {
-    return `<a class="runner-btn" href="/">Coming Soon</a>`;
-  }
-  return `<a class="runner-btn" href="${platform.link}" target="_blank" rel="noopener">Try Now →</a>`;
-}
+  <div class="divider"></div>
 
-function showResults() {
-  const ranked = scorePlatforms();
-  const top = PLATFORMS[ranked[0]];
-  const reasons = getReasons(ranked[0]);
-  const runner1 = PLATFORMS[ranked[1]];
-  const runner2 = PLATFORMS[ranked[2]];
+  <h2 id="bitcoin-vs-altcoins">3. Bitcoin vs altcoins</h2>
 
-  const reasonsHTML = reasons.map(r => `<li>${r}</li>`).join('');
-  const featuresHTML = top.features.map(f => `<span class="result-feat">${f}</span>`).join('');
+  <p><strong>Bitcoin (BTC)</strong> was the first and is still the biggest cryptocurrency by a wide margin. It is the most trusted, the most liquid, and the one that institutional investors hold. When people talk about "crypto" in general, they usually mean Bitcoin.</p>
 
-  document.getElementById('resultContent').innerHTML = `
-    <div class="result-badge">Your perfect match</div>
-    <div class="result-card">
-      <div class="result-name">${top.name}</div>
-      <div class="result-tagline">${top.tagline}</div>
-      <ul class="result-reasons">${reasonsHTML}</ul>
-      <div class="result-features">${featuresHTML}</div>
-      <!-- AFFILIATE LINK: ${top.name.toUpperCase()} -->
-      ${ctaButton(top)}
-      ${howPanelHTML(top, 'howTop')}
-    </div>
+  <p>Every other cryptocurrency is called an <strong>altcoin</strong> — short for "alternative coin." There are thousands of them. Here are the ones worth knowing about:</p>
 
-    <div class="runners-title">Also great for you</div>
+  <ul>
+    <li><strong>Ethereum (ETH)</strong> — The second biggest. Ethereum is not just a coin — it is a platform that lets developers build apps on top of its blockchain. Most of the innovation in crypto happens on Ethereum.</li>
+    <li><strong>Solana (SOL)</strong> — A faster, cheaper alternative to Ethereum. Popular for apps and games that need quick transactions.</li>
+    <li><strong>Stablecoins (USDC, USDT)</strong> — These are pegged to the US dollar, so 1 USDC always equals roughly $1. They are used for moving money around the crypto world without the volatility.</li>
+  </ul>
 
-    <div class="runner-card" style="flex-direction:column;align-items:stretch;">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <div class="runner-info">
-          <div class="runner-name">${runner1.name}</div>
-          <div class="runner-tag">${runner1.tagline}</div>
-        </div>
-        <!-- AFFILIATE LINK: ${runner1.name.toUpperCase()} -->
-        ${runnerBtn(runner1)}
-      </div>
-      ${howPanelHTML(runner1, 'howRunner1')}
-    </div>
+  <p>Then there are <strong>meme coins</strong> like Dogecoin and Shiba Inu. These started as jokes but some have gotten very large. They are extremely volatile and driven almost entirely by hype rather than technology. Most beginners should stay away from them until they have more experience.</p>
 
-    <div class="runner-card" style="flex-direction:column;align-items:stretch;">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <div class="runner-info">
-          <div class="runner-name">${runner2.name}</div>
-          <div class="runner-tag">${runner2.tagline}</div>
-        </div>
-        <!-- AFFILIATE LINK: ${runner2.name.toUpperCase()} -->
-        ${runnerBtn(runner2)}
-      </div>
-      ${howPanelHTML(runner2, 'howRunner2')}
-    </div>
+  <div class="callout">If you are just starting out, stick with Bitcoin and Ethereum. They are the safest entry point and will teach you how the market moves before you start exploring smaller, riskier coins.</div>
 
-    <a class="btn-ghost" href="/" style="margin-top:24px;">Go to Greenline News Feed</a>
-    <button class="retake" onclick="retakeQuiz()">Retake the quiz</button>`;
+  <div class="divider"></div>
 
-  document.getElementById('resultSidebar').style.display = '';
-  goTo(10);
-}
+  <h2 id="wallets">4. Wallets — where your crypto lives</h2>
 
-function showCrashCourse() {
-  const overlay = document.getElementById('ccOverlay');
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-  showCCStep('ccSelect');
-}
+  <p>A crypto wallet is where you store your coins. But unlike a physical wallet, it does not actually hold the crypto itself — it holds the <strong>private key</strong> that proves you own the crypto on the blockchain.</p>
 
-function closeCrashCourse() {
-  const overlay = document.getElementById('ccOverlay');
-  overlay.classList.remove('active');
-  document.body.style.overflow = '';
-}
+  <p>There are a few types of wallets:</p>
 
-function showCCStep(id) {
-  document.querySelectorAll('.cc-step').forEach(s => s.classList.remove('active'));
-  const step = document.getElementById(id);
-  if (step) step.classList.add('active');
-  document.getElementById('ccOverlay').scrollTop = 0;
-}
+  <ul>
+    <li><strong>Exchange wallets</strong> — When you buy crypto on Coinbase or Robinhood, it is stored in their wallet for you. This is the easiest option for beginners because you do not have to manage keys yourself. The downside is that the exchange controls your keys.</li>
+    <li><strong>Software wallets</strong> — Apps like MetaMask, Trust Wallet, or Phantom that run on your phone or browser. You control your own keys, which means more responsibility but more control.</li>
+    <li><strong>Hardware wallets</strong> — Physical devices (like Ledger or Trezor) that store your keys offline. The most secure option, mainly used by people holding large amounts.</li>
+  </ul>
 
-function startGuide(platform) {
-  const map = { coinbase: 'ccCoinbase1', robinhood: 'ccRobinhood1', changenow: 'ccChangenow1', general: 'ccGeneral1' };
-  showCCStep(map[platform] || 'ccGeneral1');
-}
+  <h3>What is a seed phrase?</h3>
 
-function retakeQuiz() {
-  Object.keys(answers).forEach(k => delete answers[k]);
-  goTo(1);
-}
+  <p>When you create a software or hardware wallet, it generates a <strong>seed phrase</strong> — usually 12 or 24 random words. This phrase is the master key to your wallet. If you lose your phone, you can use the seed phrase to recover everything. But if someone else gets your seed phrase, they can steal all your crypto.</p>
 
-document.getElementById('progressBar').style.width = '0%';
-</script>
+  <div class="warning"><strong>Never share your seed phrase with anyone.</strong> Not customer support, not a friend, not someone in a Telegram group. No legitimate service will ever ask for it. If someone asks for your seed phrase, it is a scam. 100% of the time.</div>
+
+  <p>For beginners, starting with an <strong>exchange wallet</strong> (like Coinbase) is fine. You can always move your crypto to your own wallet later when you are more comfortable.</p>
+
+  <div class="divider"></div>
+
+  <h2 id="exchanges">5. Exchanges — where you buy crypto</h2>
+
+  <p>A crypto exchange is the app or website where you buy, sell, and trade cryptocurrency. You connect your bank account, deposit dollars, and use them to purchase crypto. The exchange handles everything — matching buyers with sellers, holding your coins, and showing you prices.</p>
+
+  <p>The most popular exchanges for beginners:</p>
+
+  <ul>
+    <li><strong>Coinbase</strong> — The biggest exchange in the US. Clean interface, strong security, hundreds of coins. Probably the best starting point for most people.</li>
+    <li><strong>Robinhood</strong> — If you already use Robinhood for stocks, you can buy crypto there too. Fewer coin options but zero extra apps to manage.</li>
+    <li><strong>ChangeNOW</strong> — Not a traditional exchange. It lets you swap one crypto for another without creating an account. Useful if you already own crypto and want to trade between coins privately.</li>
+  </ul>
+
+  <h3>What about fees?</h3>
+
+  <p>Every exchange charges fees. Some charge a flat fee per transaction, others take a percentage, and some build the fee into the price so you do not see it separately. Always check what you are being charged before you buy. On most major exchanges, expect to pay somewhere between 0.5% and 1.5% per transaction as a beginner.</p>
+
+  <div class="divider"></div>
+
+  <h2 id="buying">6. How to buy your first crypto</h2>
+
+  <p>Here is the step-by-step process. It takes about 10 minutes.</p>
+
+  <p><strong>Step 1: Choose an exchange.</strong> For most beginners, Coinbase is the simplest. Download the app or go to their website.</p>
+
+  <p><strong>Step 2: Create an account.</strong> You will need to verify your identity with a government ID. This is required by law — it is not optional on any legitimate US exchange.</p>
+
+  <p><strong>Step 3: Link a payment method.</strong> Connect your bank account or debit card. Bank transfers are usually free but take 1-3 days. Debit card purchases are instant but may have a small fee.</p>
+
+  <p><strong>Step 4: Buy Bitcoin (or Ethereum).</strong> Search for Bitcoin, enter a dollar amount — even $10 is fine — and tap Buy. Review the order, confirm, and you are done. You now own cryptocurrency.</p>
+
+  <p><strong>Step 5: Do nothing.</strong> Seriously. Do not check the price every 5 minutes. Do not panic if it drops 5% tomorrow. The best thing you can do with your first purchase is leave it alone and spend the next few weeks reading and learning.</p>
+
+  <div class="callout">You do not need to buy a whole Bitcoin (which costs tens of thousands of dollars). Every exchange lets you buy a fraction. Owning $10 worth of Bitcoin is real ownership — it works the same way as owning $10,000 worth.</div>
+
+  <div class="divider"></div>
+
+  <h2 id="security">7. Keeping your crypto safe</h2>
+
+  <p>Crypto security comes down to a few simple rules. Follow these and you will avoid 95% of the problems beginners run into.</p>
+
+  <ul>
+    <li><strong>Turn on two-factor authentication (2FA)</strong> on every account. Use an authenticator app (like Google Authenticator), not SMS — text messages can be intercepted.</li>
+    <li><strong>Use a strong, unique password</strong> for your exchange account. Do not reuse a password from another site.</li>
+    <li><strong>Never share your seed phrase.</strong> Write it on paper and store it somewhere safe. Do not save it in a screenshot, a note on your phone, or cloud storage.</li>
+    <li><strong>Ignore anyone who DMs you</strong> offering help, free crypto, or recovery services. They are scammers.</li>
+    <li><strong>Double-check wallet addresses</strong> before sending crypto. Transactions are irreversible — if you send to the wrong address, it is gone forever.</li>
+  </ul>
+
+  <div class="warning"><strong>The #1 way people lose crypto is scams, not hacks.</strong> Most losses happen because someone gave their seed phrase to a fake website, clicked a phishing link, or trusted a stranger in a group chat. The technology is secure. The weak point is almost always the human.</div>
+
+  <div class="divider"></div>
+
+  <h2 id="mistakes">8. Common beginner mistakes</h2>
+
+  <p><strong>Investing more than you can afford to lose.</strong> Crypto can drop 30-50% in a matter of weeks. If that would cause real financial stress, you are in too deep. Start with an amount that would not change your life if it went to zero.</p>
+
+  <p><strong>Chasing hype coins.</strong> When a coin is all over Twitter and TikTok, the early buyers have usually already made their money. Buying at the peak of hype is how most beginners lose money fast.</p>
+
+  <p><strong>Trading too often.</strong> Every trade has a fee. Every trade is a taxable event. And the more you trade, the more likely you are to make emotional decisions. Most long-term holders outperform active traders.</p>
+
+  <p><strong>Ignoring taxes.</strong> In the US, crypto is taxed as property. If you sell at a profit, you owe capital gains tax. If you trade one coin for another, that is also a taxable event. Keep records of every transaction.</p>
+
+  <p><strong>Panicking during dips.</strong> The price will go down. Sometimes a lot. That is normal. If you believe in what you own and your investment is a reasonable size, the best move is almost always to do nothing and wait.</p>
+
+  <div class="divider"></div>
+
+  <h2 id="news">9. Why the news matters</h2>
+
+  <p>Crypto is one of the most news-driven markets in the world. A single tweet from a CEO, a regulatory announcement from the SEC, or an exchange going bankrupt can move prices by double digits in hours.</p>
+
+  <p>Once you own some crypto, the news stops being abstract. It becomes personal. You start understanding why Bitcoin dropped when the Fed raised rates, or why Ethereum surged after a successful network upgrade. That understanding is what separates informed investors from people who are just guessing.</p>
+
+  <p>You do not need to read every headline. A quick scan each morning — five minutes with your coffee — is enough to stay in the loop and avoid being blindsided by major moves.</p>
+
+  <div class="cta-box">
+    <h3>Stay Informed</h3>
+    <p>Greenline News shows live market news with an AI button that explains every headline in plain English. Five minutes a day is all you need.</p>
+    <a class="cta-btn" href="/">Start Reading the News</a>
+  </div>
+
+  <p class="footer-note">This guide is for educational purposes only and is not financial advice. Cryptocurrency is volatile and you can lose your entire investment. Always do your own research before buying any cryptocurrency.</p>
+
+</article>
 </body>
 </html>
