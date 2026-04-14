@@ -49,6 +49,5 @@ Run `npm audit` periodically to check for vulnerable dependencies. Security head
 
 ## Contact
 
-- **Press**: [press@greenlinenews.com](mailto:press@greenlinenews.com)
-- **Legal**: [legal@greenlinenews.com](mailto:legal@greenlinenews.com)
+- **Contact**: [ryanstam@greenlinenews.com](mailto:ryanstam@greenlinenews.com)
 - **Site**: [greenlinenews.com](https://greenlinenews.com)
