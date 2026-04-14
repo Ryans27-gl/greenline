@@ -875,12 +875,14 @@ function scoreBrokers() {
 }
 
 function shouldShowTVPrimary() {
+  // TradingView is secondary — only show as primary in rare cases
   let tvScore = 0;
-  if (answers.hands === 'active') tvScore += 2;
-  if (answers.auto === 'no') tvScore += 2;
-  if (answers.amount === 'mid' || answers.amount === 'high') tvScore += 1;
-  if (answers.risk && answers.risk !== 'low') tvScore += 1;
-  return tvScore >= 3;
+  if (answers.hands === 'active') tvScore += 1;
+  if (answers.auto === 'no') tvScore += 1;
+  if (answers.amount === 'high') tvScore += 1;
+  if (answers.risk === 'high') tvScore += 1;
+  if (answers.device === 'desktop') tvScore += 1;
+  return tvScore >= 5;
 }
 
 function getReasons(key) {
@@ -952,12 +954,6 @@ function showResults() {
   const pairingBroker = BROKERS[ranked[0]] || BROKERS.public;
 
   document.getElementById('resultContent').innerHTML = `
-    <!-- AFFILIATE LINK: TRADINGVIEW -->
-    <div class="tv-banner">
-      <span class="tv-banner-text">📈 Track your picks on TradingView — $15 off for Greenline users</span>
-      <a class="tv-banner-link" href="https://www.tradingview.com/?aff_id=165441" target="_blank" rel="noopener">Claim $15 Off →</a>
-    </div>
-
     ${tvPrimary ? `
     <div class="result-badge">Your perfect match</div>
     <!-- AFFILIATE LINK: TRADINGVIEW -->
@@ -987,26 +983,10 @@ function showResults() {
       <ul class="result-reasons">${reasonsHTML}</ul>
       <div class="result-features">${featuresHTML}</div>
       <!-- AFFILIATE LINK: ${top.name.toUpperCase()} -->
-      ${top.link.startsWith('http') ? `<a class="result-cta" href="${top.link}" target="_blank" rel="noopener">Get Started with ${top.name}</a>` : `<a class="result-cta-soon" href="${top.link}">Get Started with ${top.name} — Coming Soon</a>`}
+      ${top.link.startsWith('http') ? `<a class="result-cta" href="${top.link}" target="_blank" rel="noopener noreferrer">Get Started with ${top.name}</a>` : `<a class="result-cta-soon" href="${top.link}">Get Started with ${top.name} — Coming Soon</a>`}
       ${howPanelHTML(top, 'howTop')}
     </div>
 
-    <!-- AFFILIATE LINK: TRADINGVIEW -->
-    <div class="tv-badge"><span>EXCLUSIVE GREENLINE OFFER</span></div>
-    <div class="tv-card">
-      <div class="tv-label">Recommended Tool</div>
-      <div class="tv-title">Get $15 Off TradingView — on us</div>
-      ${tvExtra}
-      <div class="tv-sub">The world's #1 charting platform used by millions of serious investors. Plans start at $14.95/month and come with professional-grade charts, real-time data, and expert trade ideas. Greenline users get $15 off their first plan.</div>
-      <div class="tv-pills">
-        <span class="tv-pill">Live Charts</span>
-        <span class="tv-pill">Paper Trading</span>
-        <span class="tv-pill">Plans from $14.95/mo</span>
-      </div>
-      <div class="tv-credit">🎁 Every Greenline user gets $15 off any TradingView plan</div>
-      <a class="tv-cta" href="https://www.tradingview.com/?aff_id=165441" target="_blank" rel="noopener">Claim Your $15 Off TradingView →</a>
-      <div class="tv-disclaimer">$15 credit applied automatically at checkout</div>
-    </div>
     `}
 
     <div class="runners-title">Also great for you</div>
@@ -1018,7 +998,7 @@ function showResults() {
           <div class="runner-tag">${runner1.tagline}</div>
         </div>
         <!-- AFFILIATE LINK: ${runner1.name.toUpperCase()} -->
-        ${runner1.link.startsWith('http') ? `<a class="runner-btn" href="${runner1.link}" target="_blank" rel="noopener">Get Started</a>` : `<a class="runner-btn-soon" href="${runner1.link}">Coming Soon</a>`}
+        ${runner1.link.startsWith('http') ? `<a class="runner-btn" href="${runner1.link}" target="_blank" rel="noopener noreferrer">Get Started</a>` : `<a class="runner-btn-soon" href="${runner1.link}">Coming Soon</a>`}
       </div>
       ${howPanelHTML(runner1, 'howRunner1')}
     </div>
@@ -1030,9 +1010,25 @@ function showResults() {
           <div class="runner-tag">${runner2.tagline}</div>
         </div>
         <!-- AFFILIATE LINK: ${runner2.name.toUpperCase()} -->
-        ${runner2.link.startsWith('http') ? `<a class="runner-btn" href="${runner2.link}" target="_blank" rel="noopener">Get Started</a>` : `<a class="runner-btn-soon" href="${runner2.link}">Coming Soon</a>`}
+        ${runner2.link.startsWith('http') ? `<a class="runner-btn" href="${runner2.link}" target="_blank" rel="noopener noreferrer">Get Started</a>` : `<a class="runner-btn-soon" href="${runner2.link}">Coming Soon</a>`}
       </div>
       ${howPanelHTML(runner2, 'howRunner2')}
+    </div>
+
+    <!-- AFFILIATE LINK: TRADINGVIEW -->
+    <div class="tv-badge" style="margin-top:28px;"><span>FOR ADVANCED TRADERS</span></div>
+    <div class="tv-card">
+      <div class="tv-label">Charting Tool</div>
+      <div class="tv-title">Track Your Investments with TradingView</div>
+      ${tvExtra}
+      <div class="tv-sub">Professional-grade charts and real-time data. Plans start at $14.95/month. Greenline users get $15 off their first plan.</div>
+      <div class="tv-pills">
+        <span class="tv-pill">Live Charts</span>
+        <span class="tv-pill">Paper Trading</span>
+        <span class="tv-pill">Plans from $14.95/mo</span>
+      </div>
+      <a class="tv-cta" href="https://www.tradingview.com/?aff_id=165441" target="_blank" rel="noopener noreferrer">Claim Your $15 Off TradingView →</a>
+      <div class="tv-disclaimer">$15 credit applied automatically at checkout</div>
     </div>
 
     <a class="btn-ghost" href="/" style="margin-top:24px;">Go to Greenline News Feed</a>
