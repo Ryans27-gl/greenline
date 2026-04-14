@@ -709,16 +709,16 @@ nav {
     <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
     <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
     <h2 class="cc-headline">Welcome to Public</h2>
-    <div class="cc-body">Public is where investing meets community. When you first open the app you'll see a social feed of other investors sharing what they're buying and why. This is one of the best ways to learn as a beginner because you can see exactly how real people think about their investments. Start by linking your bank account and exploring the feed to find investors who match your style.</div>
-    <div class="cc-tip">Follow a few investors who share their reasoning before they buy. Reading their thinking is one of the fastest ways to build your own investing instincts.</div>
+    <div class="cc-body">Public is a multi-asset platform where you can invest in stocks, ETFs, options, bonds, crypto, and retirement accounts — all commission-free. When you open the app, start by linking your bank account and depositing at least $20 to get started. Explore the home screen to see market movers and use the AI agents to help build an investing strategy that fits your goals.</div>
+    <div class="cc-tip">If you have an existing portfolio, IRA, or 401k elsewhere, Public offers an uncapped 1% match when you transfer it over. Worth checking out before you start from scratch.</div>
     <button class="cc-next" onclick="showCCStep('ccPublic2')">Next: Making Your First Investment →</button>
   </div>
   <div class="cc-step" id="ccPublic2">
     <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
     <button class="btn-back" onclick="showCCStep('ccPublic1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
     <h2 class="cc-headline">Building Your First Portfolio</h2>
-    <div class="cc-body">Public lets you invest in more than just stocks. You can buy fractional shares of stocks and ETFs, crypto, treasury bonds, and even alternative assets like art and collectibles — all from the same app. Search for a company you believe in, tap Invest, and choose any dollar amount. You don't need to buy a whole share. Then check your feed to see what other investors think.</div>
-    <div class="cc-tip">Start by spreading a small amount across 3 or 4 different things. Diversifying early helps you learn how different assets behave without risking too much on any single one.</div>
+    <div class="cc-body">Search for any stock or ETF, tap Invest, and choose a dollar amount. Public supports fractional shares so you can own a piece of any company for as little as a few dollars. You can also explore bonds for steady income, crypto if you want exposure, or set up an IRA for retirement. Your uninvested cash earns approximately 3.3% APY in the high-yield cash account with up to $5M FDIC insurance.</div>
+    <div class="cc-tip">Start by spreading a small amount across 3 or 4 different investments. Diversifying early helps you learn how different assets behave without risking too much on any single one.</div>
     <button class="cc-next" onclick="showCCStep('ccPublic3')">Next: How News Drives the Community →</button>
   </div>
   <div class="cc-step" id="ccPublic3">
@@ -801,11 +801,11 @@ const BROKERS = {
   },
   public: {
     name: 'Public',
-    tagline: 'Best for serious investors who want a community',
-    desc: 'Public lets you invest in stocks, ETFs, crypto, bonds, and alternative assets all in one place — with a built-in social feed of real investors sharing what they buy and why.',
-    features: ['Stocks & ETFs', 'Crypto & bonds', 'Alternative assets', 'Social feed', 'Fractional shares'],
-    how: { bestFor: 'Investors who want to take investing seriously with a social community and real data', beginner: 'Yes — clean modern interface with a social feed of other investors', advantage: 'Invest in stocks, ETFs, crypto, bonds, and alternative assets all in one place with a community of real investors to learn from', minimum: '$1' },
-    link: '/', // <!-- AFFILIATE LINK: PUBLIC -->
+    tagline: 'Best for beginners and investors who want one platform for everything',
+    desc: 'Public is a multi-asset platform where you can trade stocks, ETFs, options, bonds, crypto, and manage retirement accounts — all commission-free. It features a high-yield cash account, AI-powered investing tools, and an uncapped 1% match on portfolio transfers. FINRA/SIPC member trusted by millions.',
+    features: ['Commission-free', 'High-yield cash', 'Stocks & ETFs', 'Crypto & bonds', 'Options', 'IRA & 401k', 'AI agents'],
+    how: { bestFor: 'Complete beginners and existing investors looking for a comprehensive all-in-one platform', beginner: 'Yes — clean modern interface with AI tools that help automate your strategy', advantage: 'Commission-free stocks and ETFs, high-yield cash account (~3.3% APY with up to $5M FDIC insurance), and uncapped 1% match on portfolio/IRA/401k transfers', minimum: '$20 to get started (no minimum after that)' },
+    link: 'https://www.pqr3ntrk.com/J84C51/7KNGTQ/', // <!-- AFFILIATE LINK: PUBLIC -->
   },
   webull: {
     name: 'Webull',
@@ -841,34 +841,34 @@ function scoreBrokers() {
   const scores = { robinhood: 0, public: 0, webull: 0 };
 
   // Q1: hands-on
-  if (answers.hands === 'passive') { scores.robinhood += 3; }
+  if (answers.hands === 'passive') { scores.public += 2; scores.robinhood += 2; }
   if (answers.hands === 'active')  { scores.public += 3; scores.webull += 3; scores.robinhood += 1; }
-  if (answers.hands === 'unsure')  { scores.robinhood += 3; scores.public += 1; }
+  if (answers.hands === 'unsure')  { scores.public += 3; scores.robinhood += 2; }
 
   // Q2: amount
-  if (answers.amount === 'low')  { scores.robinhood += 3; }
+  if (answers.amount === 'low')  { scores.robinhood += 3; scores.public += 1; }
   if (answers.amount === 'mid')  { scores.public += 3; scores.robinhood += 2; }
-  if (answers.amount === 'high') { scores.webull += 3; scores.public += 2; }
+  if (answers.amount === 'high') { scores.webull += 3; scores.public += 3; }
 
   // Q3: goal
   if (answers.goal === 'wealth') { scores.public += 3; scores.webull += 1; }
   if (answers.goal === 'trade')  { scores.webull += 3; scores.public += 2; }
-  if (answers.goal === 'spare')  { scores.robinhood += 3; }
+  if (answers.goal === 'spare')  { scores.public += 2; scores.robinhood += 2; }
 
   // Q4: risk
-  if (answers.risk === 'low')  { scores.robinhood += 3; }
+  if (answers.risk === 'low')  { scores.public += 2; scores.robinhood += 2; }
   if (answers.risk === 'mid')  { scores.public += 3; scores.robinhood += 1; }
   if (answers.risk === 'high') { scores.webull += 3; scores.public += 1; }
 
   // Q5: auto
-  if (answers.auto === 'yes') { scores.robinhood += 3; }
+  if (answers.auto === 'yes') { scores.public += 2; scores.robinhood += 2; }
   if (answers.auto === 'no')  { scores.webull += 3; scores.public += 2; }
-  if (answers.auto === 'mix') { scores.public += 2; scores.robinhood += 1; }
+  if (answers.auto === 'mix') { scores.public += 3; scores.robinhood += 1; }
 
   // Q6: device
   if (answers.device === 'mobile')  { scores.public += 3; scores.robinhood += 2; }
-  if (answers.device === 'desktop') { scores.webull += 3; }
-  if (answers.device === 'any')     { scores.public += 1; scores.robinhood += 1; }
+  if (answers.device === 'desktop') { scores.webull += 3; scores.public += 1; }
+  if (answers.device === 'any')     { scores.public += 2; scores.robinhood += 1; }
 
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   return sorted.map(([key]) => key);
@@ -894,12 +894,13 @@ function getReasons(key) {
     if (r.length < 3) r.push('Instant deposits so you can start investing right away');
   }
   if (key === 'public') {
-    if (answers.hands === 'active') r.push('You want to pick your own stocks — Public makes it social and educational');
-    if (answers.goal === 'wealth') r.push('You want to take investing seriously and build real wealth over time');
-    if (answers.device === 'mobile') r.push('You prefer investing on your phone — Public has one of the cleanest mobile apps');
-    if (answers.amount === 'mid' || answers.amount === 'high') r.push('Perfect for starting with $100+ across stocks, ETFs, crypto, and bonds');
-    if (r.length < 2) r.push('Built-in social feed lets you learn from real investors as you go');
-    if (r.length < 3) r.push('Invest in stocks, ETFs, crypto, bonds, and alternatives all in one app');
+    if (answers.hands === 'unsure' || answers.hands === 'passive') r.push('Great for getting started — AI agents can help automate your investing strategy');
+    if (answers.hands === 'active') r.push('One platform for stocks, ETFs, options, crypto, and bonds — no need for multiple apps');
+    if (answers.goal === 'wealth') r.push('High-yield cash account (~3.3% APY) and uncapped 1% match on portfolio transfers help your money grow');
+    if (answers.device === 'mobile') r.push('Clean mobile app with everything in one place — stocks, crypto, retirement, and cash');
+    if (answers.amount === 'mid' || answers.amount === 'high') r.push('Transfer an existing portfolio or IRA and get an uncapped 1% match');
+    if (r.length < 2) r.push('Commission-free trading across stocks, ETFs, options, bonds, and crypto');
+    if (r.length < 3) r.push('FINRA/SIPC member trusted by millions of investors');
   }
   if (key === 'webull') {
     if (answers.hands === 'active') r.push('You want to pick your own stocks — Webull gives you advanced tools to do it right');
@@ -986,7 +987,7 @@ function showResults() {
       <ul class="result-reasons">${reasonsHTML}</ul>
       <div class="result-features">${featuresHTML}</div>
       <!-- AFFILIATE LINK: ${top.name.toUpperCase()} -->
-      <a class="result-cta-soon" href="${top.link}">Get Started with ${top.name} — Coming Soon</a>
+      ${top.link.startsWith('http') ? `<a class="result-cta" href="${top.link}" target="_blank" rel="noopener">Get Started with ${top.name}</a>` : `<a class="result-cta-soon" href="${top.link}">Get Started with ${top.name} — Coming Soon</a>`}
       ${howPanelHTML(top, 'howTop')}
     </div>
 
@@ -1017,7 +1018,7 @@ function showResults() {
           <div class="runner-tag">${runner1.tagline}</div>
         </div>
         <!-- AFFILIATE LINK: ${runner1.name.toUpperCase()} -->
-        <a class="runner-btn-soon" href="${runner1.link}">Coming Soon</a>
+        ${runner1.link.startsWith('http') ? `<a class="runner-btn" href="${runner1.link}" target="_blank" rel="noopener">Get Started</a>` : `<a class="runner-btn-soon" href="${runner1.link}">Coming Soon</a>`}
       </div>
       ${howPanelHTML(runner1, 'howRunner1')}
     </div>
@@ -1029,7 +1030,7 @@ function showResults() {
           <div class="runner-tag">${runner2.tagline}</div>
         </div>
         <!-- AFFILIATE LINK: ${runner2.name.toUpperCase()} -->
-        <a class="runner-btn-soon" href="${runner2.link}">Coming Soon</a>
+        ${runner2.link.startsWith('http') ? `<a class="runner-btn" href="${runner2.link}" target="_blank" rel="noopener">Get Started</a>` : `<a class="runner-btn-soon" href="${runner2.link}">Coming Soon</a>`}
       </div>
       ${howPanelHTML(runner2, 'howRunner2')}
     </div>
