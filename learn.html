@@ -630,7 +630,7 @@ nav {
         <div class="next-step-card">
           <div class="ns-label">Next Step</div>
           <div class="ns-title">Come Back After You Sign Up</div>
-          <div class="ns-sub">Once you've created your account, bookmark this page. We'll walk you through a crash course on how to use TradingView, read your first chart, and make your first investment with confidence.</div>
+          <div class="ns-sub">Once you've created your account, bookmark this page. We'll walk you through a crash course on how to use your new platform, read your first chart, and make your first investment with confidence.</div>
           <ul class="ns-checklist">
             <li>How to read a stock chart</li>
             <li>What the numbers mean</li>
@@ -670,10 +670,6 @@ nav {
       <div class="cc-select-card" onclick="startGuide('webull')">
         <div class="cc-select-name">Webull</div>
         <div class="cc-select-desc">Advanced charting and trading tools</div>
-      </div>
-      <div class="cc-select-card" onclick="startGuide('tradingview')">
-        <div class="cc-select-name">TradingView</div>
-        <div class="cc-select-desc">Professional charts and market analysis</div>
       </div>
     </div>
   </div>
@@ -744,7 +740,7 @@ nav {
     <button class="btn-back" onclick="showCCStep('ccWebull1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
     <h2 class="cc-headline">Understanding Stock Charts</h2>
     <div class="cc-body">A stock chart shows you the price of a stock over time. The green candles mean the price went up that day and the red ones mean it went down. The lines at the bottom show trading volume which tells you how many people were buying and selling. When volume is high something big is happening. You can switch between different time frames like one day, one week, or one year to see the bigger picture.</div>
-    <div class="cc-tip">Pair Webull with TradingView for even more powerful charts and ideas from other traders around the world.</div>
+    <div class="cc-tip">Explore the community features in Webull to see how other traders analyze stocks and share ideas.</div>
     <button class="cc-next" onclick="showCCStep('ccWebull3')">Next: How News Moves the Market →</button>
   </div>
   <div class="cc-step" id="ccWebull3">
@@ -756,31 +752,6 @@ nav {
     <a class="cc-final" href="/">Take Me to the News →</a>
   </div>
 
-  <!-- TRADINGVIEW GUIDE -->
-  <div class="cc-step" id="ccTradingview1">
-    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div><div class="cc-dot"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccSelect')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="cc-headline">Welcome to TradingView</h2>
-    <div class="cc-body">TradingView is where serious investors go to understand the market. When you first log in search for any stock you're interested in and open the chart. You'll see the price history displayed as candles. Each candle represents a period of time and tells you where the price opened, closed, and how high and low it went. Start by just exploring and getting comfortable with the layout.</div>
-    <div class="cc-tip">Follow other traders on TradingView to see how they analyze stocks. Reading their ideas is one of the fastest ways to learn.</div>
-    <button class="cc-next" onclick="showCCStep('ccTradingview2')">Next: Your First Chart Analysis →</button>
-  </div>
-  <div class="cc-step" id="ccTradingview2">
-    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div><div class="cc-dot"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccTradingview1')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="cc-headline">How to Read What the Chart is Telling You</h2>
-    <div class="cc-body">When a stock is making higher highs and higher lows over time that's called an uptrend and it generally means the stock is doing well. When it's making lower lows that's a downtrend. Look for where the price has bounced before. Those levels are called support and resistance and they're where a lot of traders make their decisions. You don't need to be an expert right away. Just start noticing patterns and they'll start making sense over time.</div>
-    <div class="cc-tip">Use the drawing tools in TradingView to mark levels you find interesting. Over time your charts tell your own story.</div>
-    <button class="cc-next" onclick="showCCStep('ccTradingview3')">Next: Connecting News to Charts →</button>
-  </div>
-  <div class="cc-step" id="ccTradingview3">
-    <div class="cc-progress"><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot done"></div><div class="cc-dot active"></div></div>
-    <button class="btn-back" onclick="showCCStep('ccTradingview2')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-    <h2 class="cc-headline">When News and Charts Come Together</h2>
-    <div class="cc-body">The most powerful skill you can build as an investor is connecting what you read in the news to what you see on the chart. A strong earnings report should show up as a spike in price and volume. A Fed rate decision can move the entire market in seconds. When you can look at a chart and understand why it moved the way it did you're thinking like a real investor. That's what Greenline News is here to help you with every single day.</div>
-    <div class="cc-tip">Bookmark Greenline News and check the headlines every morning before the market opens. Knowledge is your biggest edge.</div>
-    <a class="cc-final" href="/">Take Me to the News →</a>
-  </div>
 
   </div>
 </div>
@@ -874,16 +845,6 @@ function scoreBrokers() {
   return sorted.map(([key]) => key);
 }
 
-function shouldShowTVPrimary() {
-  // TradingView is secondary — only show as primary in rare cases
-  let tvScore = 0;
-  if (answers.hands === 'active') tvScore += 1;
-  if (answers.auto === 'no') tvScore += 1;
-  if (answers.amount === 'high') tvScore += 1;
-  if (answers.risk === 'high') tvScore += 1;
-  if (answers.device === 'desktop') tvScore += 1;
-  return tvScore >= 5;
-}
 
 function getReasons(key) {
   const r = [];
@@ -949,33 +910,7 @@ function showResults() {
   const reasonsHTML = reasons.map(r => `<li>${r}</li>`).join('');
   const featuresHTML = top.features.map(f => `<span class="result-feat">${f}</span>`).join('');
 
-  const tvPrimary = shouldShowTVPrimary();
-  const tvExtra = ranked[0] === 'webull' ? '<div class="tv-extra">Webull traders love TradingView for advanced charting and technical analysis.</div>' : '';
-  const pairingBroker = BROKERS[ranked[0]] || BROKERS.public;
-
   document.getElementById('resultContent').innerHTML = `
-    ${tvPrimary ? `
-    <div class="result-badge">Your perfect match</div>
-    <!-- AFFILIATE LINK: TRADINGVIEW -->
-    <div class="tv-badge"><span>EXCLUSIVE GREENLINE OFFER</span></div>
-    <div class="tv-card">
-      <div class="tv-label">Recommended Tool</div>
-      <div class="tv-title">TradingView + a Brokerage</div>
-      <div class="tv-sub">You're ready to be an active investor. Start with TradingView to track and analyze your picks, then open a brokerage account to start buying.</div>
-      <div class="tv-pills">
-        <span class="tv-pill">Live Charts</span>
-        <span class="tv-pill">Paper Trading</span>
-        <span class="tv-pill">Plans from $14.95/mo</span>
-      </div>
-      <div class="tv-credit">🎁 Every Greenline user gets $15 off any TradingView plan</div>
-      <a class="tv-cta" href="https://www.tradingview.com/?aff_id=165441" target="_blank" rel="noopener">Claim Your $15 Off TradingView →</a>
-      <div class="tv-pairing">
-        <div class="tv-pairing-label">Recommended brokerage pairing</div>
-        <!-- AFFILIATE LINK: ${pairingBroker.name.toUpperCase()} -->
-        <a class="result-cta-soon" href="${pairingBroker.link}" style="margin-top:8px;">Get Started with ${pairingBroker.name} — Coming Soon</a>
-      </div>
-    </div>
-    ` : `
     <div class="result-badge">Your perfect match</div>
     <div class="result-card main">
       <div class="result-name">${top.name}</div>
@@ -986,8 +921,6 @@ function showResults() {
       ${top.link.startsWith('http') ? `<a class="result-cta" href="${top.link}" target="_blank" rel="noopener noreferrer">Get Started with ${top.name}</a>` : `<a class="result-cta-soon" href="${top.link}">Get Started with ${top.name} — Coming Soon</a>`}
       ${howPanelHTML(top, 'howTop')}
     </div>
-
-    `}
 
     <div class="runners-title">Also great for you</div>
 
@@ -1015,22 +948,6 @@ function showResults() {
       ${howPanelHTML(runner2, 'howRunner2')}
     </div>
 
-    <!-- AFFILIATE LINK: TRADINGVIEW -->
-    <div class="tv-badge" style="margin-top:28px;"><span>FOR ADVANCED TRADERS</span></div>
-    <div class="tv-card">
-      <div class="tv-label">Charting Tool</div>
-      <div class="tv-title">Track Your Investments with TradingView</div>
-      ${tvExtra}
-      <div class="tv-sub">Professional-grade charts and real-time data. Plans start at $14.95/month. Greenline users get $15 off their first plan.</div>
-      <div class="tv-pills">
-        <span class="tv-pill">Live Charts</span>
-        <span class="tv-pill">Paper Trading</span>
-        <span class="tv-pill">Plans from $14.95/mo</span>
-      </div>
-      <a class="tv-cta" href="https://www.tradingview.com/?aff_id=165441" target="_blank" rel="noopener noreferrer">Claim Your $15 Off TradingView →</a>
-      <div class="tv-disclaimer">$15 credit applied automatically at checkout</div>
-    </div>
-
     <a class="btn-ghost" href="/" style="margin-top:24px;">Go to Greenline News Feed</a>
     <button class="retake" onclick="retakeQuiz()">Retake the quiz</button>`;
 
@@ -1055,7 +972,7 @@ function showCrashCourse() {
 }
 
 function startGuide(app) {
-  const map = { robinhood: 'ccRobinhood1', public: 'ccPublic1', webull: 'ccWebull1', tradingview: 'ccTradingview1' };
+  const map = { robinhood: 'ccRobinhood1', public: 'ccPublic1', webull: 'ccWebull1' };
   showCCStep(map[app] || 'ccRobinhood1');
 }
 
