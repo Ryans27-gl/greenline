@@ -331,6 +331,11 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 .tooltip-box {
   background: var(--card); border-radius: var(--radius);
   border: 1px solid var(--border2); max-width: 520px; width: 100%;
+  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   box-shadow: 0 24px 60px rgba(17,26,15,0.25);
   animation: slideUp 0.22s ease;
 }
@@ -338,6 +343,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 .tooltip-head {
   display: flex; align-items: center; justify-content: space-between;
   padding: 18px 20px 14px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--card); z-index: 1;
 }
 .tooltip-head-left { display: flex; align-items: center; gap: 10px; }
 .tooltip-icon { font-size: 20px; }
@@ -497,7 +503,11 @@ main { max-width: 1080px; margin: 0 auto; padding: 36px 32px 80px; }
 
   /* Tooltip modal: mobile-friendly sizing */
   .tooltip-overlay { padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
-  .tooltip-box { max-width: 100%; }
+  .tooltip-box {
+    max-width: 100%;
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+  }
   .tooltip-body { font-size: 15px; }
 
   /* Onboarding modal */
@@ -1487,6 +1497,7 @@ Keep it friendly, clear, and jargon-free. No bullet points — just conversation
 
 function showTooltipLoading(title) {
   closeTooltip();
+  document.body.style.overflow = 'hidden';
   const overlay = document.createElement('div');
   overlay.className = 'tooltip-overlay';
   overlay.id = 'tooltipOverlay';
@@ -1540,6 +1551,7 @@ function showTooltipContent(title, text, tickers, card) {
 function closeTooltip() {
   const el = document.getElementById('tooltipOverlay');
   if (el) el.remove();
+  document.body.style.overflow = '';
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTooltip(); });
